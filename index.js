@@ -18,20 +18,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   loadTrailpacks () {
-    let Core = this.config.trailpack.core
-    if (! Core instanceof Trailpack) {
-      throw new Error('Core pack does not extend Trailpack', pack)
-    }
-
-    let core = new PackWrapper(Core, this)
-
-    this.trailpacks = [ core ].concat(this.config.trailpack.packs.map(Pack => {
+    this.trailpacks = this.config.trailpack.packs.map(Pack => {
       if (! Pack instanceof Trailpack) {
         throw new Error('pack does not extend Trailpack', pack)
       }
 
       return new PackWrapper(Pack, this)
-    }))
+    })
 
     return this.validateTrailpacks()
       .then(() => this.configureTrailpacks())
