@@ -18,7 +18,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   loadTrailpacks () {
-    this.trailpacks = this.config.trailpack.packs.map(Pack => {
+    this.packs = this.config.trailpack.packs.map(Pack => {
       if (! Pack instanceof Trailpack) {
         throw new Error('pack does not extend Trailpack', pack)
       }
@@ -32,7 +32,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   validateTrailpacks () {
-    return Promise.all(this.trailpacks.map(pack => {
+    return Promise.all(this.packs.map(pack => {
       return pack.validate(this.pkg, this.config, this.api)
     }))
     .then(() => {
@@ -41,7 +41,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   configureTrailpacks () {
-    return Promise.all(this.trailpacks.map(pack => {
+    return Promise.all(this.packs.map(pack => {
       return pack.configure()
     }))
     .then(() => {
@@ -50,7 +50,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   initializeTrailpacks () {
-    return Promise.all(this.trailpacks.map(pack => {
+    return Promise.all(this.packs.map(pack => {
       return pack.initialize()
     }))
     .then(() => {
