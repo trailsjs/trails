@@ -106,4 +106,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     return Promise.all(eventPromises)
   }
+
+  /**
+   * expose winston logger on global app object
+   */
+  get log() {
+    return this.config.log.logger
+  }
 }

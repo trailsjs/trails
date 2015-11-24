@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/trailsjs/trails-app/issues"
   },
-  "homepage": "https://github.com/trailsjs/trails-app#readme"
+  "homepage": "https://github.com/trailsjs/trails-app#readme",
+  "dependencies": {
+    "winston": "^2.1.1"
+  }
 }
