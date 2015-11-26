@@ -12,13 +12,14 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.pkg = app.pkg
     this.config = app.config
     this.api = app.api
+    this.packs = [ ]
 
     // increase listeners default
     this.setMaxListeners(64)
   }
 
-  loadTrailpacks () {
-    this.packs = this.config.trailpack.packs.map(Pack => {
+  loadTrailpacks (packs) {
+    this.packs = this.packs.concat(packs.map(Pack => {
       if (! Pack instanceof Trailpack) {
         throw new Error('pack does not extend Trailpack', pack)
       }
@@ -64,7 +65,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   start () {
     this.emit('trails:start')
 
-    return this.loadTrailpacks()
+    return this.loadTrailpacks(this.config.trailpack.packs)
       .catch(err => {
         console.error(err.stack)
         throw err
@@ -106,4 +107,5 @@ module.exports = class TrailsApp extends events.EventEmitter {
   get log() {
     return this.config.log.logger
   }
+
 }
