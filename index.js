@@ -25,7 +25,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       }
 
       return new PackWrapper(Pack, this)
-    })
+    }))
 
     return this.validateTrailpacks()
       .then(() => this.configureTrailpacks())
