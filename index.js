@@ -13,6 +13,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.config = app.config
     this.api = app.api
     this.packs = [ ]
+    this.bound = false
 
     // increase listeners default
     this.setMaxListeners(64)
@@ -63,9 +64,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Start the App. Load and execute all Trailpacks.
    */
   start () {
+    this.bindEvents()
     this.emit('trails:start')
 
     return this.loadTrailpacks(this.config.trailpack.packs)
+      .then(() => {
+        this.emit('trails:ready')
+      })
       .catch(err => {
         console.error(err.stack)
         throw err
@@ -77,9 +82,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   stop (code) {
     this.emit('trails:stop')
-    setTimeout(() => {
-      process.exit(code || 0)
-    }, 5000)
+    this.removeAllListeners()
+    process.exit(code || 0)
   }
 
   /**
@@ -107,5 +111,25 @@ module.exports = class TrailsApp extends events.EventEmitter {
   get log() {
     return this.config.log.logger
   }
+
+  bindEvents () {
+    if (this.bound) {
+      this.log.warn('trails-app: Someone attempted to bindEvents() twice!')
+      this.log.warn(console.trace())
+      return
+    }
+
+    this.once('trails:error:fatal', err => {
+      this.stop(err)
+    })
+
+    this.bound = true
+  }
+
+  /**
+   * TODO
+  inspect () {
+  }
+  */
 
 }
