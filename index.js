@@ -13,32 +13,43 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.pkg = app.pkg
     this.config = app.config
     this.api = app.api
-    this.packs = { }
     this.bound = false
 
     // increase listeners default
     this.setMaxListeners(64)
   }
 
+  /**
+   * Validate and Organize Trailpacks
+   */
   loadTrailpacks (packs) {
-    let wrappers = packs.map(Pack => {
+    let wrappers = _.compact(packs.map(Pack => {
       if (! Pack instanceof Trailpack) {
         throw new TypeError('pack does not extend Trailpack', pack)
       }
+      if (this.config.trailpack.disabled.indexOf(Pack.name.toLowerCase()) !== -1) {
+        this.app.log.debug(`trailpack: ${Pack.name.toLowerCase()} is explicitly disabled in the configuration. Not loading.`)
+        return
+      }
+
       return new PackWrapper(Pack, this)
-    })
+    }))
 
-    this.packs = _.indexBy(wrappers, wrapper => {
-      return wrapper.pack.name
-    })
+    this.packs = _.chain(wrappers)
+      .indexBy(wrapper => wrapper.pack.name)
+      .mapValues(wrapper => wrapper.pack)
+      .value()
 
-    return this.validateTrailpacks()
-      .then(() => this.configureTrailpacks())
-      .then(() => this.initializeTrailpacks())
+    return this.validateTrailpacks(wrappers)
+      .then(() => this.configureTrailpacks(wrappers))
+      .then(() => this.initializeTrailpacks(wrappers))
   }
 
-  validateTrailpacks () {
-    return Promise.all(_.map(_.omit(this.packs, 'inspect'), pack => {
+  /**
+   * Invoke .validate() on all loaded trailpacks
+   */
+  validateTrailpacks (wrappers) {
+    return Promise.all(wrappers.map(pack => {
       return pack.validate(this.pkg, this.config, this.api)
     }))
     .then(() => {
@@ -47,8 +58,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
     })
   }
 
-  configureTrailpacks () {
-    return Promise.all(_.map(_.omit(this.packs, 'inspect'), pack => {
+  /**
+   * Invoke .configure() on all loaded trailpacks
+   */
+  configureTrailpacks (wrappers) {
+    return Promise.all(wrappers.map(pack => {
       return pack.configure()
     }))
     .then(() => {
@@ -57,8 +71,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
     })
   }
 
-  initializeTrailpacks () {
-    return Promise.all(_.map(_.omit(this.packs, 'inspect'), pack => {
+  /**
+   * Invoke .initialize() on all loaded trailpacks
+   */
+  initializeTrailpacks (wrappers) {
+    return Promise.all(wrappers.map(pack => {
       return pack.initialize()
     }))
     .then(() => {
@@ -87,10 +104,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
   /**
    * Pack up and go home. Everybody has 5s to clean up.
    */
-  stop (code) {
+  stop (err) {
+    if (err) this.log.error(err)
     this.emit('trails:stop')
     this.removeAllListeners()
-    process.exit(code || 0)
+    process.exit(err ? 1 : 0)
   }
 
   /**
@@ -132,5 +150,4 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     this.bound = true
   }
-
 }
