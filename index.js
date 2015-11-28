@@ -137,6 +137,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
     return this.config.log.logger
   }
 
+  /**
+   * Handle various application events
+   */
   bindEvents () {
     if (this.bound) {
       this.log.warn('trails-app: Someone attempted to bindEvents() twice!')
