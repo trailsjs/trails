@@ -1,5 +1,6 @@
 'use strict'
 
+const _ = require('lodash')
 const Trailpack = require('trailpack')
 const PackWrapper = require('./lib/packwrapper')
 const events = require('events')
@@ -12,7 +13,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.pkg = app.pkg
     this.config = app.config
     this.api = app.api
-    this.packs = [ ]
+    this.packs = { }
     this.bound = false
 
     // increase listeners default
@@ -20,13 +21,16 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   loadTrailpacks (packs) {
-    this.packs = this.packs.concat(packs.map(Pack => {
+    let wrappers = packs.map(Pack => {
       if (! Pack instanceof Trailpack) {
-        throw new Error('pack does not extend Trailpack', pack)
+        throw new TypeError('pack does not extend Trailpack', pack)
       }
-
       return new PackWrapper(Pack, this)
-    }))
+    })
+
+    this.packs = _.indexBy(wrappers, wrapper => {
+      return wrapper.pack.name
+    })
 
     return this.validateTrailpacks()
       .then(() => this.configureTrailpacks())
@@ -34,29 +38,32 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   validateTrailpacks () {
-    return Promise.all(this.packs.map(pack => {
+    return Promise.all(_.map(_.omit(this.packs, 'inspect'), pack => {
       return pack.validate(this.pkg, this.config, this.api)
     }))
     .then(() => {
       this.emit('trailpack:all:validated')
+      this.log.verbose('Trailpacks: All Validated.')
     })
   }
 
   configureTrailpacks () {
-    return Promise.all(this.packs.map(pack => {
+    return Promise.all(_.map(_.omit(this.packs, 'inspect'), pack => {
       return pack.configure()
     }))
     .then(() => {
       this.emit('trailpack:all:configured')
+      this.log.verbose('Trailpacks: All Configured.')
     })
   }
 
   initializeTrailpacks () {
-    return Promise.all(this.packs.map(pack => {
+    return Promise.all(_.map(_.omit(this.packs, 'inspect'), pack => {
       return pack.initialize()
     }))
     .then(() => {
       this.emit('trailpack:all:initialized')
+      this.log.verbose('Trailpacks: All Initialized.')
     })
   }
 
@@ -125,11 +132,5 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     this.bound = true
   }
-
-  /**
-   * TODO
-  inspect () {
-  }
-  */
 
 }
