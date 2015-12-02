@@ -10,6 +10,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
   constructor (app) {
     super()
 
+    process.env.NODE_ENV || (process.env.NODE_ENV = 'development')
+
     this.pkg = app.pkg
     this.config = app.config
     this.api = app.api
