@@ -133,7 +133,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
-   * expose winston logger on global app object
+   * Expose winston logger on global app object
    */
   get log() {
     return this.config.log.logger
