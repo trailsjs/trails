@@ -1,0 +1,22 @@
+{
+  "name": "trails-app",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trailsjs/trails-app.git"
+  },
+  "author": "Travis Webb <me@traviswebb.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trailsjs/trails-app/issues"
+  },
+  "homepage": "https://github.com/trailsjs/trails-app#readme",
+  "dependencies": {
+    "winston": "^2.1.1"
+  }
+}
