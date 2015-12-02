@@ -1,0 +1,1 @@
+exports.User = require('./User')

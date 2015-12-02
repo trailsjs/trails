@@ -1,0 +1,1 @@
+exports.DefaultService = require('./DefaultService')
