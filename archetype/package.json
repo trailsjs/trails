@@ -1,5 +1,9 @@
 {
   "version": "0.0.0",
+  "keywords": [
+    "trails",
+    "trailsjs",
+  ],
   "main": "index.js",
   "dependencies": {
     "lodash": "^3.10",
