@@ -3,7 +3,6 @@
  * (app.config)
  */
 exports.env = require('./env')
-exports.errors = require('./errors')
 exports.log = require('./log')
 exports.trailpack = require('./trailpack')
 

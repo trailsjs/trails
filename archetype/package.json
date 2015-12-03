@@ -13,7 +13,8 @@
     "trailpack-repl": "latest",
     "trailpack-router": "latest",
     "trails": "latest",
-    "waterline-sqlite3": "^0.12.4"
+    "waterline-sqlite3": "latest",
+    "winston": "^2.1.1"
   },
   "devDependencies": {
     "mocha": "^2.3",
@@ -27,7 +28,8 @@
     "trailpack-repl",
     "trailpack-router",
     "trails",
-    "waterline-sqlite3"
+    "waterline-sqlite3",
+    "winston"
   ],
   "scripts": {
     "test": "mocha"
