@@ -15,7 +15,7 @@
     "realtime"
   ],
   "scripts": {
-    "test": "mocha"
+    "test": "eslint . && mocha"
   },
   "repository": {
     "type": "git",
@@ -34,5 +34,12 @@
   "bundledDependencies": [
     "lodash",
     "trailpack"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": "trails"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-config-trails": "0.0.8"
+  }
 }
