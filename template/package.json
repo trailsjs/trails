@@ -1,0 +1,33 @@
+{
+  "version": "0.0.0",
+  "dependencies": {
+    "lodash": "^3.10",
+    "rc": "^1.1",
+    "trailpack-core": "latest",
+    "trailpack-hapi": "latest",
+    "trailpack-repl": "latest",
+    "trailpack-router": "latest",
+    "trails": "latest",
+    "waterline-sqlite3": "^0.12.4",
+  },
+  "devDependencies": {
+    "mocha": "^2.3",
+    "supertest": "^1.1"
+  },
+  "bundledDependencies": [
+    "lodash",
+    "rc",
+    "trailpack-core",
+    "trailpack-hapi",
+    "trailpack-repl",
+    "trailpack-router",
+    "trails",
+    "waterline-sqlite3"
+  ],
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">= 4.0.0"
+  }
+}

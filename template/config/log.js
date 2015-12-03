@@ -2,7 +2,7 @@
  * Logging Configuration
  * (app.config.log)
  *
- * @see http://trailsjs.io/doc/config/log.js
+ * @see http://trailsjs.io/doc/config/log
  */
 const winston = require('winston')
 
@@ -15,7 +15,7 @@ module.exports = {
    * Exposed on app.log
    */
   logger: new winston.Logger({
-    level: 'silly',
+    level: 'debug',
     exitOnError: false,
     transports: [
       new (winston.transports.Console)({
