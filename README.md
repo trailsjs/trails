@@ -102,14 +102,14 @@ popular trailpacks, but you are free to implement your own integration and use
 that instead or in addition to the core packs.
 
 ## License
-[MIT](https://github.com/trailsjs/eslint-config-trails/blob/master/LICENSE)
+[MIT](https://github.com/trailsjs/trails/blob/master/LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/eslint-config-trails.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/eslint-config-trails
-[ci-image]: https://img.shields.io/travis/trailsjs/eslint-config-trails/master.svg?style=flat-square
-[ci-url]: https://travis-ci.org/trailsjs/eslint-config-trails
-[daviddm-image]: http://img.shields.io/david/trailsjs/eslint-config-trails.svg?style=flat-square
-[daviddm-url]: https://david-dm.org/trailsjs/eslint-config-trails
+[npm-image]: https://img.shields.io/npm/v/trails.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/trails
+[ci-image]: https://img.shields.io/travis/trailsjs/trails/master.svg?style=flat-square
+[ci-url]: https://travis-ci.org/trailsjs/trails
+[daviddm-image]: http://img.shields.io/david/trailsjs/trails.svg?style=flat-square
+[daviddm-url]: https://david-dm.org/trailsjs/trails
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
 [gitter-url]: https://gitter.im/trailsjs/trails
 
