@@ -8,7 +8,7 @@
     "trailpack-repl": "latest",
     "trailpack-router": "latest",
     "trails": "latest",
-    "waterline-sqlite3": "^0.12.4",
+    "waterline-sqlite3": "^0.12.4"
   },
   "devDependencies": {
     "mocha": "^2.3",
