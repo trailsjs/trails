@@ -25,9 +25,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Validate and Organize Trailpacks
    */
   loadTrailpacks (packs) {
-    let wrappers = _.compact(packs.map(Pack => {
+    const wrappers = _.compact(packs.map(Pack => {
       if (! Pack instanceof Trailpack) {
-        throw new TypeError('pack does not extend Trailpack', pack)
+        throw new TypeError('pack does not extend Trailpack', Pack)
       }
       if (this.config.trailpack.disabled.indexOf(Pack.name.toLowerCase()) !== -1) {
         this.app.log.debug(`trailpack: ${Pack.name.toLowerCase()} is explicitly disabled in the configuration. Not loading.`)
@@ -98,7 +98,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
         this.emit('trails:ready')
       })
       .catch(err => {
-        console.error(err.stack)
+        this.log.error(err.stack)
         throw err
       })
   }
@@ -121,7 +121,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       events = [ events ]
     }
 
-    let eventPromises = events.map(eventName => {
+    const eventPromises = events.map(eventName => {
       return new Promise(resolve => {
         this.once(eventName, event => {
           resolve(event)
@@ -145,6 +145,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   bindEvents () {
     if (this.bound) {
       this.log.warn('trails-app: Someone attempted to bindEvents() twice!')
+      /*eslint no-console: 0 */
       this.log.warn(console.trace())
       return
     }
