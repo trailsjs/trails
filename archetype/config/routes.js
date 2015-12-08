@@ -29,6 +29,6 @@ module.exports = [
   {
     method: 'GET',
     path: '/{p*}',
-    handler: 'ViewController.catchAll';
+    handler: 'ViewController.catchAll'
   }
 ]
