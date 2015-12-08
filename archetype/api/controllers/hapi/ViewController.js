@@ -4,7 +4,7 @@ module.exports = {
     reply('Hello Trails.js !');
   },
 
-  catchAll(request, reply) {
-  	reply('<h1>This is the wrong trail</h1>');
+  catchAll (request, reply) {
+    reply('<h1>This is the wrong trail</h1>');
   }
 }
