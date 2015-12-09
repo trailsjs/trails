@@ -28,7 +28,6 @@
   },
   "homepage": "http://trailsjs.io",
   "dependencies": {
-    "jade": "^1.11.0",
     "lodash": "^3.10.1",
     "trailpack": "0.0.0"
   },
