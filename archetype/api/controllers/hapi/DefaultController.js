@@ -12,5 +12,9 @@ module.exports = {
    */
   info (request, reply) {
     reply(this.api.services.DefaultService.getApplicationInfo())
+  },
+
+  catchAll (request, reply) {
+    reply('<h1>This is the wrong trail</h1>');
   }
 }
