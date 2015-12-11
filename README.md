@@ -78,7 +78,7 @@ Out of the box, Trails includes a small suite of trailpacks:
 
 #### Q. Does Trails have a Roadmap?
 
-Yes! We have a [Trail Map](https://trailsjs/trails/blob/master/ROADMAP.md) that
+Yes! We have a [Trail Map](https://github.com/trailsjs/trails/blob/master/ROADMAP.md) that
 lays out our future plans and release schedule. Feel free to contribute your
 ideas.
 
