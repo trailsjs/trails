@@ -26,25 +26,28 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
-   * Validate and Organize Trailpacks
+   * Bind trailpack listeners to "this". Trailpacks are loaded in order,
+   * according to which events they listen for and emit. This metadata
+   * are configured in the trailpack's config in the "events" section.
    */
-  loadTrailpacks (packs) {
-    const filteredPacks = Util.filterTrailpacks(packs, this)
-
-    this.bindTrailpacks(filteredPacks)
-    this.validateTrailpacks(filteredPacks)
+  bindTrailpackListeners (packs) {
+    this.bindTrailpackMethodListeners(packs),
+    this.bindTrailpackPhaseListeners(packs)
   }
 
-  bindTrailpacks (packs) {
-    this.after(packs.map(pack => `trailpack:${pack.name}:configured`))
-      .then(() => this.emit(`trailpack:all:configured`))
+  bindTrailpackPhaseListeners (packs) {
+    const configuredEvents = packs.map(pack => `trailpack:${pack.name}:configured`)
+    const initializedEvents = packs.map(pack => `trailpack:${pack.name}:initialized`)
 
-    this.after(packs.map(pack => `trailpack:${pack.name}:initialized`))
-      .then(() => {
-        this.emit('trailpack:all:initialized')
-        this.emit('trails:ready')
-      })
+    this.after(configuredEvents).then(() => this.emit('trailpack:all:configured')),
 
+    this.after(initializedEvents).then(() => {
+      this.emit('trailpack:all:initialized')
+      this.emit('trails:ready')
+    })
+  }
+
+  bindTrailpackMethodListeners (packs) {
     packs.map(pack => {
       const events = pack.config.events
 
@@ -77,10 +80,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Start the App. Load and execute all Trailpacks.
    */
   start () {
-    this.bindEvents()
-    this.loadTrailpacks(this.config.trailpack.packs)
-
     this.emit('trails:start')
+
+    const filteredPacks = Util.filterTrailpacks(this)
+
+    this.bindEvents()
+    this.bindTrailpackListeners(filteredPacks),
+    this.validateTrailpacks(filteredPacks)
 
     return this.after('trails:ready')
   }
