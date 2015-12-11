@@ -9,16 +9,13 @@ module.exports = {
   disabled: [ ],
 
   /**
-   * Order does *not* matter. Each module is loaded according to its own requirements.
+   * Order does *not* matter. Each module is loaded according to its own
+   * requirements.
    */
   packs: [
     require('trailpack-core'),
     require('trailpack-repl'),
     require('trailpack-router'),
     require('trailpack-hapi')
-  ],
-
-  paths: {
-    root: `${__dirname}/..`
-  }
+  ]
 }
