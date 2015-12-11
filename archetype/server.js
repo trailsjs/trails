@@ -5,7 +5,6 @@
  */
 const rc = require('rc')
 const TrailsApp = require('trails')
-const testapp = require('./')
-const app = new TrailsApp(testapp)
+const app = new TrailsApp(require('.'))
 
 app.start(rc('trails')).catch(app.stop)
