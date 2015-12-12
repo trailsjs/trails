@@ -31,8 +31,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * are configured in the trailpack's config in the "events" section.
    */
   bindTrailpackListeners (packs) {
-    this.bindTrailpackMethodListeners(packs),
     this.bindTrailpackPhaseListeners(packs)
+    this.bindTrailpackMethodListeners(packs)
   }
 
   bindTrailpackPhaseListeners (packs) {
@@ -74,20 +74,20 @@ module.exports = class TrailsApp extends events.EventEmitter {
         this.log.verbose('Trailpacks: All Validated.')
         this.emit('trailpack:all:validated')
       })
+      .catch(err => this.stop(err))
   }
 
   /**
    * Start the App. Load and execute all Trailpacks.
    */
   start () {
-    this.emit('trails:start')
-
     const filteredPacks = Util.filterTrailpacks(this)
 
     this.bindEvents()
-    this.bindTrailpackListeners(filteredPacks),
+    this.bindTrailpackListeners(filteredPacks)
     this.validateTrailpacks(filteredPacks)
 
+    this.emit('trails:start')
     return this.after('trails:ready')
   }
 
@@ -112,6 +112,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
     const argv = arguments
 
     // allow errors to escape and be printed on exit
+    // XXX this might only be needed because I don't have all the escape hatches
+    // covered that errors can escape out of
     process.nextTick(() => super.emit.apply(this, argv))
   }
 
