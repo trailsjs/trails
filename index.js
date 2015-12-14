@@ -49,14 +49,14 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
   bindTrailpackMethodListeners (packs) {
     packs.map(pack => {
-      const events = pack.config.events
+      const lifecycle = pack.config.lifecycle
 
-      this.after(events.configure.listen.concat([ 'trailpack:all:validated' ]))
+      this.after(lifecycle.configure.listen.concat([ 'trailpack:all:validated' ]))
         .then(() => pack.configure())
         .then(() => this.emit(`trailpack:${pack.name}:configured`))
         .catch(err => this.stop(err))
 
-      this.after(events.initialize.listen.concat([ 'trailpack:all:configured' ]))
+      this.after(lifecycle.initialize.listen.concat([ 'trailpack:all:configured' ]))
         .then(() => pack.initialize())
         .then(() => this.emit(`trailpack:${pack.name}:initialized`))
         .catch(err => this.stop(err))
