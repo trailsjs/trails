@@ -153,7 +153,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.once('trails:error:fatal', err => this.stop(err))
 
     process.on('exit', () => {
-      this.log.warn('Event loop is empty. I have nothing else to do. Shutting down')
+      this.log.verbose('Event loop is empty. I have nothing else to do. Shutting down')
     })
     process.on('uncaughtException', err => this.stop(err))
 
