@@ -2,7 +2,7 @@
 'use strict'
 
 const events = require('events')
-const Util = require('./lib/util')
+const lib = require('./lib')
 
 /**
  * The Trails Application. Merges the configuration and API resources
@@ -74,7 +74,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   validateTrailpacks (packs) {
     return Promise.all(packs.map(pack => pack.validate()))
       .then(() => {
-        this.packs = Util.getTrailpackMapping(packs)
+        this.packs = lib.Util.getTrailpackMapping(packs)
 
         this.log.verbose('Trailpacks: All Validated.')
         this.emit('trailpack:all:validated')
@@ -86,11 +86,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Start the App. Load and execute all Trailpacks.
    */
   start () {
-    const filteredPacks = Util.filterTrailpacks(this)
+    const instantiatedPacks = this.config.main.packs.map(Pack => new Pack(this))
 
     this.bindEvents()
-    this.bindTrailpackListeners(filteredPacks)
-    this.validateTrailpacks(filteredPacks)
+    this.bindTrailpackListeners(instantiatedPacks)
+    this.validateTrailpacks(instantiatedPacks)
 
     this.emit('trails:start')
     return this.after('trails:ready')
@@ -134,7 +134,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
-   * Expose winston logger on global app object
+   * Expose winston logger on app object.
    */
   get log() {
     return this.config.log.logger

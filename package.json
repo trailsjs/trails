@@ -39,6 +39,7 @@
   "devDependencies": {
     "eslint": "^1.10.3",
     "eslint-config-trails": "0.0.8",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "winston": "^2.1.1"
   }
 }
