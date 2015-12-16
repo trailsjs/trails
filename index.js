@@ -113,12 +113,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   emit (event) {
     this.log.debug('trails event:', event)
-    const argv = arguments
 
     // allow errors to escape and be printed on exit
     // XXX this might only be needed because I don't have all the escape hatches
     // covered that errors can escape out of
-    process.nextTick(() => super.emit.apply(this, argv))
+    process.nextTick(() => super.emit.apply(this, arguments))
   }
 
   /**
