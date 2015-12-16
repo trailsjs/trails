@@ -10,11 +10,17 @@ const Util = require('./lib/util')
  */
 module.exports = class TrailsApp extends events.EventEmitter {
 
+  /**
+   * @param app.api The application api (api/ folder)
+   * @param app.config The application configuration (config/ folder)
+   * @param app.pkg The application package.json
+   */
   constructor (app) {
     super()
 
-    // set correct environment
-    process.env.NODE_ENV || (process.env.NODE_ENV = 'development')
+    if (!process.env.NODE_ENV) {
+      process.env.NODE_ENV = 'development'
+    }
 
     this.pkg = app.pkg
     this.config = app.config
@@ -26,9 +32,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
-   * Bind trailpack listeners to "this". Trailpacks are loaded in order,
-   * according to which events they listen for and emit. This metadata
-   * are configured in the trailpack's config in the "events" section.
+   * Trailpacks are loaded in order, according to which events they listen for
+   * and emit.
    */
   bindTrailpackListeners (packs) {
     this.bindTrailpackPhaseListeners(packs)
@@ -51,12 +56,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
     packs.map(pack => {
       const lifecycle = pack.config.lifecycle
 
-      this.after(lifecycle.configure.listen.concat([ 'trailpack:all:validated' ]))
+      this.after(lifecycle.configure.listen.concat('trailpack:all:validated'))
         .then(() => pack.configure())
         .then(() => this.emit(`trailpack:${pack.name}:configured`))
         .catch(err => this.stop(err))
 
-      this.after(lifecycle.initialize.listen.concat([ 'trailpack:all:configured' ]))
+      this.after(lifecycle.initialize.listen.concat('trailpack:all:configured'))
         .then(() => pack.initialize())
         .then(() => this.emit(`trailpack:${pack.name}:initialized`))
         .catch(err => this.stop(err))
@@ -95,8 +100,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Shutdown.
    */
   stop (err) {
-    console.log()
-    if (err) this.log.error(err.stack)
+    if (err) this.log.error('\n', err.stack)
     this.emit('trails:stop')
     this.removeAllListeners()
     process.removeAllListeners()
