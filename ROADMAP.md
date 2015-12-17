@@ -48,7 +48,13 @@ See: [trailsjs/trails/milestones/v1.0-alpha](https://github.com/trailsjs/trails/
 ##### Open Issues
 See: [trailsjs/trails/milestones/v1.0-beta](https://github.com/trailsjs/trails/milestones/v1.0-beta)
 
-### v1.0 (February 2016)
+### v1.0 (April 2016)
+
+The April 2016 release of Trails will constitute the first production-ready release. The following trailpacks also must reach v1.0 status:
+
+- [trailpack-auth](https://github.com/trailsjs/trailpack-auth) ([v1.0 milestone](https://github.com/trailsjs/trailpack-auth/milestones/v1.0))
+- [trailpack-permissions](https://github.com/trailsjs/trailpack-permissions) ([v1.0 milestone](https://github.com/trailsjs/trailpack-permissions/milestones/v1.0))
+- [trailpack-sails](https://github.com/trailsjs/trailpack-sails) ([v1.0 milestone](https://github.com/trailsjs/trailpack-sails/milestones/v1.0))
 
 ##### Open Issues
 See: [trailsjs/trails/milestones/v1.0](https://github.com/trailsjs/trails/milestones/v1.0)
