@@ -5,5 +5,5 @@
  * @see http://trailsjs.io/doc/config/views.js
  */
 module.exports = {
-
+  engine: require('jade')
 }
