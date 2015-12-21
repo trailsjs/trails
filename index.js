@@ -14,12 +14,21 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @param app.api The application api (api/ folder)
    * @param app.config The application configuration (config/ folder)
    * @param app.pkg The application package.json
+   *
+   * Initialize the Trails Application and its EventEmitter parentclass. Set
+   * some necessary default configuration.
    */
   constructor (app) {
     super()
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
+    }
+    if (!app.config.main.paths) {
+      app.config.main.paths = { }
+    }
+    if (!app.config.main.paths.root) {
+      app.config.main.paths.root = process.cwd()
     }
 
     this.pkg = app.pkg
@@ -102,9 +111,17 @@ module.exports = class TrailsApp extends events.EventEmitter {
   stop (err) {
     if (err) this.log.error('\n', err.stack)
     this.emit('trails:stop')
+
+    const unloadPromises = Object.keys(this.packs).map(packName => {
+      const pack = this.packs[packName]
+      return pack.unload()
+    })
+
     this.removeAllListeners()
-    process.removeAllListeners()
-    process.exit(err ? 1 : 0)
+    process.removeAllListeners('exit')
+    process.removeAllListeners('uncaughtException')
+
+    return Promise.all(unloadPromises)
   }
 
   /**
