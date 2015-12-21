@@ -4,7 +4,7 @@
 [![NPM version][npm-image]][npm-url]
 [![Build status][ci-image]][ci-url]
 [![Dependency Status][daviddm-image]][daviddm-url]
-[![Follow @trailsjs on Twitter][twitter-image]]
+[![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
 
 Trails is a modern, community-driven web application framework for node.js. It
 builds on the pedigree of [Rails](http://rubyonrails.org/) and [Grails](https://grails.org/)
