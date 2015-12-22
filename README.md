@@ -4,6 +4,7 @@
 [![NPM version][npm-image]][npm-url]
 [![Build status][ci-image]][ci-url]
 [![Dependency Status][daviddm-image]][daviddm-url]
+[![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
 
 Trails is a modern, community-driven web application framework for node.js. It
 builds on the pedigree of [Rails](http://rubyonrails.org/) and [Grails](https://grails.org/)
@@ -119,4 +120,6 @@ docs for more info.
 [daviddm-url]: https://david-dm.org/trailsjs/trails
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
 [gitter-url]: https://gitter.im/trailsjs/trails
+[twitter-image]: https://img.shields.io/twitter/follow/trailsjs.svg?style=social
+[twitter-url]: https://twitter.com/trailsjs
 
