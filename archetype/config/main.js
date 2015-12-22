@@ -15,5 +15,12 @@ module.exports = {
     require('trailpack-repl'),
     require('trailpack-router'),
     require('trailpack-hapi')
-  ]
+  ],
+
+  /**
+   * Define application paths here. "root" is the only required path.
+   */
+  paths: {
+    root: __dirname + '../'
+  }
 }
