@@ -67,3 +67,13 @@ See: [trailsjs/trails/milestones/v1.0](https://github.com/trailsjs/trails/milest
 
 See https://github.com/trailsjs/trails/releases.
 
+## Backlog
+
+The backlog consists of features which are not currently in the immediate-term roadmap above, but are useful.  We would exuberantly accept a pull request implementing any of the items below, so long as it was accompanied with reasonable tests that prove it, and it doesn't break other core functionality.
+
+This backlog table is intended for major pieces of functionality that have not been broken down yet.  If you have a backlog item that's a smaller piece of work, please add it to the [Backlog](https://github.com/trailsjs/trails/milestones/Backlog) milestone in the Issue queue.
+
+ProTip: _(feel free to suggest things)_
+
+ Feature                                         | Owner                                              | Details
+ :---------------------------------------------- | :------------------------------------------------- | :------
