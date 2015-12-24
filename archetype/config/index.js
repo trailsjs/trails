@@ -4,7 +4,7 @@
  */
 exports.env = require('./env')
 exports.log = require('./log')
-exports.trailpack = require('./trailpack')
+exports.main = require('./main')
 
 exports.database = require('./database')
 exports.footprints = require('./footprints')

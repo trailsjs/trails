@@ -20,3 +20,4 @@ deploy:
     tags: true
     repo: trailsjs/trails
     all_branches: true
+    node: 'stable'

@@ -1,6 +1,6 @@
 {
   "name": "trails",
-  "version": "0.0.5",
+  "version": "0.0.14",
   "description": "Modern MVC Web Framework for Node.js",
   "keywords": [
     "mvc",
@@ -28,11 +28,9 @@
   },
   "homepage": "http://trailsjs.io",
   "dependencies": {
-    "lodash": "^3.10.1",
-    "trailpack": "0.0.0"
+    "trailpack": "latest"
   },
   "bundledDependencies": [
-    "lodash",
     "trailpack"
   ],
   "eslintConfig": {
@@ -41,6 +39,7 @@
   "devDependencies": {
     "eslint": "^1.10.3",
     "eslint-config-trails": "0.0.8",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "winston": "^2.1.1"
   }
 }
