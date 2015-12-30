@@ -51,7 +51,7 @@
   "homepage": "http://trailsjs.io",
   "dependencies": {
     "i18next": "2.0.10"
-  }
+  },
   "devDependencies": {
     "eslint": "^1.10.3",
     "eslint-config-trails": "0.0.8",
@@ -60,5 +60,5 @@
   },
   "eslintConfig": {
     "extends": "trails"
-  },
+  }
 }
