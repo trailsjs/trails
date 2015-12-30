@@ -12,7 +12,11 @@
     "grails",
     "sails",
     "trails",
-    "realtime"
+    "trailsjs"
+    "realtime",
+    "hapi",
+    "i18n",
+    "orm"
   ],
   "scripts": {
     "test": "eslint . && mocha"
@@ -27,12 +31,6 @@
     "url": "https://github.com/trailsjs/trails/issues"
   },
   "homepage": "http://trailsjs.io",
-  "dependencies": {
-    "trailpack": "latest"
-  },
-  "bundledDependencies": [
-    "trailpack"
-  ],
   "eslintConfig": {
     "extends": "trails"
   },
