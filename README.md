@@ -1,4 +1,4 @@
-# [![Trails.js][trails-image]][trails-url]
+[![Trails.js][trails-image]][trails-url]
 
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
