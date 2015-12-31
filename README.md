@@ -112,7 +112,7 @@ docs for more info.
 ## License
 [MIT](https://github.com/trailsjs/trails/blob/master/LICENSE)
 
-[trails-image]: http://i.imgur.com/RZb5WG2.png
+[trails-image]: http://i.imgur.com/amwaQQI.png
 [trails-url]: http://trailsjs.io
 [npm-image]: https://img.shields.io/npm/v/trails.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trails
