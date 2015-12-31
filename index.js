@@ -23,6 +23,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
+    if (!app.config.env) {
+      app.config.env = { }
+    }
+    if (!app.config.env[process.env.NODE_ENV]) {
+      app.config.env[process.env.NODE_ENV] = { }
+    }
     if (!app.config.main.paths) {
       app.config.main.paths = { }
     }
@@ -63,14 +69,14 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (err) this.log.error('\n', err.stack)
     this.emit('trails:stop')
 
+    this.removeAllListeners()
+    process.removeAllListeners('exit')
+    process.removeAllListeners('uncaughtException')
+
     const unloadPromises = Object.keys(this.packs).map(packName => {
       const pack = this.packs[packName]
       return pack.unload()
     })
-
-    this.removeAllListeners()
-    process.removeAllListeners('exit')
-    process.removeAllListeners('uncaughtException')
 
     return Promise.all(unloadPromises)
   }
@@ -113,7 +119,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Expose the i18n translate function on the app object
    */
   get __ () {
-    return this.config.i18n.t
+    return this.packs.core.i18n.t
   }
 }
 
