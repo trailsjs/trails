@@ -75,6 +75,14 @@ Out of the box, Trails includes a small suite of trailpacks:
 - Windows, Mac, and Linux
 - Node 4.0 and newer
 
+## Contribute
+
+Trails welcomes and encourages contributions from the community.  To contribute to Trails core, please read our [Contribution Guide](https://github.com/trailsjs/trails/blob/master/CONTRIBUTING.md).
+
+We encourage community members to build and maintain their own [Trail Packs](https://github.com/trailsjs/trailpack) as well.
+
+Lastly, we appreciate any and all contributions around documentation and technical articles describing how to work with Trails.
+
 ## FAQ
 
 #### Q. Does Trails have a Roadmap?
