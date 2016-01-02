@@ -1,4 +1,3 @@
-/*eslint no-console: 0 */
 'use strict'
 
 const events = require('events')
@@ -24,6 +23,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
+    if (!app.config.env) {
+      app.config.env = { }
+    }
+    if (!app.config.env[process.env.NODE_ENV]) {
+      app.config.env[process.env.NODE_ENV] = { }
+    }
     if (!app.config.main.paths) {
       app.config.main.paths = { }
     }
@@ -41,85 +46,37 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
-   * Trailpacks are loaded in order, according to which events they listen for
-   * and emit.
-   */
-  bindTrailpackListeners (packs) {
-    this.bindTrailpackPhaseListeners(packs)
-    this.bindTrailpackMethodListeners(packs)
-  }
-
-  bindTrailpackPhaseListeners (packs) {
-    const configuredEvents = packs.map(pack => `trailpack:${pack.name}:configured`)
-    const initializedEvents = packs.map(pack => `trailpack:${pack.name}:initialized`)
-
-    this.after(configuredEvents).then(() => this.emit('trailpack:all:configured')),
-
-    this.after(initializedEvents).then(() => {
-      this.emit('trailpack:all:initialized')
-      this.emit('trails:ready')
-    })
-  }
-
-  bindTrailpackMethodListeners (packs) {
-    packs.map(pack => {
-      const lifecycle = pack.config.lifecycle
-
-      this.after(lifecycle.configure.listen.concat('trailpack:all:validated'))
-        .then(() => pack.configure())
-        .then(() => this.emit(`trailpack:${pack.name}:configured`))
-        .catch(err => this.stop(err))
-
-      this.after(lifecycle.initialize.listen.concat('trailpack:all:configured'))
-        .then(() => pack.initialize())
-        .then(() => this.emit(`trailpack:${pack.name}:initialized`))
-        .catch(err => this.stop(err))
-    })
-  }
-
-  /**
-   * Invoke .validate() on all loaded trailpacks
-   */
-  validateTrailpacks (packs) {
-    return Promise.all(packs.map(pack => pack.validate()))
-      .then(() => {
-        this.packs = lib.Util.getTrailpackMapping(packs)
-
-        this.log.verbose('Trailpacks: All Validated.')
-        this.emit('trailpack:all:validated')
-      })
-      .catch(err => this.stop(err))
-  }
-
-  /**
-   * Start the App. Load and execute all Trailpacks.
+   * Start the App. Load all Trailpacks.
+   * @return Promise
    */
   start () {
     const instantiatedPacks = this.config.main.packs.map(Pack => new Pack(this))
 
-    this.bindEvents()
-    this.bindTrailpackListeners(instantiatedPacks)
-    this.validateTrailpacks(instantiatedPacks)
+    lib.Trails.bindEvents(this)
+    lib.Trailpack.bindTrailpackPhaseListeners(this, instantiatedPacks)
+    lib.Trailpack.bindTrailpackMethodListeners(this, instantiatedPacks)
+    lib.Trailpack.validateTrailpacks(this, instantiatedPacks)
 
     this.emit('trails:start')
     return this.after('trails:ready')
   }
 
   /**
-   * Shutdown.
+   * Shutdown. Unbind listeners, unload trailpacks.
+   * @return Promise
    */
   stop (err) {
     if (err) this.log.error('\n', err.stack)
     this.emit('trails:stop')
 
+    this.removeAllListeners()
+    process.removeAllListeners('exit')
+    process.removeAllListeners('uncaughtException')
+
     const unloadPromises = Object.keys(this.packs).map(packName => {
       const pack = this.packs[packName]
       return pack.unload()
     })
-
-    this.removeAllListeners()
-    process.removeAllListeners('exit')
-    process.removeAllListeners('uncaughtException')
 
     return Promise.all(unloadPromises)
   }
@@ -139,6 +96,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
   /**
    * Resolve Promise once all events in the list have emitted
+   * @return Promise
    */
   after (events) {
     if (!Array.isArray(events)) {
@@ -153,28 +111,15 @@ module.exports = class TrailsApp extends events.EventEmitter {
   /**
    * Expose winston logger on app object.
    */
-  get log() {
+  get log () {
     return this.config.log.logger
   }
 
   /**
-   * Handle various application events
+   * Expose the i18n translate function on the app object
    */
-  bindEvents () {
-    if (this.bound) {
-      this.log.warn('trails-app: Someone attempted to bindEvents() twice! Stacktrace below.')
-      this.log.warn(console.trace())
-      return
-    }
-
-    this.once('trails:error:fatal', err => this.stop(err))
-
-    process.on('exit', () => {
-      this.log.verbose('Event loop is empty. I have nothing else to do. Shutting down')
-    })
-    process.on('uncaughtException', err => this.stop(err))
-
-    this.bound = true
+  get __ () {
+    return this.packs.core.i18n.t
   }
 }
 

@@ -61,7 +61,7 @@ See: [trailsjs/trails/milestones/v1.0](https://github.com/trailsjs/trails/milest
 
 ## Future Releases
 
-### v1.x LTS (October 2015)
+### v1.x LTS (October 2016)
 
 ## Past Releases
 

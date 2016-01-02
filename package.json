@@ -1,6 +1,6 @@
 {
   "name": "trails",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "description": "Modern MVC Web Framework for Node.js",
   "keywords": [
     "mvc",
@@ -12,7 +12,11 @@
     "grails",
     "sails",
     "trails",
-    "realtime"
+    "trailsjs",
+    "realtime",
+    "hapi",
+    "i18n",
+    "orm"
   ],
   "scripts": {
     "test": "eslint . && mocha"
@@ -21,25 +25,47 @@
     "type": "git",
     "url": "git+https://github.com/trailsjs/trails.git"
   },
-  "author": "Travis Webb <me@traviswebb.com>",
+  "author": "Trails.js Team <hello@trailsjs.io>",
+  "contributors": [
+    {
+      "name": "Travis Webb",
+      "email": "me@traviswebb.com",
+      "url": "https://github.com/tjwebb"
+    },
+    {
+      "name": "Konstantin Zolotarev",
+      "url": "https://github.com/konstantinzolotarev"
+    },
+    {
+      "name": "Weyland Joyner",
+      "url": "https://github.com/weyj4"
+    },
+    {
+      "name": "Linda Nichols",
+      "email": "lynnaloo@gmail.com",
+      "url": "https://github.com/weyj4"
+    },
+    {
+      "name": "Mike Hostetler",
+      "email": "mike@epicfirm.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/trailsjs/trails/issues"
   },
   "homepage": "http://trailsjs.io",
   "dependencies": {
-    "trailpack": "latest"
-  },
-  "bundledDependencies": [
-    "trailpack"
-  ],
-  "eslintConfig": {
-    "extends": "trails"
+    "i18next": "^2.0.10"
   },
   "devDependencies": {
-    "eslint": "^1.10.3",
-    "eslint-config-trails": "0.0.8",
+    "eslint": "next",
+    "eslint-config-trails": "^1.0",
     "mocha": "^2.3.4",
+    "trailpack": "0.0.15",
     "winston": "^2.1.1"
+  },
+  "eslintConfig": {
+    "extends": "trails"
   }
 }
