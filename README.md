@@ -11,6 +11,8 @@ builds on the pedigree of [Rails](http://rubyonrails.org/) and [Grails](https://
 to accelerate development by adhering to a straightforward, convention-based,
 API-driven design philosophy.
 
+## Note: Trails.js is pre-release. 1.0-alpha is scheduled for release on January 8, 2016.
+
 ## Getting Started
 
 #### Install
