@@ -75,7 +75,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
         .then(() => this.emit(`trailpack:${pack.name}:initialized`))
         .catch(err => this.stop(err))
     })
-    this.packs = packs
   }
 
   /**
