@@ -57,7 +57,6 @@ $ npm start
 
 #### Happy Trails!
 
-
 ## Trailpacks
 
 [Trailpacks](https://github.com/trailsjs/trailpack) extend the framework's
@@ -71,6 +70,7 @@ Out of the box, Trails includes a small suite of trailpacks:
 - [router](https://github.com/trailsjs/trailpack-router)
 - [repl](https://github.com/trailsjs/trailpack-repl)
 - [hapi](https://github.com/trailsjs/trailpack-hapi)
+- [waterline](https://github.com/trailsjs/trailpack-waterline)
 
 ## Compatibility
 
@@ -87,7 +87,7 @@ ideas.
 
 #### Q. Why does Trails require Node 4+?
 
-Trails is written entirely in ES6, and runs natively on Node without
+Trails is written entirely in ES6, and [runs natively on Node](https://nodejs.org/en/docs/es6/) without
 transpiling. If you'd like to use Trails on an older version of node, you can
 install babel and configure it to transpile your application into ES5.
 
