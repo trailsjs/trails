@@ -52,10 +52,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
   start () {
     const instantiatedPacks = this.config.main.packs.map(Pack => new Pack(this))
 
-    lib.Trails.bindEvents(this)
     lib.Trailpack.bindTrailpackPhaseListeners(this, instantiatedPacks)
     lib.Trailpack.bindTrailpackMethodListeners(this, instantiatedPacks)
-    lib.Trailpack.validateTrailpacks(this, instantiatedPacks)
+    lib.Trails.bindEvents(this)
 
     this.emit('trails:start')
     return this.after('trails:ready')
