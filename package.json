@@ -62,7 +62,7 @@
     "eslint": "next",
     "eslint-config-trails": "^1.0",
     "mocha": "^2.3.4",
-    "trailpack": "0.0.17",
+    "trailpack": "0.0.18",
     "winston": "^2.1.1"
   },
   "eslintConfig": {
