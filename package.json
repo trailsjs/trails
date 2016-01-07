@@ -1,6 +1,6 @@
 {
   "name": "trails",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Modern MVC Web Framework for Node.js",
   "keywords": [
     "mvc",
