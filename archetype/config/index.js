@@ -8,6 +8,7 @@ exports.main = require('./main')
 
 exports.database = require('./database')
 exports.footprints = require('./footprints')
+exports.i18n = require('./i18n')
 exports.policies = require('./policies')
 exports.routes = require('./routes')
 exports.web = require('./web')

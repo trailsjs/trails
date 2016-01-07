@@ -1,4 +1,4 @@
-# trails
+[![Trails.js][trails-image]][trails-url]
 
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
@@ -10,6 +10,8 @@ Trails is a modern, community-driven web application framework for node.js. It
 builds on the pedigree of [Rails](http://rubyonrails.org/) and [Grails](https://grails.org/)
 to accelerate development by adhering to a straightforward, convention-based,
 API-driven design philosophy.
+
+## Note: Trails.js is pre-release. 1.0-alpha is scheduled for release on January 8, 2016.
 
 ## Getting Started
 
@@ -55,7 +57,6 @@ $ npm start
 
 #### Happy Trails!
 
-
 ## Trailpacks
 
 [Trailpacks](https://github.com/trailsjs/trailpack) extend the framework's
@@ -69,6 +70,7 @@ Out of the box, Trails includes a small suite of trailpacks:
 - [router](https://github.com/trailsjs/trailpack-router)
 - [repl](https://github.com/trailsjs/trailpack-repl)
 - [hapi](https://github.com/trailsjs/trailpack-hapi)
+- [waterline](https://github.com/trailsjs/trailpack-waterline)
 
 ## Compatibility
 
@@ -85,7 +87,7 @@ ideas.
 
 #### Q. Why does Trails require Node 4+?
 
-Trails is written entirely in ES6, and runs natively on Node without
+Trails is written entirely in ES6, and [runs natively on Node](https://nodejs.org/en/docs/es6/) without
 transpiling. If you'd like to use Trails on an older version of node, you can
 install babel and configure it to transpile your application into ES5.
 
@@ -112,6 +114,8 @@ docs for more info.
 ## License
 [MIT](https://github.com/trailsjs/trails/blob/master/LICENSE)
 
+[trails-image]: http://i.imgur.com/amwaQQI.png
+[trails-url]: http://trailsjs.io
 [npm-image]: https://img.shields.io/npm/v/trails.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trails
 [ci-image]: https://img.shields.io/travis/trailsjs/trails/master.svg?style=flat-square

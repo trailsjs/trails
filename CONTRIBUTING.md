@@ -86,6 +86,21 @@ In case of doubt, open an issue in the [issue tracker](), ask your question in t
 5. Add a line of what you did to CHANGELOG.md (right under `master`).
 6. Push to your fork and submit a pull request to the appropriate branch
 
+## Publishing Releases
+
+All releases are tagged and published by the [Trails.js Maintainers](https://github.com/orgs/trailsjs/teams) automatically via [Travis-CI](https://travis-ci.org/trailsjs/trails). For a patch release, the deployment process is as follows:
+
+1. Tag a release
+```sh
+$ npm version patch
+```
+
+2. Push the tag upstream (the "trailsjs" org)
+```sh
+$ git push upstream --tags
+```
+
+3. Travis-CI will publish the release to npm.
 
 ## Financial Support
 
