@@ -1,6 +1,6 @@
 {
   "name": "trails",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Modern MVC Web Framework for Node.js",
   "keywords": [
     "mvc",
@@ -55,8 +55,7 @@
     "url": "https://github.com/trailsjs/trails/issues"
   },
   "homepage": "http://trailsjs.io",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "next",
     "eslint-config-trails": "^1.0",
