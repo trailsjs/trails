@@ -67,8 +67,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   stop (err) {
     if (err) {
-      console.trace()
-      this.log.error('\n', err.stack)
+      console.trace(err)
+      this.log.error('\n', err.stack || '')
     }
     this.emit('trails:stop')
 
