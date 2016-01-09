@@ -3,7 +3,6 @@
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][ci-image]][ci-url]
-[![Dependency Status][daviddm-image]][daviddm-url]
 [![Code Climate][codeclimate-image]][codeclimate-url]
 [![Issue Stats][issuestats-image]][issuestats-url]
 [![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
@@ -120,8 +119,6 @@ docs for more info.
 [npm-url]: https://npmjs.org/package/trails
 [ci-image]: https://img.shields.io/travis/trailsjs/trails/master.svg?style=flat-square
 [ci-url]: https://travis-ci.org/trailsjs/trails
-[daviddm-image]: http://img.shields.io/david/trailsjs/trails.svg?style=flat-square
-[daviddm-url]: https://david-dm.org/trailsjs/trails
 [codeclimate-image]: https://img.shields.io/codeclimate/github/trailsjs/trails.svg?style=flat-square
 [codeclimate-url]: https://codeclimate.com/github/trailsjs/trails
 [issuestats-image]: http://issuestats.com/github/trailsjs/trails/badge/issue?style=flat-square
