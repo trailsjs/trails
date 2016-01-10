@@ -3,15 +3,14 @@
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][ci-image]][ci-url]
-[![Dependency Status][daviddm-image]][daviddm-url]
+[![Code Climate][codeclimate-image]][codeclimate-url]
+[![Issue Stats][issuestats-image]][issuestats-url]
 [![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
 
 Trails is a modern, community-driven web application framework for node.js. It
 builds on the pedigree of [Rails](http://rubyonrails.org/) and [Grails](https://grails.org/)
 to accelerate development by adhering to a straightforward, convention-based,
 API-driven design philosophy.
-
-## Note: Trails.js is pre-release. 1.0-alpha is scheduled for release on January 8, 2016.
 
 ## Getting Started
 
@@ -120,8 +119,10 @@ docs for more info.
 [npm-url]: https://npmjs.org/package/trails
 [ci-image]: https://img.shields.io/travis/trailsjs/trails/master.svg?style=flat-square
 [ci-url]: https://travis-ci.org/trailsjs/trails
-[daviddm-image]: http://img.shields.io/david/trailsjs/trails.svg?style=flat-square
-[daviddm-url]: https://david-dm.org/trailsjs/trails
+[codeclimate-image]: https://img.shields.io/codeclimate/github/trailsjs/trails.svg?style=flat-square
+[codeclimate-url]: https://codeclimate.com/github/trailsjs/trails
+[issuestats-image]: http://issuestats.com/github/trailsjs/trails/badge/issue?style=flat-square
+[issuestats-url]: http://issuestats.com/github/trailsjs/trails
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
 [gitter-url]: https://gitter.im/trailsjs/trails
 [twitter-image]: https://img.shields.io/twitter/follow/trailsjs.svg?style=social

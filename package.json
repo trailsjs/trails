@@ -1,6 +1,6 @@
 {
   "name": "trails",
-  "version": "0.0.18",
+  "version": "0.0.24",
   "description": "Modern MVC Web Framework for Node.js",
   "keywords": [
     "mvc",
@@ -43,7 +43,7 @@
     {
       "name": "Linda Nichols",
       "email": "lynnaloo@gmail.com",
-      "url": "https://github.com/weyj4"
+      "url": "https://github.com/lynnaloo"
     },
     {
       "name": "Mike Hostetler",
@@ -55,14 +55,12 @@
     "url": "https://github.com/trailsjs/trails/issues"
   },
   "homepage": "http://trailsjs.io",
-  "dependencies": {
-    "i18next": "^2.0.14"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "next",
     "eslint-config-trails": "^1.0",
     "mocha": "^2.3.4",
-    "trailpack": "0.0.17",
+    "trailpack": "0.0.18",
     "winston": "^2.1.1"
   },
   "eslintConfig": {

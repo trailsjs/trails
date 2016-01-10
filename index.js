@@ -1,3 +1,4 @@
+/*eslint no-console: 0 */
 'use strict'
 
 const events = require('events')
@@ -65,14 +66,17 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   stop (err) {
-    if (err) this.log.error('\n', err.stack)
+    if (err) {
+      console.trace(err)
+      this.log.error('\n', err.stack || '')
+    }
     this.emit('trails:stop')
 
     this.removeAllListeners()
     process.removeAllListeners('exit')
     process.removeAllListeners('uncaughtException')
 
-    const unloadPromises = Object.keys(this.packs).map(packName => {
+    const unloadPromises = Object.keys(this.packs || { }).map(packName => {
       const pack = this.packs[packName]
       return pack.unload()
     })
