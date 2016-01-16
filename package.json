@@ -57,7 +57,7 @@
   "homepage": "http://trailsjs.io",
   "dependencies": {},
   "devDependencies": {
-    "eslint": "next",
+    "eslint": "^2.0.0-beta.1",
     "eslint-config-trails": "^1.0",
     "mocha": "^2.3.4",
     "trailpack": "0.0.18",
