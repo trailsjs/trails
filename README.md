@@ -76,6 +76,17 @@ Out of the box, Trails includes a small suite of trailpacks:
 - Windows, Mac, and Linux
 - Node 4.0 and newer
 
+## RESOURCES
+
+#### Tutorials 
+- [Getting started](http://blog.jaumard.com/en/2016/01/05/getting-started-with-trails/)
+- [Create a custom Trailpack](http://blog.jaumard.com/en/2016/01/06/create-a-trailpack-for-trails/)
+
+#### Videos
+
+#### Support
+- [Gitter chat room](https://gitter.im/trailsjs/trails)
+
 ## FAQ
 
 #### Q. Does Trails have a Roadmap?
