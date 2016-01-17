@@ -6,13 +6,15 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "jade": "^1.11.0",
     "lodash": "^3.10",
     "rc": "^1.1",
     "trailpack-core": "latest",
-    "trailpack-hapi": "latest",
     "trailpack-repl": "latest",
     "trailpack-router": "latest",
+    "trails-services": "latest",
+    "trails-policy": "latest",
+    "trails-controller": "latest",
+    "trails-model": "latest",
     "trails": "latest",
     "waterline-sqlite3": "latest",
     "winston": "^2.1.1"

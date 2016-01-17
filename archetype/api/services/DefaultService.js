@@ -1,4 +1,6 @@
+'use strict'
 const _ = require('lodash')
+const Service = require('trails-service')
 
 /**
  * @module DefaultService
@@ -7,12 +9,12 @@ const _ = require('lodash')
  * @see {@link http://trailsjs.io/doc/api/services}
  * @this TrailsApp
  */
-module.exports = {
+module.exports = class DefaultService extends Service {
 
   /**
    * Return some info about this application
    */
-  getApplicationInfo () {
+  getApplicationInfo() {
     return {
       app: this.pkg.version,
       node: process.version,
