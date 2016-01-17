@@ -10,7 +10,6 @@
     "lodash": "^3.10",
     "rc": "^1.1",
     "trailpack-core": "1.0.0-alpha-2",
-    "trailpack-hapi": "1.0.0-alpha-5",
     "trailpack-repl": "1.0.0-alpha-3",
     "trailpack-router": "1.0.0-alpha-2",
     "trails": "latest",
