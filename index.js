@@ -1,7 +1,6 @@
 /*eslint no-console: 0 */
 'use strict'
 
-const _ = require('lodash')
 const events = require('events')
 const lib = require('./lib')
 
@@ -55,9 +54,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
       let log = function () {
         log[logger.level].apply(log, arguments)
       }
-      _.each(logger.levels, (value, key) => {
+      for (let key in logger.levels){
         log[key] = logger[key]
-      })
+      }
       return log
     }
     else {
