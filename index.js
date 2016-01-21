@@ -1,6 +1,7 @@
 /*eslint no-console: 0 */
 'use strict'
 
+const _ = require('lodash')
 const events = require('events')
 const lib = require('./lib')
 
@@ -18,24 +19,26 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Initialize the Trails Application and its EventEmitter parentclass. Set
    * some necessary default configuration.
    */
-  constructor (app) {
+  constructor(app) {
     super()
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
     if (!app.config.env) {
-      app.config.env = { }
+      app.config.env = {}
     }
     if (!app.config.env[process.env.NODE_ENV]) {
-      app.config.env[process.env.NODE_ENV] = { }
+      app.config.env[process.env.NODE_ENV] = {}
     }
     if (!app.config.main.paths) {
-      app.config.main.paths = { }
+      app.config.main.paths = {}
     }
     if (!app.config.main.paths.root) {
       app.config.main.paths.root = process.cwd()
     }
+
+    this.log = this.buildLog(app.config)
 
     this.pkg = app.pkg
     this.config = app.config
@@ -46,11 +49,27 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.setMaxListeners(64)
   }
 
+  buildLog(config) {
+    const logger = config.log.logger
+    if (logger.levels) {
+      let log = function () {
+        log[logger.level].apply(log, arguments)
+      }
+      _.each(logger.levels, (value, key) => {
+        log[key] = logger[key]
+      })
+      return log
+    }
+    else {
+      return logger
+    }
+  }
+
   /**
    * Start the App. Load all Trailpacks.
    * @return Promise
    */
-  start () {
+  start() {
     const instantiatedPacks = this.config.main.packs.map(Pack => new Pack(this))
 
     lib.Trailpack.bindTrailpackPhaseListeners(this, instantiatedPacks)
@@ -65,7 +84,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Shutdown. Unbind listeners, unload trailpacks.
    * @return Promise
    */
-  stop (err) {
+  stop(err) {
     if (err) {
       console.trace(err)
       this.log.error('\n', err.stack || '')
@@ -76,7 +95,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     process.removeAllListeners('exit')
     process.removeAllListeners('uncaughtException')
 
-    const unloadPromises = Object.keys(this.packs || { }).map(packName => {
+    const unloadPromises = Object.keys(this.packs || {}).map(packName => {
       const pack = this.packs[packName]
       return pack.unload()
     })
@@ -88,7 +107,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @override
    * Log app events for debugging
    */
-  emit (event) {
+  emit(event) {
     this.log.debug('trails event:', event)
 
     // allow errors to escape and be printed on exit
@@ -101,9 +120,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Resolve Promise once all events in the list have emitted
    * @return Promise
    */
-  after (events) {
+  after(events) {
     if (!Array.isArray(events)) {
-      events = [ events ]
+      events = [events]
     }
 
     return Promise.all(events.map(eventName => {
@@ -112,16 +131,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
-   * Expose winston logger on app object.
-   */
-  get log () {
-    return this.config.log.logger
-  }
-
-  /**
    * Expose the i18n translate function on the app object
    */
-  get __ () {
+  get __() {
     return this.packs.core.i18n.t
   }
 }
