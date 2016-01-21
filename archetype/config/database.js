@@ -9,11 +9,6 @@
 module.exports = {
 
   /**
-   * The default store used by models
-   */
-  defaultStore: 'sqlitedev',
-
-  /**
    * Define the database stores. A store is typically a single database.
    *
    * Use the SQLite3 by default for development purposes.
@@ -29,5 +24,10 @@ module.exports = {
       adapter: require('waterline-sqlite3'),
       migrate: 'alter'
     }
+  },
+
+  models: {
+    defaultStore: 'sqlitedev',
+    migrate: 'alter'
   }
 }

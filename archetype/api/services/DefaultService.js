@@ -1,4 +1,5 @@
 'use strict'
+
 const _ = require('lodash')
 const Service = require('trails-service')
 
@@ -14,12 +15,12 @@ module.exports = class DefaultService extends Service {
   /**
    * Return some info about this application
    */
-  getApplicationInfo() {
+  getApplicationInfo () {
     return {
-      app: this.pkg.version,
+      app: this.app.pkg.version,
       node: process.version,
       libs: process.versions,
-      trailpacks: _.map(_.omit(this.packs, 'inspect'), pack => {
+      trailpacks: _.map(_.omit(this.app.packs, 'inspect'), pack => {
         return {
           name: pack.name,
           version: pack.pkg.version
