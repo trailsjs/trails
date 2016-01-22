@@ -41,6 +41,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.config = app.config
     this.api = app.api
     this.bound = false
+    this._trails = require('./package')
 
     // increase listeners default
     this.setMaxListeners(64)
