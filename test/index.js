@@ -16,7 +16,7 @@ describe('Trails', () => {
         assert(app instanceof require('events').EventEmitter)
       })
       it('should set max number of event listeners', () => {
-        assert.equal(app.getMaxListeners(), 64)
+        assert.equal(app.getMaxListeners(), 128)
       })
       it('should set app properties', () => {
         assert(app.pkg)
