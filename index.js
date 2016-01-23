@@ -76,12 +76,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
     process.removeAllListeners('exit')
     process.removeAllListeners('uncaughtException')
 
-    const unloadPromises = Object.keys(this.packs || { }).map(packName => {
-      const pack = this.packs[packName]
-      return pack.unload()
-    })
-
-    return Promise.all(unloadPromises)
+    return Promise.all(
+      Object.keys(this.packs || { }).map(packName => {
+        this.log.debug('unloading trailpack', packName)
+        return this.packs[packName].unload()
+      }))
   }
 
   /**
@@ -109,20 +108,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
     return Promise.all(events.map(eventName => {
       return new Promise(resolve => this.once(eventName, resolve))
     }))
-  }
-
-  /**
-   * Expose winston logger on app object.
-   */
-  get log () {
-    return this.config.log.logger
-  }
-
-  /**
-   * Expose the i18n translate function on the app object
-   */
-  get __ () {
-    return this.packs.core.i18n.t
   }
 }
 
