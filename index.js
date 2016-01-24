@@ -72,9 +72,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     }
     this.emit('trails:stop')
 
-    this.removeAllListeners()
-    process.removeAllListeners('exit')
-    process.removeAllListeners('uncaughtException')
+    lib.Trails.unbindEvents(this)
 
     return Promise.all(
       Object.keys(this.packs || { }).map(packName => {
@@ -108,6 +106,14 @@ module.exports = class TrailsApp extends events.EventEmitter {
     return Promise.all(events.map(eventName => {
       return new Promise(resolve => this.once(eventName, resolve))
     }))
+  }
+
+  /**
+   * Expose the logger on the app object. The logger can be configured by
+   * setting the "config.log.logger" config property.
+   */
+  get log () {
+    return this.config.log.logger
   }
 }
 
