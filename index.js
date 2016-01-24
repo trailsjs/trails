@@ -43,9 +43,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.config = app.config
     this.api = app.api
     this.bound = false
+    this._trails = require('./package')
 
-    // increase listeners default
-    this.setMaxListeners(64)
+    this.setMaxListeners(app.config.main.maxListeners || 128)
   }
 
   buildLog(config) {
@@ -68,12 +68,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Start the App. Load all Trailpacks.
    * @return Promise
    */
-  start() {
-    const instantiatedPacks = this.config.main.packs.map(Pack => new Pack(this))
+  start () {
+    const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
 
-    lib.Trailpack.bindTrailpackPhaseListeners(this, instantiatedPacks)
-    lib.Trailpack.bindTrailpackMethodListeners(this, instantiatedPacks)
     lib.Trails.bindEvents(this)
+    lib.Trailpack.bindTrailpackPhaseListeners(this, trailpacks)
+    lib.Trailpack.bindTrailpackMethodListeners(this, trailpacks)
 
     this.emit('trails:start')
     return this.after('trails:ready')
@@ -90,16 +90,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
     }
     this.emit('trails:stop')
 
-    this.removeAllListeners()
-    process.removeAllListeners('exit')
-    process.removeAllListeners('uncaughtException')
+    lib.Trails.unbindEvents(this)
 
-    const unloadPromises = Object.keys(this.packs || {}).map(packName => {
-      const pack = this.packs[packName]
-      return pack.unload()
-    })
-
-    return Promise.all(unloadPromises)
+    return Promise.all(
+      Object.keys(this.packs || { }).map(packName => {
+        this.log.debug('unloading trailpack', packName)
+        return this.packs[packName].unload()
+      }))
   }
 
   /**
@@ -127,13 +124,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
     return Promise.all(events.map(eventName => {
       return new Promise(resolve => this.once(eventName, resolve))
     }))
-  }
-
-  /**
-   * Expose the i18n translate function on the app object
-   */
-  get __() {
-    return this.packs.core.i18n.t
   }
 }
 
