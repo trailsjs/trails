@@ -52,6 +52,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   start () {
     const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
+    this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)
 
     lib.Trails.bindEvents(this)
     lib.Trailpack.bindTrailpackPhaseListeners(this, trailpacks)
