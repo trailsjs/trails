@@ -1,11 +1,10 @@
 'use strict'
 
 const assert = require('assert')
-const lib = require('../lib')
+const lib = require('../../lib')
 const Trailpack = require('trailpack')
 const testAppDefinition = require('../testapp')
-const TrailsApp = require('../')
-
+const TrailsApp = require('../../')
 
 describe('Trailpack', () => {
   const app = new TrailsApp(testAppDefinition)
