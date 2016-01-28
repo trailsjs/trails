@@ -24,23 +24,14 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
-    if (!app.config.env) {
-      app.config.env = { }
-    }
-    if (!app.config.env[process.env.NODE_ENV]) {
-      app.config.env[process.env.NODE_ENV] = { }
-    }
-    if (!app.config.main.paths) {
-      app.config.main.paths = { }
-    }
-    if (!app.config.main.paths.root) {
-      app.config.main.paths.root = process.cwd()
-    }
+
+    lib.Trails.assignConfigDefaults(app.config)
 
     this.pkg = app.pkg
     this.config = app.config
     this.api = app.api
     this.bound = false
+    this.running = false
     this._trails = require('./package')
 
     this.setMaxListeners(app.config.main.maxListeners || 128)
@@ -59,7 +50,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     lib.Trailpack.bindTrailpackMethodListeners(this, trailpacks)
 
     this.emit('trails:start')
-    return this.after('trails:ready')
+    return this.after('trails:ready').then(() => this.running = true)
   }
 
   /**
@@ -70,6 +61,15 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (err) {
       this.log.error('\n', err.stack || '')
     }
+    if (!this.running) {
+      this.log.error('\n', 'The application attempted to shut down, but is not',
+        'in a running state. Either it is in the process of shutting down, or',
+        'did not start successfully. Trails will not attempt to shut down twice.')
+
+      this.log.error('\n', 'Try increasing the loglevel to "debug" to learn more')
+      return
+    }
+
     this.emit('trails:stop')
 
     lib.Trails.unbindEvents(this)
@@ -79,6 +79,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
         this.log.debug('unloading trailpack', packName)
         return this.packs[packName].unload()
       }))
+      .then(() => this.running = false)
   }
 
   /**
