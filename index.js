@@ -25,7 +25,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
       process.env.NODE_ENV = 'development'
     }
 
-    lib.Trails.assignConfigDefaults(app.config)
+    app.config = lib.Trails.assignConfigDefaults(app.config)
+
+    if (!app.config.log.logger) {
+      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
+    }
 
     this.pkg = app.pkg
     this.config = app.config
