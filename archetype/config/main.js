@@ -4,6 +4,8 @@
  *
  * @see http://trailsjs.io/doc/config/main
  */
+const path = require('path')
+
 module.exports = {
 
   /**
@@ -21,6 +23,6 @@ module.exports = {
    * Define application paths here. "root" is the only required path.
    */
   paths: {
-    root: __dirname + '../'
+    root: path.join(__dirname, '..')
   }
 }
