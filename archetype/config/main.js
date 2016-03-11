@@ -4,6 +4,9 @@
  *
  * @see http://trailsjs.io/doc/config/main
  */
+
+'use strict'
+
 const path = require('path')
 
 module.exports = {
