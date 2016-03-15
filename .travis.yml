@@ -1,7 +1,7 @@
 language: node_js
-node_js:
-- '4'
-- stable
+env:
+  - NODE_VERSION="4.0"
+  - NODE_VERSION="5.4"
 os:
 - linux
 - osx
