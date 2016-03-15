@@ -35,7 +35,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.config = app.config
     this.api = app.api
     this.bound = false
-    this.running = false
+    this.started = false
+    this.stopped = false
     this._trails = require('./package')
 
     this.setMaxListeners(app.config.main.maxListeners)
@@ -54,7 +55,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
     lib.Trailpack.bindTrailpackMethodListeners(this, trailpacks)
 
     this.emit('trails:start')
-    return this.after('trails:ready').then(() => this.running = true)
+    return this.after('trails:ready')
+      .then(() => {
+        this.started = true
+        return this
+      })
   }
 
   /**
@@ -65,13 +70,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (err) {
       this.log.error('\n', err.stack || '')
     }
-    if (!this.running) {
+    if (!this.started) {
       this.log.error('\n', 'The application attempted to shut down, but is not',
-        'in a running state. Either it is in the process of shutting down, or',
+        'in a started state. Either it is in the process of shutting down, or',
         'did not start successfully. Trails will not attempt to shut down twice.')
 
       this.log.error('\n', 'Try increasing the loglevel to "debug" to learn more')
-      return
+      return Promise.resolve(this)
     }
 
     this.emit('trails:stop')
@@ -83,7 +88,10 @@ module.exports = class TrailsApp extends events.EventEmitter {
         this.log.debug('unloading trailpack', packName)
         return this.packs[packName].unload()
       }))
-      .then(() => this.running = false)
+      .then(() => {
+        this.stopped = true
+        return this
+      })
   }
 
   /**
