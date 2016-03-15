@@ -1,7 +1,12 @@
 language: node_js
+
 node_js:
 - '4'
 - stable
+
+os:
+- linux
+- osx
 
 notifications:
   email: false
