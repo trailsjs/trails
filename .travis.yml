@@ -3,6 +3,11 @@ node_js:
 - '4'
 - stable
 
+os:
+- linux
+- osx
+- windows
+
 notifications:
   email: false
   webhooks:

@@ -18,50 +18,28 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Initialize the Trails Application and its EventEmitter parentclass. Set
    * some necessary default configuration.
    */
-  constructor(app) {
+  constructor (app) {
     super()
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
-    if (!app.config.env) {
-      app.config.env = {}
-    }
-    if (!app.config.env[process.env.NODE_ENV]) {
-      app.config.env[process.env.NODE_ENV] = {}
-    }
-    if (!app.config.main.paths) {
-      app.config.main.paths = {}
-    }
-    if (!app.config.main.paths.root) {
-      app.config.main.paths.root = process.cwd()
-    }
 
-    this.log = this.buildLog(app.config)
+    app.config = lib.Trails.assignConfigDefaults(app.config)
+
+    if (!app.config.log.logger) {
+      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
+    }
 
     this.pkg = app.pkg
     this.config = app.config
     this.api = app.api
     this.bound = false
+    this.started = false
+    this.stopped = false
     this._trails = require('./package')
 
-    this.setMaxListeners(app.config.main.maxListeners || 128)
-  }
-
-  buildLog(config) {
-    const logger = config.log.logger
-    if (logger.levels) {
-      let log = function () {
-        log[logger.level].apply(log, arguments)
-      }
-      for (let key in logger.levels){
-        log[key] = logger[key]
-      }
-      return log
-    }
-    else {
-      return logger
-    }
+    this.setMaxListeners(app.config.main.maxListeners)
   }
 
   /**
@@ -70,6 +48,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   start () {
     const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
+    this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)
 
     lib.Trails.bindEvents(this)
     lib.Trailpack.bindTrailpackPhaseListeners(this, trailpacks)
@@ -77,17 +56,29 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     this.emit('trails:start')
     return this.after('trails:ready')
+      .then(() => {
+        this.started = true
+        return this
+      })
   }
 
   /**
    * Shutdown. Unbind listeners, unload trailpacks.
    * @return Promise
    */
-  stop(err) {
+  stop (err) {
     if (err) {
-      console.trace(err)
       this.log.error('\n', err.stack || '')
     }
+    if (!this.started) {
+      this.log.error('\n', 'The application attempted to shut down, but is not',
+        'in a started state. Either it is in the process of shutting down, or',
+        'did not start successfully. Trails will not attempt to shut down twice.')
+
+      this.log.error('\n', 'Try increasing the loglevel to "debug" to learn more')
+      return Promise.resolve(this)
+    }
+
     this.emit('trails:stop')
 
     lib.Trails.unbindEvents(this)
@@ -97,13 +88,17 @@ module.exports = class TrailsApp extends events.EventEmitter {
         this.log.debug('unloading trailpack', packName)
         return this.packs[packName].unload()
       }))
+      .then(() => {
+        this.stopped = true
+        return this
+      })
   }
 
   /**
    * @override
    * Log app events for debugging
    */
-  emit(event) {
+  emit (event) {
     this.log.debug('trails event:', event)
 
     // allow errors to escape and be printed on exit
@@ -116,14 +111,22 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Resolve Promise once all events in the list have emitted
    * @return Promise
    */
-  after(events) {
+  after (events) {
     if (!Array.isArray(events)) {
-      events = [events]
+      events = [ events ]
     }
 
     return Promise.all(events.map(eventName => {
       return new Promise(resolve => this.once(eventName, resolve))
     }))
+  }
+
+  /**
+   * Expose the logger on the app object. The logger can be configured by
+   * setting the "config.log.logger" config property.
+   */
+  get log () {
+    return this.config.log.logger
   }
 }
 

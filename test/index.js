@@ -6,6 +6,35 @@ const testAppDefinition = require('./testapp')
 
 describe('Trails', () => {
   describe('@TrailsApp', () => {
+    describe('idempotence', () => {
+      it('should be able to start and stop many times in a single node process', () => {
+
+        let cycles = [ ]
+        for (let i = 0; i < 10; ++i) {
+          cycles.push(new Promise (resolve => {
+            console.log('loading application; iteration', i)
+            let app = new TrailsApp(testAppDefinition)
+            app.start()
+              .then(app => {
+                assert.equal(app.started, true)
+                resolve(app)
+              })
+          }))
+        }
+
+        return Promise.all(cycles)
+          .then(apps => {
+            return Promise.all(apps.map(app => {
+              return app.stop()
+            }))
+          })
+          .then(apps => {
+            apps.map(app => {
+              assert.equal(app.stopped, true)
+            })
+          })
+      })
+    })
     describe('#constructor', () => {
       let app
       before(() => {
