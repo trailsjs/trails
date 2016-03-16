@@ -11,42 +11,41 @@ const lib = require('./lib')
 module.exports = class TrailsApp extends events.EventEmitter {
 
   /**
-   * @param app.api The application api (api/ folder)
-   * @param app.config The application configuration (config/ folder)
-   * @param app.pkg The application package.json
+   * @param pkg The application package.json
    *
    * Initialize the Trails Application and its EventEmitter parentclass. Set
    * some necessary default configuration.
    */
-  constructor (app) {
+  constructor (pkg) {
     super()
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
 
-    app.config = lib.Trails.assignConfigDefaults(app.config)
-
-    if (!app.config.log.logger) {
-      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
-    }
-
-    this.pkg = app.pkg
-    this.config = app.config
-    this.api = app.api
+    this.pkg = pkg
     this.bound = false
     this.started = false
     this.stopped = false
     this._trails = require('./package')
-
-    this.setMaxListeners(app.config.main.maxListeners)
   }
 
   /**
    * Start the App. Load all Trailpacks.
+   *
+   * @param app.api The application api (api/ folder)
+   * @param app.config The application configuration (config/ folder)
    * @return Promise
    */
-  start () {
+  start (app) {
+    if (!app.config.log.logger) {
+      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
+    }
+
+    this.api = app.api
+    this.config = lib.Trails.assignConfigDefaults(app.config)
+    this.setMaxListeners(this.config.main.maxListeners)
+
     const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
     this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)
 
@@ -104,7 +103,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
     // allow errors to escape and be printed on exit
     // XXX this might only be needed because I don't have all the escape hatches
     // covered that errors can escape out of
-    process.nextTick(() => super.emit.apply(this, arguments))
+    //process.nextTick(() => super.emit.apply(this, arguments))
+    super.emit.apply(this, arguments)
   }
 
   /**
