@@ -7,7 +7,6 @@
   "main": "index.js",
   "dependencies": {
     "lodash": "^4.0",
-    "rc": "^1.1",
     "trailpack-core": "^1.0.0-beta-3",
     "trailpack-repl": "^1.0.0-beta-3",
     "trailpack-router": "^1.0.0-beta-4",
@@ -26,14 +25,8 @@
   },
   "bundledDependencies": [
     "lodash",
-    "rc",
     "trailpack-core",
-    "trailpack-hapi",
-    "trailpack-repl",
-    "trailpack-router",
-    "trails",
-    "waterline-sqlite3",
-    "winston"
+    "trails"
   ],
   "scripts": {
     "test": "eslint . && mocha"
