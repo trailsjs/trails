@@ -16,35 +16,41 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Initialize the Trails Application and its EventEmitter parentclass. Set
    * some necessary default configuration.
    */
-  constructor (pkg) {
+  constructor (app) {
     super()
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
 
-    this.pkg = pkg
+    this.pkg = app.pkg
+    this.config = lib.Trails.assignConfigDefaults(app.config)
+    this.api = app.api
     this.bound = false
     this.started = false
     this.stopped = false
     this._trails = require('./package')
+
+    if (!this.config.log.logger) {
+      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
+    }
+
+    this.setMaxListeners(this.config.main.maxListeners)
   }
 
   /**
-   * Start the App. Load all Trailpacks.
+   * Start the App. Load all Trailpacks. The "api" property is required, here,
+   * if not provided to the constructor.
    *
    * @param app.api The application api (api/ folder)
    * @param app.config The application configuration (config/ folder)
    * @return Promise
    */
   start (app) {
-    if (!app.config.log.logger) {
-      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
+    if (this.api && app.api) {
+      this.log.info('Starting trails app with new API definition')
     }
-
     this.api = app.api
-    this.config = lib.Trails.assignConfigDefaults(app.config)
-    this.setMaxListeners(this.config.main.maxListeners)
 
     const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
     this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)

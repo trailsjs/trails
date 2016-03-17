@@ -5,6 +5,6 @@
  */
 const app = require('./')
 const TrailsApp = require('trails')
-const server = new TrailsApp(app.pkg)
+const server = new TrailsApp(app)
 
-server.start(app).catch(() => server.stop())
+server.start().catch(() => server.stop())

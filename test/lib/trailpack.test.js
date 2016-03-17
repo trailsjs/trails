@@ -9,14 +9,21 @@ const TrailsApp = require('../../')
 describe('Trailpack', () => {
   const app = new TrailsApp(testAppDefinition)
 
+  before(() => {
+    return app.start(testAppDefinition)
+  })
+
   describe('#getUserlandTrailpacks', () => {
-    const testTrailpacks = [
-      new Trailpack(app, { pkg: { name: 'trailpack-pack1' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-pack2' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-pack3' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-pack4' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-core' }, config: { } })
-    ]
+    let testTrailpacks
+    before(() => {
+      testTrailpacks = [
+        new Trailpack(app, { pkg: { name: 'trailpack-pack1' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-pack2' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-pack3' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-pack4' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-core' }, config: { } })
+      ]
+    })
 
     it('should exclude the core trailpack', () => {
       const packs = lib.Trailpack.getUserlandTrailpacks(testTrailpacks)
@@ -26,13 +33,16 @@ describe('Trailpack', () => {
     })
   })
   describe('#getTrailpackMapping', () => {
-    const testTrailpacks = [
-      new Trailpack(app, { pkg: { name: 'trailpack-pack1' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-pack2' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-pack3' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-pack4' }, config: { } }),
-      new Trailpack(app, { pkg: { name: 'trailpack-core' }, config: { } })
-    ]
+    let testTrailpacks
+    before(() => {
+      testTrailpacks = [
+        new Trailpack(app, { pkg: { name: 'trailpack-pack1' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-pack2' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-pack3' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-pack4' }, config: { } }),
+        new Trailpack(app, { pkg: { name: 'trailpack-core' }, config: { } })
+      ]
+    })
 
     it('should index packs by name', () => {
       const packs = lib.Trailpack.getTrailpackMapping(testTrailpacks)

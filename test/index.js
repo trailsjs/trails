@@ -11,9 +11,9 @@ describe('Trails', () => {
         let cycles = [ ]
         for (let i = 0; i < 10; ++i) {
           cycles.push(new Promise (resolve => {
-            console.log('loading application; iteration', i)
+            //console.log('loading application; iteration', i)
             let app = new TrailsApp(testAppDefinition)
-            app.start()
+            app.start(testAppDefinition)
               .then(app => {
                 assert.equal(app.started, true)
                 resolve(app)
@@ -35,14 +35,14 @@ describe('Trails', () => {
       })
       it('should be able to stop, then start the same app', () => {
         let app = new TrailsApp(testAppDefinition)
-        return app.start()
+        return app.start(testAppDefinition)
           .then(app => {
             assert.equal(app.started, true)
             return app.stop()
           })
           .then(app => {
             assert.equal(app.stopped, true)
-            return app.start()
+            return app.start(testAppDefinition)
           })
           .then(app => {
             assert.equal(app.started, true)
