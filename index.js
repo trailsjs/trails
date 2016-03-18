@@ -50,7 +50,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (this.api && app.api) {
       this.log.info('Starting trails app with new API definition')
     }
-    this.api = app.api
+    if (app.api) {
+      this.api = app.api
+    }
 
     const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
     this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)
