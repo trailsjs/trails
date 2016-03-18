@@ -47,10 +47,10 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   start (app) {
-    if (this.api && app.api) {
+    if (this.api && app && app.api) {
       this.log.info('Starting trails app with new API definition')
     }
-    if (app.api) {
+    if (app && app.api) {
       this.api = app.api
     }
 
