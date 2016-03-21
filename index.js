@@ -92,7 +92,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     return Promise.all(
       Object.keys(this.packs || { }).map(packName => {
-        this.log.debug('unloading trailpack', packName)
+        this.log.debug('Unloading trailpack', packName)
         return this.packs[packName].unload()
       }))
       .then(() => {
