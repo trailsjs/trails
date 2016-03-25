@@ -1,6 +1,8 @@
 /*eslint no-console: 0 */
 'use strict'
 
+const path = require('path')
+const fs = require('fs')
 const events = require('events')
 const lib = require('./lib')
 
@@ -33,6 +35,17 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     if (!this.config.log.logger) {
       throw new Error('A logger must be set at config.log.logger. Application cannot start.')
+    }
+
+    try {
+      fs.statSync(this.config.main.paths.root)
+    }
+    catch (e) {
+      this.config.main.paths.root = path.resolve(process.cwd())
+
+      this.log.warn('The config setting main.paths.root is not found on disk')
+      this.log.warn('Setting main.paths.root =', this.config.main.paths.root)
+      this.log.warn('If this isn\'t your application\'s root, please set main.paths.root manually')
     }
 
     this.setMaxListeners(this.config.main.maxListeners)
