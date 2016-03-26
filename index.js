@@ -34,7 +34,10 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this._trails = require('./package')
 
     if (!this.config.log.logger) {
-      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
+      console.error('A logger must be set at config.log.logger. Application cannot start.')
+      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] )')
+      console.error('For more info, see the config.log archetype: https://git.io/vVvUI')
+      throw new Error('Trails logger is not defined')
     }
 
     try {
