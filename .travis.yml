@@ -1,4 +1,5 @@
 language: node_js
+osx_image: xcode7.3
 node_js:
 - '4'
 - stable
