@@ -1,6 +1,8 @@
 # Test against this version of Node.js
 environment:
-  nodejs_version: "4.0.0"
+  matrix:
+  - nodejs_version: "4.4.2"
+  - nodejs_version: "5.1.0"
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -8,6 +10,10 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm install
+
+platform:
+  - x86
+  - x64
 
 # Post-install test scripts.
 test_script:
