@@ -20,7 +20,7 @@
     "server"
   ],
   "scripts": {
-    "test": "eslint --fix . && mocha"
+    "test": "eslint . && mocha"
   },
   "repository": {
     "type": "git",
