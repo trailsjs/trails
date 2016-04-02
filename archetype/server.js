@@ -1,10 +1,10 @@
 /**
  * @module server
  *
- * This code is part of the Trails framework. Don't edit it.
+ * This code is part of the Trails framework.
  */
-const rc = require('rc')
+const app = require('./')
 const TrailsApp = require('trails')
-const app = new TrailsApp(require('.'))
+const server = new TrailsApp(app)
 
-app.start(rc('trails')).catch(app.stop)
+server.start().catch(() => server.stop())

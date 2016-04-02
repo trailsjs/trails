@@ -23,6 +23,7 @@ module.exports = {
    * Define application paths here. "root" is the only required path.
    */
   paths: {
-    root: path.join(__dirname, '..')
+    root: path.resolve(__dirname, '..'),
+    temp: path.resolve(__dirname, '..', '.tmp')
   }
 }

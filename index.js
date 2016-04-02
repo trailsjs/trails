@@ -1,6 +1,8 @@
 /*eslint no-console: 0 */
 'use strict'
 
+const path = require('path')
+const fs = require('fs')
 const events = require('events')
 const lib = require('./lib')
 
@@ -11,9 +13,7 @@ const lib = require('./lib')
 module.exports = class TrailsApp extends events.EventEmitter {
 
   /**
-   * @param app.api The application api (api/ folder)
-   * @param app.config The application configuration (config/ folder)
-   * @param app.pkg The application package.json
+   * @param pkg The application package.json
    *
    * Initialize the Trails Application and its EventEmitter parentclass. Set
    * some necessary default configuration.
@@ -25,28 +25,51 @@ module.exports = class TrailsApp extends events.EventEmitter {
       process.env.NODE_ENV = 'development'
     }
 
-    app.config = lib.Trails.assignConfigDefaults(app.config)
-
-    if (!app.config.log.logger) {
-      throw new Error('A logger must be set at config.log.logger. Application cannot start.')
-    }
-
     this.pkg = app.pkg
-    this.config = app.config
+    this.config = lib.Trails.assignConfigDefaults(app.config)
     this.api = app.api
     this.bound = false
     this.started = false
     this.stopped = false
     this._trails = require('./package')
 
-    this.setMaxListeners(app.config.main.maxListeners)
+    if (!this.config.log.logger) {
+      console.error('A logger must be set at config.log.logger. Application cannot start.')
+      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] )')
+      console.error('For more info, see the config.log archetype: https://git.io/vVvUI')
+      throw new Error('Trails logger is not defined')
+    }
+
+    try {
+      fs.statSync(this.config.main.paths.root)
+    }
+    catch (e) {
+      this.config.main.paths.root = path.resolve(process.cwd())
+
+      this.log.warn('The config setting main.paths.root is not found on disk')
+      this.log.warn('Setting main.paths.root =', this.config.main.paths.root)
+      this.log.warn('If this isn\'t your application\'s root, please set main.paths.root manually')
+    }
+
+    this.setMaxListeners(this.config.main.maxListeners)
   }
 
   /**
-   * Start the App. Load all Trailpacks.
+   * Start the App. Load all Trailpacks. The "api" property is required, here,
+   * if not provided to the constructor.
+   *
+   * @param app.api The application api (api/ folder)
+   * @param app.config The application configuration (config/ folder)
    * @return Promise
    */
-  start () {
+  start (app) {
+    if (this.api && app && app.api) {
+      this.log.info('Starting trails app with new API definition')
+    }
+    if (app && app.api) {
+      this.api = app.api
+    }
+
     const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
     this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)
 
@@ -85,7 +108,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     return Promise.all(
       Object.keys(this.packs || { }).map(packName => {
-        this.log.debug('unloading trailpack', packName)
+        this.log.debug('Unloading trailpack', packName)
         return this.packs[packName].unload()
       }))
       .then(() => {
@@ -104,7 +127,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
     // allow errors to escape and be printed on exit
     // XXX this might only be needed because I don't have all the escape hatches
     // covered that errors can escape out of
-    process.nextTick(() => super.emit.apply(this, arguments))
+    //process.nextTick(() => super.emit.apply(this, arguments))
+    super.emit.apply(this, arguments)
   }
 
   /**
