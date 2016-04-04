@@ -32,6 +32,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.started = false
     this.stopped = false
     this._trails = require('./package')
+    // Create new handler for each created Trails app so that we can remove it from `process`
+    // when the app is stopped. This ensures we do not accidentally remove other listeners of the
+    // same event.
+    this.onUncaughtException = this.onUncaughtException.bind(this)
+    this.onExit = this.onExit.bind(this)
 
     if (!this.config.log.logger) {
       console.error('A logger must be set at config.log.logger. Application cannot start.')
@@ -152,5 +157,24 @@ module.exports = class TrailsApp extends events.EventEmitter {
   get log () {
     return this.config.log.logger
   }
-}
 
+  /**
+   * Gracefully shut down the app on uncaught exception
+   *
+   * @param     {Error}    err    The error that caused the exception
+   * @return    {void}
+   */
+  onUncaughtException (err) {
+    this.log.error('uncaughtException', err)
+    this.stop(err)
+  }
+
+  /**
+   * Print a message to console when the process is about to exit due to lack of work
+   *
+   * @return    {void}
+   */
+  onExit () {
+    this.log.verbose('Event loop is empty. Shutting down')
+  }
+}
