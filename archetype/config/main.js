@@ -16,7 +16,7 @@ module.exports = {
     require('trailpack-core'),
     require('trailpack-repl'),
     require('trailpack-router'),
-    require('<%= trailpacks %>')
+    require('<%- trailpacks %>')
   ],
 
   /**
