@@ -49,7 +49,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
       fs.statSync(this.config.main.paths.root)
     }
     catch (e) {
-      this.config.main.paths.root = path.resolve(process.cwd())
+      // If the root is not set, use the application's entry point to determine current root
+      this.config.main.paths.root = path.resolve(path.dirname(require.main.filename))
 
       this.log.warn('The config setting main.paths.root is not found on disk')
       this.log.warn('Setting main.paths.root =', this.config.main.paths.root)
