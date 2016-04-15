@@ -1,0 +1,10 @@
+---
+instrumentation:
+  # Include all source files so we know which files are not tested at all
+  include-all-sources: true
+
+reporting:
+  reports:
+    # Lcov output can be used by some other program, and the html report can be viewed by humans in
+    # browser - coverage/lcov-report/index.html
+    - lcov
