@@ -12,7 +12,6 @@ install:
   - npm install
 
 platform:
-  - x86
   - x64
 
 # Post-install test scripts.
