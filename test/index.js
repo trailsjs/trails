@@ -8,11 +8,11 @@ describe('Trails', () => {
   describe('@TrailsApp', () => {
     describe('idempotence', () => {
       it('should be able to start and stop many instances in a single node process', () => {
-        let cycles = [ ]
+        const cycles = [ ]
         for (let i = 0; i < 10; ++i) {
           cycles.push(new Promise (resolve => {
             //console.log('loading application; iteration', i)
-            let app = new TrailsApp(testAppDefinition)
+            const app = new TrailsApp(testAppDefinition)
             app.start(testAppDefinition)
               .then(app => {
                 assert.equal(app.started, true)
@@ -34,7 +34,7 @@ describe('Trails', () => {
           })
       })
       it('should be able to stop, then start the same app', () => {
-        let app = new TrailsApp(testAppDefinition)
+        const app = new TrailsApp(testAppDefinition)
         return app.start(testAppDefinition)
           .then(app => {
             assert.equal(app.started, true)
