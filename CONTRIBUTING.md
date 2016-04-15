@@ -9,7 +9,7 @@ Maintaining a open source project is a labor of love, meaning the core maintaine
 
 > Trails is composed of a core library, [Trails.js](https://github.com/trailsjs/trails), and a number of [Trailpacks](https://github.com/trailsjs), which have their own dedicated repositories.  These repositories may also live outside the Trails.js official Github organization.  
 > 
-> _*Please open issues with Waterline, various trailpacks, various generators, etc. in the relevant repo.*_  
+> _*Please open issues with trailpacks, generators, etc. in the relevant repository.*_  
 > 
 > This helps us stay on top of issues and keep organized.
 
@@ -75,7 +75,7 @@ Trails generators are based upon Yeoman.  You can read up on Yeoman's [authoring
 
 Trails has several dependencies referenced in the `package.json` file that are not part of the project proper. Any proposed changes to those dependencies or _their_ dependencies should be sent to their respective projects (i.e. Waterline etc.) Please do not send your patch or feature request to this repository, we cannot accept or fulfill it.
 
-In case of doubt, open an issue in the [issue tracker](), ask your question in the [Gitter room](http://gitter.im/trailsjs/trails).  Especially if you plan to work on something big. Nothing is more frustrating than seeing your hard work go to waste because your vision does not align with a project's roadmap.  At the end of the day, we just want to be able to merge your code.
+In case of doubt, open an issue in the [issue tracker](https://github.com/trailsjs/trails/issues), ask your question in the [Gitter room](http://gitter.im/trailsjs/trails).  Especially if you plan to work on something big. Nothing is more frustrating than seeing your hard work go to waste because your vision does not align with a project's roadmap.  At the end of the day, we just want to be able to merge your code.
 
 ###### Submitting Pull Requests
 
@@ -101,8 +101,3 @@ $ git push upstream --tags
 ```
 
 3. Travis-CI will publish the release to npm.
-
-## Financial Support
-
-+ Trails is sponsored by [Balderdash](http://balderdash.io), a Node.js development studio in Norfolk, VA.  If you have a mutually beneficial opportunity to work together, or want to fund us to accelerate the development of a feature in Trails for a real-world use case, please [contact us](http://balderdash.io).
-+ [Donate](https://www.gittip.com/tjwebb/) to help me (@tjwebbusa) stop paying myself, and instead use that money to expand the core team, improve docs, etc.
