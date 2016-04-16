@@ -11,7 +11,6 @@ describe('Trails', () => {
         const cycles = [ ]
         for (let i = 0; i < 10; ++i) {
           cycles.push(new Promise (resolve => {
-            //console.log('loading application; iteration', i)
             const app = new TrailsApp(testAppDefinition)
             app.start(testAppDefinition)
               .then(app => {
@@ -48,30 +47,6 @@ describe('Trails', () => {
             assert.equal(app.started, true)
             return app.stop()
           })
-      })
-
-      it('should remove only those event handlers from process it created', () => {
-        // Gather initial state
-        const exitListeners = process.listenerCount('exit')
-        const excListeners = process.listenerCount('uncaughtException')
-
-        return Promise.all([
-          new TrailsApp(testAppDefinition).start(),
-          new TrailsApp(testAppDefinition).start()
-        ])
-        .then(apps => {
-          // Each Trails app should have added one listener for these events
-          assert.equal(process.listenerCount('exit'), exitListeners + 2)
-          assert.equal(process.listenerCount('uncaughtException'), excListeners + 2)
-
-          // Stop only one of the apps
-          return apps[0].stop()
-        })
-        .then(() => {
-          // Only events from a single app should have been removed
-          assert.equal(process.listenerCount('exit'), exitListeners + 1)
-          assert.equal(process.listenerCount('uncaughtException'), excListeners + 1)
-        })
       })
     })
     describe('#constructor', () => {
