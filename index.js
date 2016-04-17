@@ -1,8 +1,6 @@
 /*eslint no-console: 0 */
 'use strict'
 
-const path = require('path')
-const fs = require('fs')
 const events = require('events')
 const lib = require('./lib')
 
@@ -32,29 +30,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.started = false
     this.stopped = false
     this._trails = require('./package')
-    // Create new handler for each created Trails app so that we can remove it from `process`
-    // when the app is stopped. This ensures we do not accidentally remove other listeners of the
-    // same event.
-    this.onUncaughtException = this.onUncaughtException.bind(this)
-    this.onExit = this.onExit.bind(this)
 
     if (!this.config.log.logger) {
       console.error('A logger must be set at config.log.logger. Application cannot start.')
-      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] )')
+      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] })')
       console.error('For more info, see the config.log archetype: https://git.io/vVvUI')
-      throw new Error('Trails logger is not defined')
-    }
-
-    try {
-      fs.statSync(this.config.main.paths.root)
-    }
-    catch (e) {
-      // If the root is not set, use the application's entry point to determine current root
-      this.config.main.paths.root = path.resolve(path.dirname(require.main.filename))
-
-      this.log.warn('The config setting main.paths.root is not found on disk')
-      this.log.warn('Setting main.paths.root =', this.config.main.paths.root)
-      this.log.warn('If this isn\'t your application\'s root, please set main.paths.root manually')
+      throw new lib.Errors.LoggerNotDefinedError()
     }
 
     this.setMaxListeners(this.config.main.maxListeners)
@@ -69,6 +50,10 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   start (app) {
+    if (!this.api && !(app && app.api)) {
+      throw new lib.Errors.ApiNotDefinedError()
+    }
+
     if (this.api && app && app.api) {
       this.log.info('Starting trails app with new API definition')
     }
@@ -129,11 +114,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   emit (event) {
     this.log.debug('trails event:', event)
-
-    // allow errors to escape and be printed on exit
-    // XXX this might only be needed because I don't have all the escape hatches
-    // covered that errors can escape out of
-    //process.nextTick(() => super.emit.apply(this, arguments))
     super.emit.apply(this, arguments)
   }
 
@@ -157,25 +137,5 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   get log () {
     return this.config.log.logger
-  }
-
-  /**
-   * Gracefully shut down the app on uncaught exception
-   *
-   * @param     {Error}    err    The error that caused the exception
-   * @return    {void}
-   */
-  onUncaughtException (err) {
-    this.log.error('uncaughtException', err)
-    this.stop(err)
-  }
-
-  /**
-   * Print a message to console when the process is about to exit due to lack of work
-   *
-   * @return    {void}
-   */
-  onExit () {
-    this.log.verbose('Event loop is empty. Shutting down')
   }
 }

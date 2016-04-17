@@ -3,6 +3,7 @@
 const assert = require('assert')
 const TrailsApp = require('..')
 const testAppDefinition = require('./testapp')
+const lib = require('../lib')
 
 describe('Trails', () => {
   describe('@TrailsApp', () => {
@@ -11,7 +12,6 @@ describe('Trails', () => {
         const cycles = [ ]
         for (let i = 0; i < 10; ++i) {
           cycles.push(new Promise (resolve => {
-            //console.log('loading application; iteration', i)
             const app = new TrailsApp(testAppDefinition)
             app.start(testAppDefinition)
               .then(app => {
@@ -49,30 +49,6 @@ describe('Trails', () => {
             return app.stop()
           })
       })
-
-      it('should remove only those event handlers from process it created', () => {
-        // Gather initial state
-        const exitListeners = process.listenerCount('exit')
-        const excListeners = process.listenerCount('uncaughtException')
-
-        return Promise.all([
-          new TrailsApp(testAppDefinition).start(),
-          new TrailsApp(testAppDefinition).start()
-        ])
-        .then(apps => {
-          // Each Trails app should have added one listener for these events
-          assert.equal(process.listenerCount('exit'), exitListeners + 2)
-          assert.equal(process.listenerCount('uncaughtException'), excListeners + 2)
-
-          // Stop only one of the apps
-          return apps[0].stop()
-        })
-        .then(() => {
-          // Only events from a single app should have been removed
-          assert.equal(process.listenerCount('exit'), exitListeners + 1)
-          assert.equal(process.listenerCount('uncaughtException'), excListeners + 1)
-        })
-      })
     })
     describe('#constructor', () => {
       let app
@@ -80,20 +56,50 @@ describe('Trails', () => {
         app = new TrailsApp(testAppDefinition)
       })
 
-      it('should be instance of EventEmitter', () => {
-        assert(app instanceof require('events').EventEmitter)
+      describe('typical usage', () => {
+        it('should be instance of EventEmitter', () => {
+          assert(app instanceof require('events').EventEmitter)
+        })
+        it('should set max number of event listeners', () => {
+          assert.equal(app.getMaxListeners(), 128)
+        })
+        it('should set app properties', () => {
+          assert(app.pkg)
+          assert(app.config)
+          assert(app.api)
+        })
+        it('should set NODE_ENV', () => {
+          assert.equal(process.env.NODE_ENV, 'development')
+        })
       })
-      it('should set max number of event listeners', () => {
-        assert.equal(app.getMaxListeners(), 128)
+
+      describe('errors', () => {
+        it('should throw LoggerNotDefinedError if logger is missing', () => {
+          const def = {
+            config: {
+              main: {
+                paths: { root: __dirname }
+              }
+            }
+          }
+          assert.throws(() => new TrailsApp(def), lib.Errors.LoggerNotDefinedError)
+        })
+        it('should throw ApiNotDefinedError if no api definition is provided', () => {
+          const def = {
+            config: {
+              main: {
+                paths: { root: __dirname }
+              },
+              log: {
+                logger: { }
+              }
+            }
+          }
+          const app = new TrailsApp(def)
+          assert.throws(() => app.start(), lib.Errors.ApiNotDefinedError)
+        })
       })
-      it('should set app properties', () => {
-        assert(app.pkg)
-        assert(app.config)
-        assert(app.api)
-      })
-      it('should set NODE_ENV', () => {
-        assert.equal(process.env.NODE_ENV, 'development')
-      })
+
     })
 
     describe('#after', () => {
