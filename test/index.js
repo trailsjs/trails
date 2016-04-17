@@ -3,6 +3,7 @@
 const assert = require('assert')
 const TrailsApp = require('..')
 const testAppDefinition = require('./testapp')
+const lib = require('../lib')
 
 describe('Trails', () => {
   describe('@TrailsApp', () => {
@@ -55,20 +56,50 @@ describe('Trails', () => {
         app = new TrailsApp(testAppDefinition)
       })
 
-      it('should be instance of EventEmitter', () => {
-        assert(app instanceof require('events').EventEmitter)
+      describe('typical usage', () => {
+        it('should be instance of EventEmitter', () => {
+          assert(app instanceof require('events').EventEmitter)
+        })
+        it('should set max number of event listeners', () => {
+          assert.equal(app.getMaxListeners(), 128)
+        })
+        it('should set app properties', () => {
+          assert(app.pkg)
+          assert(app.config)
+          assert(app.api)
+        })
+        it('should set NODE_ENV', () => {
+          assert.equal(process.env.NODE_ENV, 'development')
+        })
       })
-      it('should set max number of event listeners', () => {
-        assert.equal(app.getMaxListeners(), 128)
+
+      describe('errors', () => {
+        it('should throw LoggerNotDefinedError if logger is missing', () => {
+          const def = {
+            config: {
+              main: {
+                paths: { root: __dirname }
+              }
+            }
+          }
+          assert.throws(() => new TrailsApp(def), lib.Errors.LoggerNotDefinedError)
+        })
+        it('should throw ApiNotDefinedError if no api definition is provided', () => {
+          const def = {
+            config: {
+              main: {
+                paths: { root: __dirname }
+              },
+              log: {
+                logger: { }
+              }
+            }
+          }
+          const app = new TrailsApp(def)
+          assert.throws(() => app.start(), lib.Errors.ApiNotDefinedError)
+        })
       })
-      it('should set app properties', () => {
-        assert(app.pkg)
-        assert(app.config)
-        assert(app.api)
-      })
-      it('should set NODE_ENV', () => {
-        assert.equal(process.env.NODE_ENV, 'development')
-      })
+
     })
 
     describe('#after', () => {

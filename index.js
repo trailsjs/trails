@@ -1,8 +1,6 @@
 /*eslint no-console: 0 */
 'use strict'
 
-const path = require('path')
-const fs = require('fs')
 const events = require('events')
 const lib = require('./lib')
 
@@ -35,21 +33,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     if (!this.config.log.logger) {
       console.error('A logger must be set at config.log.logger. Application cannot start.')
-      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] )')
+      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] })')
       console.error('For more info, see the config.log archetype: https://git.io/vVvUI')
-      throw new Error('Trails logger is not defined')
-    }
-
-    try {
-      fs.statSync(this.config.main.paths.root)
-    }
-    catch (e) {
-      // If the root is not set, use the application's entry point to determine current root
-      this.config.main.paths.root = path.resolve(path.dirname(require.main.filename))
-
-      this.log.warn('The config setting main.paths.root is not found on disk')
-      this.log.warn('Setting main.paths.root =', this.config.main.paths.root)
-      this.log.warn('If this isn\'t your application\'s root, please set main.paths.root manually')
+      throw new lib.Errors.LoggerNotDefinedError()
     }
 
     this.setMaxListeners(this.config.main.maxListeners)
@@ -64,6 +50,10 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   start (app) {
+    if (!this.api && !(app && app.api)) {
+      throw new lib.Errors.ApiNotDefinedError()
+    }
+
     if (this.api && app && app.api) {
       this.log.info('Starting trails app with new API definition')
     }
@@ -147,14 +137,5 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   get log () {
     return this.config.log.logger
-  }
-
-  /**
-   * Print a message to console when the process is about to exit due to lack of work
-   *
-   * @return    {void}
-   */
-  onExit () {
-    this.log.verbose('Event loop is empty. Shutting down')
   }
 }
