@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require('assert')
+const smokesignals = require('smokesignals')
 const TrailsApp = require('..')
 const testAppDefinition = require('./testapp')
 const lib = require('../lib')
@@ -100,6 +101,40 @@ describe('Trails', () => {
         })
       })
 
+      it('should cache and freeze process.env', () => {
+        process.env.FOO = 'bar'
+        const def = {
+          api: { },
+          config: {
+            log: { logger: { } }
+          }
+        }
+        const app = new TrailsApp(def)
+
+        assert.equal(process.env.FOO, 'bar')
+        assert.equal(app.env.FOO, 'bar')
+        assert.throws(() => app.env.FOO = 1, TypeError)
+      })
+
+      it('should freeze config object after trailpacks are loaded', () => {
+        const def = {
+          api: { },
+          config: {
+            log: {
+              logger: new smokesignals.Logger('silent')
+            },
+            foo: 'bar'
+          }
+        }
+        const app = new TrailsApp(def)
+
+        assert.equal(app.config.foo, 'bar')
+
+        return app.start().then(() => {
+          assert.equal(app.config.foo, 'bar')
+          assert.throws(() => app.config.foo = 1, TypeError)
+        })
+      })
     })
 
     describe('#after', () => {

@@ -23,6 +23,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       process.env.NODE_ENV = 'development'
     }
 
+    this.env = Object.freeze(JSON.parse(JSON.stringify(process.env)))
     this.pkg = app.pkg
     this.config = lib.Trails.buildConfig(app.config)
     this.api = app.api
@@ -69,6 +70,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     lib.Trailpack.bindTrailpackMethodListeners(this, trailpacks)
 
     this.emit('trails:start')
+
     return this.after('trails:ready')
       .then(() => {
         this.started = true
