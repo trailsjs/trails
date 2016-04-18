@@ -6,7 +6,6 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "lodash": "^4.0",
     "trailpack-core": "^1.0.0-beta-3",
     "trailpack-repl": "^1.0.0-beta-3",
     "trailpack-router": "^1.0.0-beta-4",
@@ -16,18 +15,20 @@
     "trails-policy": "^1.0.1",
     "trails-service": "1.0.0-beta-2",
     "waterline-sqlite3": "^1.0.0",
-    "winston": "^2.1.1"
+    "winston": "^2.2"
   },
   "devDependencies": {
     "eslint-config-trails": "latest",
-    "eslint": "^1.10",
-    "mocha": "^2.3",
-    "supertest": "^1.1"
+    "eslint": "^2.8",
+    "mocha": "^2.4",
+    "supertest": "^1.2"
   },
   "bundledDependencies": [
-    "lodash",
     "trailpack-core",
-    "trails"
+    "trails",
+    "trails-controller",
+    "trails-policy",
+    "trails-service"
   ],
   "scripts": {
     "test": "eslint . && mocha"
