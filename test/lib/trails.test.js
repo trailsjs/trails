@@ -151,7 +151,7 @@ describe('lib.Trails', () => {
         }
       }
       assert.throws(() => lib.Trails.validateConfig(testConfig), lib.Errors.ConfigValueError)
-      assert.throws(() => lib.Trails.validateConfig(testConfig), '[ envtest ]')
+      assert.throws(() => lib.Trails.validateConfig(testConfig), /Environment configs/)
     })
     it('should throw ConfigValueError if config.env contains the "env" property', () => {
       const testConfig = {
