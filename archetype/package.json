@@ -18,8 +18,8 @@
     "winston": "^2.2"
   },
   "devDependencies": {
-    "eslint-config-trails": "latest",
     "eslint": "^2.8",
+    "eslint-config-trails": "latest",
     "mocha": "^2.4",
     "supertest": "^1.2"
   },
