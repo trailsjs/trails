@@ -4,7 +4,6 @@
 [![NPM version][npm-image]][npm-url]
 [![Build status][ci-image]][ci-url]
 [![Code Climate][codeclimate-image]][codeclimate-url]
-[![Issue Stats][issuestats-image]][issuestats-url]
 [![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
 
 Trails is a modern, community-driven web application framework for node.js. It
@@ -135,8 +134,6 @@ docs for more info.
 [ci-url]: https://travis-ci.org/trailsjs/trails
 [codeclimate-image]: https://img.shields.io/codeclimate/github/trailsjs/trails.svg?style=flat-square
 [codeclimate-url]: https://codeclimate.com/github/trailsjs/trails
-[issuestats-image]: http://issuestats.com/github/trailsjs/trails/badge/issue?style=flat-square
-[issuestats-url]: http://issuestats.com/github/trailsjs/trails
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
 [gitter-url]: https://gitter.im/trailsjs/trails
 [twitter-image]: https://img.shields.io/twitter/follow/trailsjs.svg?style=social
