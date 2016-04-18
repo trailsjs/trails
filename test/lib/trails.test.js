@@ -122,5 +122,47 @@ describe('lib.Trails', () => {
     })
   })
 
+  describe('#getNestedEnv', () => {
+    it('should a list of envs if one contains a "env" property', () => {
+      const testConfig = {
+        env: {
+          envtest: {
+            env: {
+              invalid: true
+            }
+          }
+        }
+      }
+
+      const nestedEnvs = lib.Trails.getNestedEnv(testConfig)
+
+      assert.equal(nestedEnvs[0], 'envtest')
+      assert.equal(nestedEnvs.length, 1)
+    })
+  })
+
+  describe('#validateConfig', () => {
+    it('should throw ConfigValueError if an env config contains the "env" property', () => {
+      const testConfig = {
+        env: {
+          envtest: {
+            env: 'hello'
+          }
+        }
+      }
+      assert.throws(() => lib.Trails.validateConfig(testConfig), lib.Errors.ConfigValueError)
+      assert.throws(() => lib.Trails.validateConfig(testConfig), '[ envtest ]')
+    })
+    it('should throw ConfigValueError if config.env contains the "env" property', () => {
+      const testConfig = {
+        env: {
+          env: 'hello'
+        }
+      }
+      assert.throws(() => lib.Trails.validateConfig(testConfig), lib.Errors.ConfigValueError)
+      assert.throws(() => lib.Trails.validateConfig(testConfig), /config.env/)
+    })
+  })
+
 })
 
