@@ -83,6 +83,7 @@ Out of the box, Trails includes a small suite of trailpacks:
 - [Create a custom Trailpack](http://blog.jaumard.com/en/2016/01/06/create-a-trailpack-for-trails/)
 
 #### Videos
+- [Getting Started with Trails.js](https://www.youtube.com/watch?v=AbSp8jqFDAY)
 
 #### Support
 - [Gitter chat room](https://gitter.im/trailsjs/trails)
