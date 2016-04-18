@@ -24,7 +24,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     }
 
     this.pkg = app.pkg
-    this.config = lib.Trails.assignConfigDefaults(app.config)
+    this.config = lib.Trails.buildConfig(app.config)
     this.api = app.api
     this.bound = false
     this.started = false
