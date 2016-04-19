@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "test": "eslint . && mocha",
-    "coverage": "istanbul cover _mocha"
+    "coverage": "istanbul cover _mocha",
+    "ci": "cd .. && ci"
   },
   "repository": {
     "type": "git",
