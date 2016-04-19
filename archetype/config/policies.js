@@ -9,6 +9,9 @@
  *
  * @see http://trailsjs.io/doc/config/policies
  */
+
+'use strict'
+
 module.exports = {
 
   DefaultController: {

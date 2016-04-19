@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
 
   trailpack: {
@@ -5,6 +7,4 @@ module.exports = {
       'repl'
     ]
   }
-
 }
-

@@ -4,6 +4,9 @@
  *
  * @see http://trailsjs.io/doc/config/log
  */
+
+'use strict'
+
 const winston = require('winston')
 
 module.exports = {

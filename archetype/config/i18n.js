@@ -9,6 +9,9 @@
  * @see http://trailsjs.io/doc/config/i18n
  *
  */
+
+'use strict'
+
 module.exports = {
 
   /**
