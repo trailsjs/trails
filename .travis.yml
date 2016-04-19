@@ -8,6 +8,10 @@ os:
 - linux
 - osx
 
+script:
+- npm test
+- npm run ci
+
 notifications:
   email: false
   webhooks:
