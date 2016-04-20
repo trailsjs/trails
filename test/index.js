@@ -117,22 +117,28 @@ describe('Trails', () => {
       })
 
       it('should freeze config object after trailpacks are loaded', () => {
+        console.error('running freeze test')
         const def = {
           api: { },
           config: {
+            main: {
+              packs: [
+                smokesignals.Trailpack
+              ]
+            },
             log: {
-              logger: new smokesignals.Logger('silent')
+              logger: new smokesignals.Logger('debug')
             },
             foo: 'bar'
           }
         }
         const app = new TrailsApp(def)
-
         assert.equal(app.config.foo, 'bar')
 
         return app.start().then(() => {
           assert.equal(app.config.foo, 'bar')
           assert.throws(() => app.config.foo = 1, TypeError)
+          return app.stop()
         })
       })
     })

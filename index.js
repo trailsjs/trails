@@ -87,11 +87,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
       this.log.error('\n', err.stack || '')
     }
     if (!this.started) {
-      this.log.error('\n', 'The application attempted to shut down, but is not',
-        'in a started state. Either it is in the process of shutting down, or',
-        'did not start successfully. Trails will not attempt to shut down twice.')
-
-      this.log.error('\n', 'Try increasing the loglevel to "debug" to learn more')
+      this.log.error('The application did not boot successfully. Shutting down due to error')
+      this.log.error('Try increasing the loglevel to "debug" to learn more')
       return Promise.resolve(this)
     }
 
@@ -116,7 +113,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   emit (event) {
     this.log.debug('trails event:', event)
-    super.emit.apply(this, arguments)
+    return super.emit.apply(this, arguments)
   }
 
   /**

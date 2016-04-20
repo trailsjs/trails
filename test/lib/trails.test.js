@@ -164,5 +164,22 @@ describe('lib.Trails', () => {
     })
   })
 
+  describe('#unfreezeConfig', () => {
+    it('should unfreeze config object', () => {
+      const app = {
+        config: {
+          a: 1,
+          foo: 'bar'
+        }
+      }
+      lib.Trails.freezeConfig(app)
+      assert.throws(() => app.config.a = 2, Error)
+
+      lib.Trails.unfreezeConfig(app)
+      app.config.a = 2
+      assert.equal(app.config.a, 2)
+    })
+  })
+
 })
 
