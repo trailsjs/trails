@@ -77,6 +77,8 @@ describe('Trails', () => {
       describe('errors', () => {
         it('should throw LoggerNotDefinedError if logger is missing', () => {
           const def = {
+            pkg: { },
+            api: { },
             config: {
               main: {
                 paths: { root: __dirname }
@@ -87,17 +89,31 @@ describe('Trails', () => {
         })
         it('should throw ApiNotDefinedError if no api definition is provided', () => {
           const def = {
+            pkg: { },
             config: {
               main: {
                 paths: { root: __dirname }
               },
               log: {
-                logger: { }
+                logger: new smokesignals.Logger('silent')
               }
             }
           }
           const app = new TrailsApp(def)
           assert.throws(() => app.start(), lib.Errors.ApiNotDefinedError)
+        })
+        it('should throw PackageNotDefinedError if no package.json definition is provided', () => {
+          const def = {
+            config: {
+              main: {
+                paths: { root: __dirname }
+              },
+              log: {
+                logger: new smokesignals.Logger('silent')
+              }
+            }
+          }
+          assert.throws(() => new TrailsApp(def), lib.Errors.PackageNotDefinedError)
         })
       })
 
@@ -107,7 +123,8 @@ describe('Trails', () => {
           api: { },
           config: {
             log: { logger: { } }
-          }
+          },
+          pkg: { }
         }
         const app = new TrailsApp(def)
 
@@ -119,6 +136,7 @@ describe('Trails', () => {
       it('should freeze config object after trailpacks are loaded', () => {
         console.error('running freeze test')
         const def = {
+          pkg: { },
           api: { },
           config: {
             main: {

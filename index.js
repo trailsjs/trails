@@ -22,6 +22,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
+    if (!app.pkg) {
+      throw new lib.Errors.PackageNotDefinedError()
+    }
 
     this.env = Object.freeze(JSON.parse(JSON.stringify(process.env)))
     this.pkg = app.pkg
@@ -33,9 +36,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this._trails = require('./package')
 
     if (!this.config.log.logger) {
-      console.error('A logger must be set at config.log.logger. Application cannot start.')
-      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] })')
-      console.error('For more info, see the config.log archetype: https://git.io/vVvUI')
       throw new lib.Errors.LoggerNotDefinedError()
     }
 
@@ -53,10 +53,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
   start (app) {
     if (!this.api && !(app && app.api)) {
       throw new lib.Errors.ApiNotDefinedError()
-    }
-
-    if (this.api && app && app.api) {
-      this.log.info('Starting trails app with new API definition')
     }
     if (app && app.api) {
       this.api = app.api
