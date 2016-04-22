@@ -179,10 +179,22 @@ describe('lib.Trails', () => {
 
   describe('#freezeConfig', () => {
     it('should freeze nested object', () => {
-      const o1 = { config: { foo: { bar: 1 } } }
+      const o1 = { foo: { bar: 1 } }
       lib.Trails.freezeConfig(o1)
 
-      assert.throws(() => o1.config.foo = null, Error)
+      assert.throws(() => o1.foo = null, Error)
+    })
+    it('should not freeze exernal modules required from config', () => {
+      const o1 = {
+        foo: require('smokesignals'),
+        bar: 1
+      }
+      lib.Trails.freezeConfig(o1, [ 'smokesignals' ])
+
+      assert.throws(() => o1.bar = null, Error)
+
+      o1.foo.x = 1
+      assert.equal(o1.foo.x, 1)
     })
   })
 
@@ -194,7 +206,7 @@ describe('lib.Trails', () => {
           foo: 'bar'
         }
       }
-      lib.Trails.freezeConfig(app)
+      lib.Trails.freezeConfig(app.config)
       assert.throws(() => app.config.a = 2, Error)
 
       lib.Trails.unfreezeConfig(app)
