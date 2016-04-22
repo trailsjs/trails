@@ -26,18 +26,46 @@ module.exports = class TrailsApp extends events.EventEmitter {
       throw new lib.Errors.PackageNotDefinedError()
     }
 
-    this.env = Object.freeze(JSON.parse(JSON.stringify(process.env)))
-    this.pkg = app.pkg
-    this.config = lib.Trails.buildConfig(app.config)
-    this.api = app.api
+    lib.Trails.validateConfig(app.config)
+
+    Object.defineProperties(this, {
+      env: {
+        value: Object.freeze(JSON.parse(JSON.stringify(process.env)))
+      },
+      pkg: {
+        value: app.pkg
+      },
+      config: {
+        value: lib.Trails.buildConfig(app.config),
+        configurable: true
+      },
+      _trails: {
+        enumerable: false,
+        value: require('./package')
+      }
+    })
+
+    // trailpack constructors may depend on app.config
+    const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
+
+    Object.defineProperties(this, {
+      _packs: {
+        enumerable: false,
+        value: trailpacks
+      },
+      packs: {
+        value: lib.Trailpack.getTrailpackMapping(trailpacks)
+      },
+      api: {
+        value: app.api,
+        writable: true,
+        configurable: true
+      }
+    })
+
     this.bound = false
     this.started = false
     this.stopped = false
-    this._trails = require('./package')
-
-    if (!this.config.log.logger) {
-      throw new lib.Errors.LoggerNotDefinedError()
-    }
 
     this.setMaxListeners(this.config.main.maxListeners)
   }
@@ -54,16 +82,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!this.api && !(app && app.api)) {
       throw new lib.Errors.ApiNotDefinedError()
     }
-    if (app && app.api) {
-      this.api = app.api
-    }
 
-    const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
-    this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)
+    this.api || (this.api = app && app.api)
 
     lib.Trails.bindEvents(this)
-    lib.Trailpack.bindTrailpackPhaseListeners(this, trailpacks)
-    lib.Trailpack.bindTrailpackMethodListeners(this, trailpacks)
+    lib.Trailpack.bindTrailpackPhaseListeners(this, this._packs)
+    lib.Trailpack.bindTrailpackMethodListeners(this, this._packs)
 
     this.emit('trails:start')
 

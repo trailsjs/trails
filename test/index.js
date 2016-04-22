@@ -122,7 +122,10 @@ describe('Trails', () => {
         const def = {
           api: { },
           config: {
-            log: { logger: { } }
+            main: { },
+            log: {
+              logger: new smokesignals.Logger()
+            }
           },
           pkg: { }
         }
@@ -134,19 +137,14 @@ describe('Trails', () => {
       })
 
       it('should freeze config object after trailpacks are loaded', () => {
-        console.error('running freeze test')
         const def = {
           pkg: { },
           api: { },
           config: {
             main: {
-              packs: [
-                smokesignals.Trailpack
-              ]
+              packs: [ smokesignals.Trailpack ]
             },
-            log: {
-              logger: new smokesignals.Logger('debug')
-            },
+            log: { logger: new smokesignals.Logger('debug') },
             foo: 'bar'
           }
         }
@@ -160,6 +158,24 @@ describe('Trails', () => {
           return app.stop()
         })
       })
+
+      it('should disallow re-assignment of config object', () => {
+        const def = {
+          pkg: { },
+          api: { },
+          config: {
+            main: {
+              packs: [ smokesignals.Trailpack ]
+            },
+            log: { logger: new smokesignals.Logger('debug') },
+            foo: 'bar'
+          }
+        }
+        const app = new TrailsApp(def)
+        assert.equal(app.config.foo, 'bar')
+        assert.throws(() => app.config = { }, Error)
+      })
+
     })
 
     describe('#after', () => {

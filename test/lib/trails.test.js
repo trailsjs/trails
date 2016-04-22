@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require('assert')
+const smokesignals = require('smokesignals')
 const lib = require('../../lib')
 
 describe('lib.Trails', () => {
@@ -125,6 +126,10 @@ describe('lib.Trails', () => {
   describe('#getNestedEnv', () => {
     it('should a list of envs if one contains a "env" property', () => {
       const testConfig = {
+        main: { },
+        log: {
+          logger: new smokesignals.Logger()
+        },
         env: {
           envtest: {
             env: {
@@ -144,6 +149,10 @@ describe('lib.Trails', () => {
   describe('#validateConfig', () => {
     it('should throw ConfigValueError if an env config contains the "env" property', () => {
       const testConfig = {
+        main: { },
+        log: {
+          logger: new smokesignals.Logger()
+        },
         env: {
           envtest: {
             env: 'hello'
@@ -155,12 +164,25 @@ describe('lib.Trails', () => {
     })
     it('should throw ConfigValueError if config.env contains the "env" property', () => {
       const testConfig = {
+        main: { },
+        log: {
+          logger: new smokesignals.Logger()
+        },
         env: {
           env: 'hello'
         }
       }
       assert.throws(() => lib.Trails.validateConfig(testConfig), lib.Errors.ConfigValueError)
       assert.throws(() => lib.Trails.validateConfig(testConfig), /config.env/)
+    })
+  })
+
+  describe('#freezeConfig', () => {
+    it('should freeze nested object', () => {
+      const o1 = { config: { foo: { bar: 1 } } }
+      lib.Trails.freezeConfig(o1)
+
+      assert.throws(() => o1.config.foo = null, Error)
     })
   })
 
