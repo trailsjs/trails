@@ -83,13 +83,14 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   stop (err) {
+    this.stopped = true
+
     if (err) {
       this.log.error('\n', err.stack || '')
     }
     if (!this.started) {
-      this.log.error('The application did not boot successfully. Shutting down due to error')
+      this.log.error('The application did not boot successfully.')
       this.log.error('Try increasing the loglevel to "debug" to learn more')
-      return Promise.resolve(this)
     }
 
     this.emit('trails:stop')
@@ -101,10 +102,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
         this.log.debug('Unloading trailpack', packName)
         return this.packs[packName].unload()
       }))
-      .then(() => {
-        this.stopped = true
-        return this
-      })
+      .then(() => this)
   }
 
   /**

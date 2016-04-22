@@ -135,7 +135,8 @@ describe('Trails', () => {
         const app = new TrailsApp(def)
         assert.equal(app.config.foo, 'bar')
 
-        return app.start().then(() => {
+        app.start()
+        return app.after('trailpack:all:configured').then(() => {
           assert.equal(app.config.foo, 'bar')
           assert.throws(() => app.config.foo = 1, TypeError)
           return app.stop()
