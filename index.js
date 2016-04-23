@@ -39,14 +39,14 @@ module.exports = class TrailsApp extends events.EventEmitter {
         value: lib.Trails.buildConfig(app.config),
         configurable: true
       },
-      _trails: {
-        enumerable: false,
-        value: require('./package')
-      },
       api: {
         value: app.api,
         writable: true,
         configurable: true
+      },
+      _trails: {
+        enumerable: false,
+        value: require('./package')
       }
     })
 
@@ -68,8 +68,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
       }
     })
 
-    console.log(this.loadedModules)
-
     this.bound = false
     this.started = false
     this.stopped = false
@@ -86,6 +84,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   start (app) {
+    console.log('timeouts', this.config.main.timeout)
     if (!this.api && !(app && app.api)) {
       throw new lib.Errors.ApiNotDefinedError()
     }
@@ -111,7 +110,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   stop (err) {
     this.stopped = true
-
     if (err) {
       this.log.error('\n', err.stack || '')
     }
@@ -129,7 +127,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
         this.log.debug('Unloading trailpack', packName)
         return this.packs[packName].unload()
       }))
-      .then(() => this)
+      .then(() => {
+        return this
+      })
   }
 
   /**

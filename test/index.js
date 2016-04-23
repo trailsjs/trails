@@ -75,107 +75,112 @@ describe('Trails', () => {
       })
 
       describe('errors', () => {
-        it('should throw LoggerNotDefinedError if logger is missing', () => {
+        describe('@LoggerNotDefinedError', () => {
+          it('should throw LoggerNotDefinedError if logger is missing', () => {
+            const def = {
+              pkg: { },
+              api: { },
+              config: {
+                main: {
+                  paths: { root: __dirname }
+                }
+              }
+            }
+            assert.throws(() => new TrailsApp(def), lib.Errors.LoggerNotDefinedError)
+          })
+        })
+        describe('@ApiNotDefinedError', () => {
+          it('should throw ApiNotDefinedError if no api definition is provided', () => {
+            const def = {
+              pkg: { },
+              config: {
+                main: {
+                  paths: { root: __dirname }
+                },
+                log: {
+                  logger: new smokesignals.Logger('silent')
+                }
+              }
+            }
+            const app = new TrailsApp(def)
+            assert.throws(() => app.start(), lib.Errors.ApiNotDefinedError)
+          })
+        })
+        describe('@PackageNotDefinedError', () => {
+          it('should throw PackageNotDefinedError if no package.json definition is provided', () => {
+            const def = {
+              config: {
+                main: {
+                  paths: { root: __dirname }
+                },
+                log: {
+                  logger: new smokesignals.Logger('silent')
+                }
+              }
+            }
+            assert.throws(() => new TrailsApp(def), lib.Errors.PackageNotDefinedError)
+          })
+        })
+
+        it('should cache and freeze process.env', () => {
+          process.env.FOO = 'bar'
+          const def = {
+            api: { },
+            config: {
+              main: { },
+              log: {
+                logger: new smokesignals.Logger()
+              }
+            },
+            pkg: { }
+          }
+          const app = new TrailsApp(def)
+
+          assert.equal(process.env.FOO, 'bar')
+          assert.equal(app.env.FOO, 'bar')
+          assert.throws(() => app.env.FOO = 1, TypeError)
+        })
+
+        it('should freeze config object after trailpacks are loaded', () => {
           const def = {
             pkg: { },
             api: { },
             config: {
               main: {
-                paths: { root: __dirname }
-              }
-            }
-          }
-          assert.throws(() => new TrailsApp(def), lib.Errors.LoggerNotDefinedError)
-        })
-        it('should throw ApiNotDefinedError if no api definition is provided', () => {
-          const def = {
-            pkg: { },
-            config: {
-              main: {
-                paths: { root: __dirname }
+                packs: [ smokesignals.Trailpack ]
               },
-              log: {
-                logger: new smokesignals.Logger('silent')
-              }
+              log: { logger: new smokesignals.Logger('debug') },
+              foo: 'bar'
             }
           }
           const app = new TrailsApp(def)
-          assert.throws(() => app.start(), lib.Errors.ApiNotDefinedError)
+          assert.equal(app.config.foo, 'bar')
+
+          app.start()
+          return app.after('trailpack:all:configured').then(() => {
+            assert.equal(app.config.foo, 'bar')
+            assert.throws(() => app.config.foo = 1, TypeError)
+            return app.stop()
+          })
         })
-        it('should throw PackageNotDefinedError if no package.json definition is provided', () => {
+
+        it('should disallow re-assignment of config object', () => {
           const def = {
+            pkg: { },
+            api: { },
             config: {
               main: {
-                paths: { root: __dirname }
+                packs: [ smokesignals.Trailpack ]
               },
-              log: {
-                logger: new smokesignals.Logger('silent')
-              }
+              log: { logger: new smokesignals.Logger('debug') },
+              foo: 'bar'
             }
           }
-          assert.throws(() => new TrailsApp(def), lib.Errors.PackageNotDefinedError)
-        })
-      })
-
-      it('should cache and freeze process.env', () => {
-        process.env.FOO = 'bar'
-        const def = {
-          api: { },
-          config: {
-            main: { },
-            log: {
-              logger: new smokesignals.Logger()
-            }
-          },
-          pkg: { }
-        }
-        const app = new TrailsApp(def)
-
-        assert.equal(process.env.FOO, 'bar')
-        assert.equal(app.env.FOO, 'bar')
-        assert.throws(() => app.env.FOO = 1, TypeError)
-      })
-
-      it('should freeze config object after trailpacks are loaded', () => {
-        const def = {
-          pkg: { },
-          api: { },
-          config: {
-            main: {
-              packs: [ smokesignals.Trailpack ]
-            },
-            log: { logger: new smokesignals.Logger('debug') },
-            foo: 'bar'
-          }
-        }
-        const app = new TrailsApp(def)
-        assert.equal(app.config.foo, 'bar')
-
-        app.start()
-        return app.after('trailpack:all:configured').then(() => {
+          const app = new TrailsApp(def)
           assert.equal(app.config.foo, 'bar')
-          assert.throws(() => app.config.foo = 1, TypeError)
-          return app.stop()
+          assert.throws(() => app.config = { }, Error)
         })
       })
-
-      it('should disallow re-assignment of config object', () => {
-        const def = {
-          pkg: { },
-          api: { },
-          config: {
-            main: {
-              packs: [ smokesignals.Trailpack ]
-            },
-            log: { logger: new smokesignals.Logger('debug') },
-            foo: 'bar'
-          }
-        }
-        const app = new TrailsApp(def)
-        assert.equal(app.config.foo, 'bar')
-        assert.throws(() => app.config = { }, Error)
-      })
-
     })
 
     describe('#after', () => {
