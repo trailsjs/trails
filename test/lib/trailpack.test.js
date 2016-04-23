@@ -6,7 +6,7 @@ const Trailpack = require('trailpack')
 const testAppDefinition = require('../testapp')
 const TrailsApp = require('../../')
 
-describe('Trailpack', () => {
+describe('lib.Trailpack', () => {
   const app = new TrailsApp(testAppDefinition)
 
   before(() => {
