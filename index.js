@@ -30,9 +30,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     Object.defineProperties(this, {
       env: {
+        enumerable: false,
         value: Object.freeze(JSON.parse(JSON.stringify(process.env)))
       },
       pkg: {
+        enumerable: false,
         value: app.pkg
       },
       config: {
@@ -84,7 +86,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   start (app) {
-    console.log('timeouts', this.config.main.timeout)
     if (!this.api && !(app && app.api)) {
       throw new lib.Errors.ApiNotDefinedError()
     }
