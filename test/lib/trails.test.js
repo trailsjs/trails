@@ -124,7 +124,7 @@ describe('lib.Trails', () => {
   })
 
   describe('#getNestedEnv', () => {
-    it('should a list of envs if one contains a "env" property', () => {
+    it('should return a list of envs if one contains a "env" property', () => {
       const testConfig = {
         main: { },
         log: {
