@@ -16,7 +16,7 @@ Maintaining a open source project is a labor of love, meaning the core maintaine
 When submitting an issue, please follow these simple instructions:
 
 1. Search for issues similar to yours in [GitHub search](https://github.com/trailsjs/trails/search?type=Issues) and [Google](https://www.google.nl/search?q=trails+js). 
-2. Feature requests are welcome; see [Requesting Features](https://github.com/trailsjs/trails/blob/master/CONTRIBUTING.md#requesting-features) below for submission guidelines.
+2. Feature requests are welcome; see [Requesting Features](#requesting-features) below for submission guidelines.
 3. If there's an open issue, please contribute to that issue.
 4. If there's a closed issue, open a new issue and link the url of the already closed issue(s).
 5. If there is no issue, open a new issue and specify the following:
