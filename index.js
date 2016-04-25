@@ -22,22 +22,57 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }
+    if (!app.pkg) {
+      throw new lib.Errors.PackageNotDefinedError()
+    }
 
-    this.env = Object.freeze(JSON.parse(JSON.stringify(process.env)))
-    this.pkg = app.pkg
-    this.config = lib.Trails.buildConfig(app.config)
-    this.api = app.api
+    lib.Trails.validateConfig(app.config)
+
+    Object.defineProperties(this, {
+      env: {
+        enumerable: false,
+        value: Object.freeze(JSON.parse(JSON.stringify(process.env)))
+      },
+      pkg: {
+        enumerable: false,
+        value: app.pkg
+      },
+      config: {
+        value: lib.Trails.buildConfig(app.config),
+        configurable: true
+      },
+      api: {
+        value: app.api,
+        writable: true,
+        configurable: true
+      },
+      _trails: {
+        enumerable: false,
+        value: require('./package')
+      }
+    })
+
+    // trailpack constructors may depend on app.config, to instantiate after
+    // setting the config property
+    const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
+
+    Object.defineProperties(this, {
+      packs: {
+        value: lib.Trailpack.getTrailpackMapping(trailpacks)
+      },
+      loadedPacks: {
+        enumerable: false,
+        value: trailpacks
+      },
+      loadedModules: {
+        enumerable: false,
+        value: lib.Trails.getExternalModules(this.pkg)
+      }
+    })
+
     this.bound = false
     this.started = false
     this.stopped = false
-    this._trails = require('./package')
-
-    if (!this.config.log.logger) {
-      console.error('A logger must be set at config.log.logger. Application cannot start.')
-      console.error('e.g. new winston.Logger({ transports: [ new winston.transports.Console() ] })')
-      console.error('For more info, see the config.log archetype: https://git.io/vVvUI')
-      throw new lib.Errors.LoggerNotDefinedError()
-    }
 
     this.setMaxListeners(this.config.main.maxListeners)
   }
@@ -55,19 +90,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
       throw new lib.Errors.ApiNotDefinedError()
     }
 
-    if (this.api && app && app.api) {
-      this.log.info('Starting trails app with new API definition')
-    }
-    if (app && app.api) {
-      this.api = app.api
-    }
-
-    const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
-    this.packs = lib.Trailpack.getTrailpackMapping(trailpacks)
+    this.api || (this.api = app && app.api)
 
     lib.Trails.bindEvents(this)
-    lib.Trailpack.bindTrailpackPhaseListeners(this, trailpacks)
-    lib.Trailpack.bindTrailpackMethodListeners(this, trailpacks)
+    lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
+    lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
     this.emit('trails:start')
 
@@ -83,16 +110,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   stop (err) {
+    this.stopped = true
     if (err) {
       this.log.error('\n', err.stack || '')
     }
     if (!this.started) {
-      this.log.error('\n', 'The application attempted to shut down, but is not',
-        'in a started state. Either it is in the process of shutting down, or',
-        'did not start successfully. Trails will not attempt to shut down twice.')
-
-      this.log.error('\n', 'Try increasing the loglevel to "debug" to learn more')
-      return Promise.resolve(this)
+      this.log.error('The application did not boot successfully.')
+      this.log.error('Try increasing the loglevel to "debug" to learn more')
     }
 
     this.emit('trails:stop')
@@ -105,7 +129,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
         return this.packs[packName].unload()
       }))
       .then(() => {
-        this.stopped = true
         return this
       })
   }
@@ -116,7 +139,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   emit (event) {
     this.log.debug('trails event:', event)
-    super.emit.apply(this, arguments)
+    return super.emit.apply(this, arguments)
   }
 
   /**
