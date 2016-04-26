@@ -75,7 +75,7 @@ Out of the box, Trails includes a small suite of trailpacks:
 - Windows, Mac, and Linux
 - Node 4.0 and newer
 
-## RESOURCES
+## Resources
 
 #### Tutorials 
 - [Getting started](http://blog.jaumard.com/en/2016/01/05/getting-started-with-trails/)
@@ -120,6 +120,10 @@ Yes! The core team maintains [several](https://github.com/trailsjs?query=trailpa
 popular trailpacks, but you are free to implement your own integration and use
 that instead or in addition to the core packs. See the [Trailpack](https://github.com/trailsjs/trailpack)
 docs for more info.
+
+## Contributing
+We love contributions! Please check out our [Contributor's Guide](https://github.com/trailsjs/trails/blob/master/.github/CONTRIBUTING.md) for more
+information on how our projects are organized and how to get started.
 
 ## License
 [MIT](https://github.com/trailsjs/trails/blob/master/LICENSE)

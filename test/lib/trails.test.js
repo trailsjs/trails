@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require('assert')
+const smokesignals = require('smokesignals')
 const lib = require('../../lib')
 
 describe('lib.Trails', () => {
@@ -125,6 +126,10 @@ describe('lib.Trails', () => {
   describe('#getNestedEnv', () => {
     it('should return a list of envs if one contains a "env" property', () => {
       const testConfig = {
+        main: { },
+        log: {
+          logger: new smokesignals.Logger()
+        },
         env: {
           envtest: {
             env: {
@@ -144,6 +149,10 @@ describe('lib.Trails', () => {
   describe('#validateConfig', () => {
     it('should throw ConfigValueError if an env config contains the "env" property', () => {
       const testConfig = {
+        main: { },
+        log: {
+          logger: new smokesignals.Logger()
+        },
         env: {
           envtest: {
             env: 'hello'
@@ -155,12 +164,54 @@ describe('lib.Trails', () => {
     })
     it('should throw ConfigValueError if config.env contains the "env" property', () => {
       const testConfig = {
+        main: { },
+        log: {
+          logger: new smokesignals.Logger()
+        },
         env: {
           env: 'hello'
         }
       }
       assert.throws(() => lib.Trails.validateConfig(testConfig), lib.Errors.ConfigValueError)
       assert.throws(() => lib.Trails.validateConfig(testConfig), /config.env/)
+    })
+  })
+
+  describe('#freezeConfig', () => {
+    it('should freeze nested object', () => {
+      const o1 = { foo: { bar: 1 } }
+      lib.Trails.freezeConfig(o1)
+
+      assert.throws(() => o1.foo = null, Error)
+    })
+    it('should not freeze exernal modules required from config', () => {
+      const o1 = {
+        foo: require('smokesignals'),
+        bar: 1
+      }
+      lib.Trails.freezeConfig(o1, [ 'smokesignals' ])
+
+      assert.throws(() => o1.bar = null, Error)
+
+      o1.foo.x = 1
+      assert.equal(o1.foo.x, 1)
+    })
+  })
+
+  describe('#unfreezeConfig', () => {
+    it('should unfreeze config object', () => {
+      const app = {
+        config: {
+          a: 1,
+          foo: 'bar'
+        }
+      }
+      lib.Trails.freezeConfig(app.config)
+      assert.throws(() => app.config.a = 2, Error)
+
+      lib.Trails.unfreezeConfig(app)
+      app.config.a = 2
+      assert.equal(app.config.a, 2)
     })
   })
 
