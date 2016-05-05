@@ -2,7 +2,7 @@
 
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
-[![Build status][ci-image]][ci-url]
+[![Linux + OSX Build Status][ci-image]][ci-url]
 [![Code Climate][codeclimate-image]][codeclimate-url]
 [![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
 
@@ -134,8 +134,10 @@ information on how our projects are organized and how to get started.
 [trails-url]: http://trailsjs.io
 [npm-image]: https://img.shields.io/npm/v/trails.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trails
-[ci-image]: https://img.shields.io/travis/trailsjs/trails/master.svg?style=flat-square
+[ci-image]: https://img.shields.io/travis/trailsjs/trails/master.svg?style=flat-square&label=Linux%20/%20OSX
 [ci-url]: https://travis-ci.org/trailsjs/trails
+[appveyor-image]: https://img.shields.io/appveyor/ci/trailsjs/trails/master.svg?style=flat-square&label=Windows
+[appveyor-url]: https://ci.appveyor.com/project/trailsjs/trails
 [codeclimate-image]: https://img.shields.io/codeclimate/github/trailsjs/trails.svg?style=flat-square
 [codeclimate-url]: https://codeclimate.com/github/trailsjs/trails
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
