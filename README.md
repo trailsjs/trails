@@ -17,7 +17,7 @@ API-driven design philosophy.
 #### Install
 
 ```sh
-$ npm install -g generator-trails
+$ npm install -g yo generator-trails
 $ yo trails
 ```
 
