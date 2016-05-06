@@ -196,6 +196,25 @@ describe('lib.Trails', () => {
       o1.foo.x = 1
       assert.equal(o1.foo.x, 1)
     })
+
+    // https://bugs.chromium.org/p/v8/issues/detail?id=4460
+    it('v8 issue 4460 exists', () => {
+      assert.throws(() => Object.freeze(new Int8Array()), TypeError)
+      //assert.throws(() => Object.freeze(new Buffer([1,2,3])), TypeError)
+      //assert.throws(() => Object.freeze(new DataView()), TypeError)
+    })
+    it('should freeze objects containing unfreezable types without error', () => {
+      const o1 = {
+        typedArray: new Int8Array(),
+        buffer: new Buffer([ 1,2,3 ]),
+        fun: function () { }
+      }
+      lib.Trails.freezeConfig(o1, [ ])
+
+      assert(o1.typedArray)
+      assert(Buffer.isBuffer(o1.buffer))
+      assert(o1.fun)
+    })
   })
 
   describe('#unfreezeConfig', () => {
