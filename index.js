@@ -103,7 +103,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.emit('trails:start')
     this.startTimer = setTimeout(() => {
       throw new Error('Trails take too long to start...')
-      process.exit(1)
     }, process.env.TRAILS_TIMEOUT)
     return this.after('trails:ready')
       .then(() => {
@@ -132,7 +131,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
     lib.Trails.unbindEvents(this)
     this.stopTimer = setTimeout(() => {
       throw new Error('Trails take too long to stop...')
-      process.exit(1)
     }, process.env.TRAILS_TIMEOUT)
 
     return Promise.all(
