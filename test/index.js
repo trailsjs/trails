@@ -107,7 +107,7 @@ describe('Trails', () => {
           })
         })
         describe('@PackageNotDefinedError', () => {
-          it('should throw PackageNotDefinedError if no package.json definition is provided', () => {
+          it('should throw PackageNotDefinedError if no pkg definition is provided', () => {
             const def = {
               config: {
                 main: {
@@ -129,7 +129,7 @@ describe('Trails', () => {
             config: {
               main: { },
               log: {
-                logger: new smokesignals.Logger()
+                logger: new smokesignals.Logger('silent')
               }
             },
             pkg: { }
@@ -149,7 +149,7 @@ describe('Trails', () => {
               main: {
                 packs: [ smokesignals.Trailpack ]
               },
-              log: { logger: new smokesignals.Logger('debug') },
+              log: { logger: new smokesignals.Logger('silent') },
               foo: 'bar'
             }
           }
@@ -172,7 +172,7 @@ describe('Trails', () => {
               main: {
                 packs: [ smokesignals.Trailpack ]
               },
-              log: { logger: new smokesignals.Logger('debug') },
+              log: { logger: new smokesignals.Logger('silent') },
               foo: 'bar'
             }
           }

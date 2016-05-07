@@ -66,7 +66,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       },
       loadedModules: {
         enumerable: false,
-        value: lib.Trails.getExternalModules(this.pkg)
+        value: lib.Trails.getExternalModules(this.pkg, this.config.main.paths.root)
       }
     })
 

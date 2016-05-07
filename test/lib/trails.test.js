@@ -1,5 +1,6 @@
 'use strict'
 
+const path = require('path')
 const assert = require('assert')
 const smokesignals = require('smokesignals')
 const lib = require('../../lib')
@@ -128,7 +129,7 @@ describe('lib.Trails', () => {
       const testConfig = {
         main: { },
         log: {
-          logger: new smokesignals.Logger()
+          logger: new smokesignals.Logger('silent')
         },
         env: {
           envtest: {
@@ -151,7 +152,7 @@ describe('lib.Trails', () => {
       const testConfig = {
         main: { },
         log: {
-          logger: new smokesignals.Logger()
+          logger: new smokesignals.Logger('silent')
         },
         env: {
           envtest: {
@@ -166,7 +167,7 @@ describe('lib.Trails', () => {
       const testConfig = {
         main: { },
         log: {
-          logger: new smokesignals.Logger()
+          logger: new smokesignals.Logger('silent')
         },
         env: {
           env: 'hello'
@@ -180,7 +181,7 @@ describe('lib.Trails', () => {
   describe('#freezeConfig', () => {
     it('should freeze nested object', () => {
       const o1 = { foo: { bar: 1 } }
-      lib.Trails.freezeConfig(o1)
+      lib.Trails.freezeConfig(o1, [ ])
 
       assert.throws(() => o1.foo = null, Error)
     })
@@ -225,12 +226,35 @@ describe('lib.Trails', () => {
           foo: 'bar'
         }
       }
-      lib.Trails.freezeConfig(app.config)
+      lib.Trails.freezeConfig(app.config, [ ])
       assert.throws(() => app.config.a = 2, Error)
 
       lib.Trails.unfreezeConfig(app)
       app.config.a = 2
       assert.equal(app.config.a, 2)
+    })
+  })
+
+  describe('#getExternalModules', () => {
+    const rootPath = path.resolve(path.dirname(require.main.id))
+    const pkg = {
+      dependencies: {
+      },
+      devDependencies: {
+        smokesignals: '0.0.0',
+        mocha: '0.0.0'
+      }
+    }
+
+    it('should return native modules', () => {
+      const modules = lib.Trails.getExternalModules(pkg, rootPath)
+      assert(modules.indexOf('path') !== -1)
+      assert(modules.indexOf('events') !== -1)
+    })
+    it('should return external modules', () => {
+      const modules = lib.Trails.getExternalModules(pkg, rootPath)
+      assert(modules.indexOf('smokesignals') !== -1)
+      assert(modules.indexOf('mocha') !== -1)
     })
   })
 
