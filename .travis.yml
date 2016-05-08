@@ -11,14 +11,14 @@ node_js:
 compiler:
   - gcc
 env:
-  - REQUIRED_TESTS=false
   - REQUIRED_TESTS=true
+  - OPTIONAL_TESTS=true
 
 # allow the ecosystem tests to fail. these failures should be
 # communicated to the maintainers of the failing modules
 matrix:
   allow_failures:
-    - env: REQUIRED_TESTS=false
+    - env: OPTIONAL_TESTS=true
   fast_finish: true
 
 before_install:
@@ -35,7 +35,7 @@ before_install:
 
 script:
 - sh -c '[[ "$REQUIRED_TESTS" == "true" ]] && npm test'
-- sh -c '[[ "$REQUIRED_TESTS" == "false" ]] && npm run ci'
+- sh -c '[[ "$OPTIONAL_TESTS" == "true" ]] && npm run ci'
 
 notifications:
   email: false
