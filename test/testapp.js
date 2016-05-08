@@ -1,3 +1,5 @@
+const smokesignals = require('smokesignals')
+
 module.exports = {
   api: {
 
@@ -8,7 +10,9 @@ module.exports = {
         root: __dirname
       }
     },
-    log: require('../archetype/config/log')
+    log: {
+      logger: new smokesignals.Logger('silent')
+    }
   },
   pkg: {
 
