@@ -199,11 +199,13 @@ describe('lib.Trails', () => {
     })
 
     // https://bugs.chromium.org/p/v8/issues/detail?id=4460
-    it('v8 issue 4460 exists', () => {
-      assert.throws(() => Object.freeze(new Int8Array()), TypeError)
-      //assert.throws(() => Object.freeze(new Buffer([1,2,3])), TypeError)
-      //assert.throws(() => Object.freeze(new DataView()), TypeError)
-    })
+    if (!/^v6/.test(process.version)) {
+      it('v8 issue 4460 exists', () => {
+        assert.throws(() => Object.freeze(new Int8Array()), TypeError)
+        //assert.throws(() => Object.freeze(new Buffer([1,2,3])), TypeError)
+        //assert.throws(() => Object.freeze(new DataView()), TypeError)
+      })
+    }
     it('should freeze objects containing unfreezable types without error', () => {
       const o1 = {
         typedArray: new Int8Array(),
