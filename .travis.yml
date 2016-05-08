@@ -11,31 +11,31 @@ node_js:
 compiler:
   - gcc
 env:
-  - TEST_ECOSYSTEM=false
-  - TEST_ECOSYSTEM=true
+  - REQUIRED_TESTS=false
+  - REQUIRED_TESTS=true
 
 # allow the ecosystem tests to fail. these failures should be
 # communicated to the maintainers of the failing modules
 matrix:
   allow_failures:
-    - env: TEST_ECOSYSTEM=true
+    - env: REQUIRED_TESTS=false
   fast_finish: true
 
 before_install:
 # install gcc 4.8 on osx using homebrew
-- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew tap homebrew/versions
-- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew update
-- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew install gcc48
+- sh -c '[[ "$TRAVIS_OS_NAME" == "osx" ]] && brew tap homebrew/versions'
+- sh -c '[[ "$TRAVIS_OS_NAME" == "osx" ]] && brew update'
+- sh -c '[[ "$TRAVIS_OS_NAME" == "osx" ]] && brew install gcc48'
 # install gcc 4.8 on linux using apt
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install python-software-properties
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get update
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install gcc-4.8
-- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
+- sh -c '[[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install python-software-properties'
+- sh -c '[[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo add-apt-repository ppa:ubuntu-toolchain-r/test'
+- sh -c '[[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get update'
+- sh -c '[[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install gcc-4.8'
+- sh -c '[[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50'
 
 script:
-- [[ "$TEST_ECOSYSTEM" == "false" ]] && npm test
-- [[ "$TEST_ECOSYSTEM" == "true" ]] && npm run ci
+- sh -c '[[ "$REQUIRED_TESTS" == "true" ]] && npm test'
+- sh -c '[[ "$REQUIRED_TESTS" == "false" ]] && npm run ci'
 
 notifications:
   email: false
