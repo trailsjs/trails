@@ -35,8 +35,8 @@ platform:
 test_script:
   - node -v
   - npm -v
-  - IF %REQUIRED_TESTS% EQU "true" npm test
-  - IF %OPTIONAL_TESTS% EQU "true" npm run ci
+  - IF %REQUIRED_TESTS% EQU true npm test
+  - IF %OPTIONAL_TESTS% EQU true npm run ci
 
 # Don't actually build.
 build: off
