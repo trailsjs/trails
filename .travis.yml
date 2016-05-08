@@ -1,16 +1,41 @@
 language: node_js
-node_js:
-- 4
-- 5
-- 6
 
+# build matrix
 os:
-- linux
-- osx
+  - linux
+  - osx
+node_js:
+  - 4
+  - 5
+  - 6
+compiler:
+  - gcc
+env:
+  - TEST_ECOSYSTEM=false
+  - TEST_ECOSYSTEM=true
+
+# allow the ecosystem tests to fail. these failures should be
+# communicated to the maintainers of the failing modules
+matrix:
+  allow_failures:
+    - env: TEST_ECOSYSTEM=true
+  fast_finish: true
+
+before_install:
+# install gcc 4.8 on osx using homebrew
+- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew tap homebrew/versions
+- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew update
+- [[ "$TRAVIS_OS_NAME" == "osx" ]] && brew install gcc48
+# install gcc 4.8 on linux using apt
+- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install python-software-properties
+- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get update
+- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo apt-get install gcc-4.8
+- [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
 
 script:
-- npm test
-- npm run ci
+- [[ "$TEST_ECOSYSTEM" == "false" ]] && npm test
+- [[ "$TEST_ECOSYSTEM" == "true" ]] && npm run ci
 
 notifications:
   email: false
