@@ -1,8 +1,19 @@
 # Test against this version of Node.js
 environment:
+  compiler: gcc-4.8.4-posix
+
   matrix:
-  - nodejs_version: "lts"
-  - nodejs_version: "stable"
+  - nodejs_version: "4"
+  - nodejs_version: "5"
+  - nodejs_version: "6"
+  - REQUIRED_TESTS: "true"
+  - OPTIONAL_TESTS: "true"
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - OPTIONAL_TESTS: true
+    - platform: x86
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -13,15 +24,13 @@ install:
 
 platform:
   - x64
+  - x86
 
-# Post-install test scripts.
 test_script:
-  # Output useful info for debugging.
-  - node --version
-  - npm --version
-  # run tests
-  - npm test
-  - npm run ci
+  - node -v
+  - npm -v
+  - IF %REQUIRED_TESTS% EQU "true" npm test
+  - IF %OPTIONAL_TESTS% EQU "true" npm run ci
 
 # Don't actually build.
 build: off
