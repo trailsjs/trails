@@ -34,6 +34,9 @@ addons:
       - gcc-4.8
       - g++-4.8
 
+before_script:
+- npm link
+
 script:
 - npm test
 - npm run ci
