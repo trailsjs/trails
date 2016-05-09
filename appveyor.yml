@@ -34,6 +34,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm install
+  - npm link
 
 platform:
   - x64
