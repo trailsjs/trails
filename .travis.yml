@@ -11,10 +11,11 @@ node_js:
 compiler:
   - gcc
 env:
-  - REQUIRED_TESTS=true
-  - OPTIONAL_TESTS=true
   global:
     - CXX=g++-4.8
+  matrix:
+    - REQUIRED_TESTS=true
+    - OPTIONAL_TESTS=true
 
 # allow the ecosystem tests to fail. these failures should be
 # communicated to the maintainers of the failing modules
