@@ -1,8 +1,32 @@
-# Test against this version of Node.js
 environment:
+  compiler: gcc-4.8.4-posix
+
   matrix:
-  - nodejs_version: "lts"
-  - nodejs_version: "stable"
+  - nodejs_version: "4"
+    REQUIRED_TESTS: "true"
+  - nodejs_version: "4"
+    OPTIONAL_TESTS: "true"
+  - nodejs_version: "5"
+    REQUIRED_TESTS: "true"
+  - nodejs_version: "5"
+    OPTIONAL_TESTS: "true"
+  - nodejs_version: "6"
+    REQUIRED_TESTS: "true"
+  - nodejs_version: "6"
+    OPTIONAL_TESTS: "true"
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - OPTIONAL_TESTS: true
+    - platform: x86
+
+notifications:
+- provider: Webhook
+  url: https://webhooks.gitter.im/e/2a667026696d38f78146
+  on_build_success: false
+  on_build_failure: false
+  on_build_status_changed: true
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -10,18 +34,16 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # install modules
   - npm install
+  - npm link
 
 platform:
   - x64
 
-# Post-install test scripts.
 test_script:
-  # Output useful info for debugging.
-  - node --version
-  - npm --version
-  # run tests
+  - node -v
+  - npm -v
   - npm test
   - npm run ci
 
-# Don't actually build.
 build: off
+skip_tags: true

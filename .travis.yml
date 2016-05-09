@@ -1,12 +1,41 @@
 language: node_js
-node_js:
-- 4
-- 5
-- 6
 
+# build matrix
 os:
-- linux
-- osx
+  - linux
+  - osx
+node_js:
+  - 4
+  - 5
+  - 6
+compiler:
+  - gcc
+env:
+  global:
+    - CXX=g++-4.8
+  matrix:
+    - REQUIRED_TESTS=true
+    - OPTIONAL_TESTS=true
+
+# allow the ecosystem tests to fail. these failures should be
+# communicated to the maintainers of the failing modules
+matrix:
+  allow_failures:
+    - env: OPTIONAL_TESTS=true
+  fast_finish: true
+
+# gcc 4.8 is included on osx
+# install gcc 4.8 on linux using apt
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8
+
+before_script:
+- npm link
 
 script:
 - npm test
