@@ -21,12 +21,6 @@ matrix:
     - OPTIONAL_TESTS: true
     - platform: x86
 
-services:
-- postgresql94
-- mongodb
-- mssql2014
-- mysql56
-
 notifications:
 - provider: Webhook
   url: https://webhooks.gitter.im/e/2a667026696d38f78146
