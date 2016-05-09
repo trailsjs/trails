@@ -21,6 +21,7 @@ matrix:
     - env: OPTIONAL_TESTS=true
   fast_finish: true
 
+# gcc 4.8 is included on osx
 # install gcc 4.8 on linux using apt
 addons:
   apt:
@@ -29,13 +30,6 @@ addons:
     packages:
       - gcc-4.8
       - g++-4.8
-
-before_install:
-# install gcc 4.8 on osx using homebrew
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap homebrew/versions ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc48 ; fi
-#- if [[ "$TRAVIS_OS_NAME" == "linux" ]] && sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50'
 
 script:
 - if [[ "$REQUIRED_TESTS" == "true" ]]; then npm test ; fi
