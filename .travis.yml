@@ -32,8 +32,8 @@ addons:
       - g++-4.8
 
 script:
-- if [[ "$REQUIRED_TESTS" == "true" ]]; then npm test ; fi
-- if [[ "$OPTIONAL_TESTS" == "true" ]]; then npm run ci; fi
+- npm test
+- npm run ci
 
 notifications:
   email: false
