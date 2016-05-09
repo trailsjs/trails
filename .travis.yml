@@ -13,6 +13,8 @@ compiler:
 env:
   - REQUIRED_TESTS=true
   - OPTIONAL_TESTS=true
+  global:
+    - CXX=g++-4.8
 
 # allow the ecosystem tests to fail. these failures should be
 # communicated to the maintainers of the failing modules
