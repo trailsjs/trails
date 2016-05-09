@@ -1,4 +1,3 @@
-# Test against this version of Node.js
 environment:
   compiler: gcc-4.8.4-posix
 
@@ -22,6 +21,19 @@ matrix:
     - OPTIONAL_TESTS: true
     - platform: x86
 
+services:
+- postgresql94
+- mongodb
+- mssql2014
+- mysql56
+
+notifications:
+- provider: Webhook
+  url: https://webhooks.gitter.im/e/2a667026696d38f78146
+  on_build_success: false
+  on_build_failure: false
+  on_build_status_changed: true
+
 # Install scripts. (runs after repo cloning)
 install:
   # Get the latest stable version of Node.js or io.js
@@ -35,8 +47,8 @@ platform:
 test_script:
   - node -v
   - npm -v
-  - IF %REQUIRED_TESTS% EQU true npm test
-  - IF %OPTIONAL_TESTS% EQU true npm run ci
+  - npm test
+  - npm run ci
 
-# Don't actually build.
 build: off
+skip_tags: true
