@@ -30,10 +30,6 @@ notifications:
 # Install scripts. (runs after repo cloning)
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm config set loglevel error
-  - ps: if ($env:nodejs_version -eq 4) { npm install -g langateam/npm#lts }
-  - ps: if ($env:nodejs_version -eq 5) { npm install -g langateam/npm#master }
-  - ps: if ($env:nodejs_version -eq 6) { npm install -g langateam/npm#master }
   - npm install
 
 platform:
@@ -43,7 +39,6 @@ test_script:
   - node -v
   - npm -v
   - npm test
-  - npm run ci
 
 build: off
 skip_tags: true
