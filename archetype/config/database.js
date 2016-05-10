@@ -28,7 +28,7 @@ module.exports = {
      */
 
     /*
-    sqlitedev: {
+     dev: {
       adapter: require('waterline-sqlite3'),
       migrate: 'alter'
     }
