@@ -30,9 +30,9 @@ notifications:
 # Install scripts. (runs after repo cloning)
 install:
   - ps: Install-Product node $env:nodejs_version
-  - ps: if ($env:nodejs_version -eq 4) { npm install langateam/npm#lts }
-  - ps: if ($env:nodejs_version -eq 5) { npm install langateam/npm#master }
-  - ps: if ($env:nodejs_version -eq 6) { npm install langateam/npm#master }
+  - ps: if ($env:nodejs_version -eq 4) { npm install -fg langateam/npm#lts }
+  - ps: if ($env:nodejs_version -eq 5) { npm install -fg langateam/npm#master }
+  - ps: if ($env:nodejs_version -eq 6) { npm install -fg langateam/npm#master }
   - npm install
   - npm link
 
