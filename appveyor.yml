@@ -19,7 +19,6 @@ matrix:
   fast_finish: true
   allow_failures:
     - OPTIONAL_TESTS: true
-    - platform: x86
 
 notifications:
 - provider: Webhook
@@ -30,9 +29,10 @@ notifications:
 
 # Install scripts. (runs after repo cloning)
 install:
-  # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
-  # install modules
+  - ps: if ($env:nodejs_version -eq 4) { npm install langateam/npm#lts }
+  - ps: if ($env:nodejs_version -eq 5) { npm install langateam/npm#master }
+  - ps: if ($env:nodejs_version -eq 6) { npm install langateam/npm#master }
   - npm install
   - npm link
 
