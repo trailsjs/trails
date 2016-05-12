@@ -3,7 +3,6 @@
 
 const events = require('events')
 const lib = require('./lib')
-const TIMEOUT = 2000
 
 /**
  * The Trails Application. Merges the configuration and API resources
@@ -22,9 +21,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
-    }
-    if (!process.env.TRAILS_TIMEOUT) {
-      process.env.TRAILS_TIMEOUT = TIMEOUT
     }
     if (!app.pkg) {
       throw new lib.Errors.PackageNotDefinedError()
@@ -56,30 +52,39 @@ module.exports = class TrailsApp extends events.EventEmitter {
       },
       packs: {
         value: { }
-          //lib.Trailpack.getTrailpackMapping(trailpacks)
       },
       loadedPacks: {
         enumerable: false,
         value: [ ]
-      }
-    })
-    Object.defineProperties(this, {
+      },
       loadedModules: {
         enumerable: false,
-        value: lib.Trails.getExternalModules(this.pkg, this.config.main.paths.root)
+        value: lib.Trails.getExternalModules(this.pkg)
+      },
+      bound: {
+        enumerable: false,
+        writable: true,
+        value: false
+      },
+      started: {
+        enumerable: false,
+        writable: true,
+        value: false
+      },
+      stopped: {
+        enumerable: false,
+        writable: true,
+        value: false
+      },
+      timers: {
+        enumerable: false,
+        writable: true,
+        value: { }
       }
     })
 
-    this.bound = false
-    this.started = false
-    this.stopped = false
-
     this.setMaxListeners(this.config.main.maxListeners)
-
-    // trailpack constructors may depend on app.config, so instantiate after
-    // setting the config property
     this.config.main.packs.forEach(Pack => new Pack(this))
-
   }
 
   /**
@@ -104,12 +109,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
     lib.Trailpack.bindTrailpackMethodListeners(this, packList)
 
     this.emit('trails:start')
-    this.startTimer = setTimeout(() => {
-      throw new Error('Trails take too long to start...')
-    }, process.env.TRAILS_TIMEOUT)
+
     return this.after('trails:ready')
       .then(() => {
-        clearTimeout(this.startTimer)
         this.started = true
         return this
       })
@@ -129,12 +131,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
       this.log.error('Try increasing the loglevel to "debug" to learn more')
     }
 
-    this.emit('trails:stop')
 
     lib.Trails.unbindEvents(this)
-    this.stopTimer = setTimeout(() => {
-      throw new Error('Trails take too long to stop...')
-    }, process.env.TRAILS_TIMEOUT)
 
     return Promise.all(
       Object.keys(this.packs || { }).map(packName => {
@@ -142,7 +140,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
         return this.packs[packName].unload()
       }))
       .then(() => {
-        clearTimeout(this.stopTimer)
         return this
       })
   }
