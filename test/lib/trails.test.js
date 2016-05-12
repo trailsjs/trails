@@ -190,7 +190,7 @@ describe('lib.Trails', () => {
         foo: require('smokesignals'),
         bar: 1
       }
-      lib.Trails.freezeConfig(o1, [ 'smokesignals' ])
+      lib.Trails.freezeConfig(o1, [ require.resolve('smokesignals') ])
 
       assert.throws(() => o1.bar = null, Error)
 
@@ -238,25 +238,17 @@ describe('lib.Trails', () => {
   })
 
   describe('#getExternalModules', () => {
-    const rootPath = path.resolve(path.dirname(require.main.id))
-    const pkg = {
-      dependencies: {
-      },
-      devDependencies: {
-        smokesignals: '0.0.0',
-        mocha: '0.0.0'
-      }
-    }
+    const rmf = require.main.filename
 
-    it('should return native modules', () => {
-      const modules = lib.Trails.getExternalModules(pkg, rootPath)
-      assert(modules.indexOf('path') !== -1)
-      assert(modules.indexOf('events') !== -1)
+    beforeEach(() => {
+      require.main.filename = path.resolve(__dirname, '..', '..', 'index.js')
+    })
+    afterEach(() => {
+      require.main.filename = rmf
     })
     it('should return external modules', () => {
-      const modules = lib.Trails.getExternalModules(pkg, rootPath)
-      assert(modules.indexOf('smokesignals') !== -1)
-      assert(modules.indexOf('mocha') !== -1)
+      const modules = lib.Trails.getExternalModules()
+      assert(modules.indexOf(require.resolve('mocha')) !== -1)
     })
   })
 
