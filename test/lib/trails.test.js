@@ -248,6 +248,7 @@ describe('lib.Trails', () => {
     })
     it('should return external modules', () => {
       const modules = lib.Trails.getExternalModules()
+      console.log(modules)
       assert(modules.indexOf(require.resolve('smokesignals')) !== -1)
       assert(modules.indexOf(require.resolve('mocha')) !== -1)
     })
