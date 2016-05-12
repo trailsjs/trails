@@ -53,21 +53,17 @@ module.exports = class TrailsApp extends events.EventEmitter {
       _trails: {
         enumerable: false,
         value: require('./package')
-      }
-    })
-
-    // trailpack constructors may depend on app.config, to instantiate after
-    // setting the config property
-    const trailpacks = this.config.main.packs.map(Pack => new Pack(this))
-
-    Object.defineProperties(this, {
+      },
       packs: {
-        value: lib.Trailpack.getTrailpackMapping(trailpacks)
+        value: { }
+          //lib.Trailpack.getTrailpackMapping(trailpacks)
       },
       loadedPacks: {
         enumerable: false,
-        value: trailpacks
-      },
+        value: [ ]
+      }
+    })
+    Object.defineProperties(this, {
       loadedModules: {
         enumerable: false,
         value: lib.Trails.getExternalModules(this.pkg, this.config.main.paths.root)
@@ -79,6 +75,11 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.stopped = false
 
     this.setMaxListeners(this.config.main.maxListeners)
+
+    // trailpack constructors may depend on app.config, so instantiate after
+    // setting the config property
+    this.config.main.packs.forEach(Pack => new Pack(this))
+
   }
 
   /**
@@ -94,11 +95,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
       throw new lib.Errors.ApiNotDefinedError()
     }
 
+    const packList = Object.keys(this.packs).map(name => this.packs[name])
+
     this.api || (this.api = app && app.api)
 
     lib.Trails.bindEvents(this)
-    lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
-    lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
+    lib.Trailpack.bindTrailpackPhaseListeners(this, packList)
+    lib.Trailpack.bindTrailpackMethodListeners(this, packList)
 
     this.emit('trails:start')
     this.startTimer = setTimeout(() => {

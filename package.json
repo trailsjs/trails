@@ -68,7 +68,7 @@
     "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "smokesignals": "^1.0.24",
-    "trailpack": "^1.0.0-alpha-1",
+    "trailpack": "^1.0.1",
     "winston": "^2.1.1"
   },
   "eslintConfig": {
