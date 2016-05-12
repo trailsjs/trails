@@ -131,15 +131,15 @@ module.exports = class TrailsApp extends events.EventEmitter {
       this.log.error('Try increasing the loglevel to "debug" to learn more')
     }
 
-
     lib.Trails.unbindEvents(this)
 
     return Promise.all(
-      Object.keys(this.packs || { }).map(packName => {
-        this.log.debug('Unloading trailpack', packName)
-        return this.packs[packName].unload()
+      this.loadedPacks.map(pack => {
+        this.log.debug('Unloading trailpack', pack.name, '...')
+        return pack.unload()
       }))
       .then(() => {
+        this.log.debug('All trailpacks unloaded. Done.')
         return this
       })
   }
