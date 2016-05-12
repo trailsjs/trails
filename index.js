@@ -55,6 +55,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       },
       loadedPacks: {
         enumerable: false,
+        writable: true,
         value: [ ]
       },
       loadedModules: {
@@ -99,14 +100,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!this.api && !(app && app.api)) {
       throw new lib.Errors.ApiNotDefinedError()
     }
-
-    const packList = Object.keys(this.packs).map(name => this.packs[name])
-
     this.api || (this.api = app && app.api)
 
+    this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
     lib.Trails.bindEvents(this)
-    lib.Trailpack.bindTrailpackPhaseListeners(this, packList)
-    lib.Trailpack.bindTrailpackMethodListeners(this, packList)
+    lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
+    lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
     this.emit('trails:start')
 
