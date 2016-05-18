@@ -24,7 +24,7 @@ $ yo trails
 #### Trailblaze
 
 Trails uses [Yeoman](http://yeoman.io/) to generate scaffolding for new
-applications, and to create resources inside the application. 
+applications, and to create resources inside the application.
 
 ```sh
 $ yo trails --help
@@ -51,8 +51,11 @@ Generators:
 
 Once installation is complete, begin your journey!
 ```sh
-$ npm start
+$ node server.js
 ```
+
+`npm start` can also be used to start your application, but please note that it
+(wastes RAM.)[https://medium.com/@tjwebb/the-npm-start-default-uses-a-lot-of-ram-3e0d8ac0c6a1#.qdsqec425]
 
 #### Happy Trails!
 
@@ -78,7 +81,7 @@ Out of the box, Trails includes a small suite of trailpacks:
 
 ## Resources
 
-#### Tutorials 
+#### Tutorials
 - [Getting started](http://blog.jaumard.com/en/2016/01/05/getting-started-with-trails/)
 - [Create a custom Trailpack](http://blog.jaumard.com/en/2016/01/06/create-a-trailpack-for-trails/)
 
@@ -113,7 +116,7 @@ maintaining it as a core module.
 
 No. Trails is built and maintained by former members of the Sails.js core team,
 and offers an upgrade path from existing Sails applications, but it utilizes
-exactly zero lines of code from the original Sails project. 
+exactly zero lines of code from the original Sails project.
 
 #### Q. Can I use my own ORM, Webserver, whatever?
 
