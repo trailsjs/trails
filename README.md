@@ -54,9 +54,6 @@ Once installation is complete, begin your journey!
 $ node server.js
 ```
 
-`npm start` can also be used to start your application, but please note that it
-(wastes RAM.)[https://medium.com/@tjwebb/the-npm-start-default-uses-a-lot-of-ram-3e0d8ac0c6a1#.qdsqec425]
-
 #### Happy Trails!
 
 ## Trailpacks
