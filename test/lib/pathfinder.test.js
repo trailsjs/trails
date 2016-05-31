@@ -1,6 +1,5 @@
 'use strict'
 
-const Errors = require('../../lib/errors')
 const assert = require('assert')
 const lib = require('../../lib')
 const smokesignals = require('smokesignals')

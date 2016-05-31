@@ -86,6 +86,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     this.setMaxListeners(this.config.main.maxListeners)
     this.config.main.packs.forEach(Pack => new Pack(this))
+    delete this.config.env // Delete env config, now it has been merge
   }
 
   /**
