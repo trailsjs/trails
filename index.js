@@ -130,6 +130,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       this.log.error('Try increasing the loglevel to "debug" to learn more')
     }
 
+    this.emit('trails:stop')
     lib.Trails.unbindEvents(this)
 
     return Promise.all(

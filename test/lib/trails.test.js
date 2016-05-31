@@ -221,7 +221,7 @@ describe('lib.Trails', () => {
   })
 
   describe('#unfreezeConfig', () => {
-    it('should unfreeze config object', () => {
+    it('should unfreeze shallow config object', () => {
       const app = {
         config: {
           a: 1,
@@ -231,9 +231,30 @@ describe('lib.Trails', () => {
       lib.Trails.freezeConfig(app.config, [ ])
       assert.throws(() => app.config.a = 2, Error)
 
-      lib.Trails.unfreezeConfig(app)
+      lib.Trails.unfreezeConfig(app, [ ])
       app.config.a = 2
       assert.equal(app.config.a, 2)
+    })
+    it('should unfreeze deep config object', () => {
+      const app = {
+        config: {
+          main: {
+            paths: {
+              root: 'rootpath',
+              temp: 'temppath'
+            },
+            foo: 1
+          }
+        }
+      }
+      lib.Trails.freezeConfig(app.config, [ ])
+      assert.throws(() => app.config.main.paths.root = 'newrootpath', Error)
+
+      lib.Trails.unfreezeConfig(app, [ ])
+      app.config.main.paths.root = 'newrootpath'
+      assert.equal(app.config.main.paths.root, 'newrootpath')
+      assert.equal(app.config.main.paths.temp, 'temppath')
+      assert.equal(app.config.main.foo, 1)
     })
   })
 
