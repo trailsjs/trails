@@ -14,39 +14,47 @@ describe('lib.Trails', () => {
     beforeEach(() => {
       testConfig = {
         env: {
-          mergetest1: {
-            merged: 'yes',
-            extraneous: 'assigned'
-          },
-          mergetest2: {
-            nested: {
+          envTest1: {
+            log: {
               merged: 'yes',
               extraneous: 'assigned'
-            },
-            merged: 'yes',
-            extraneous: 'assigned'
+            }
           },
-          mergetest3: {
-            nested: {
-              merged: 'yes',
-              extraneous: 'assigned',
-              deeplyNested: {
+          envTest2: {
+            log: {
+              nested: {
                 merged: 'yes',
                 extraneous: 'assigned'
-              }
-            },
-            merged: 'yes',
-            extraneous: 'assigned'
+              },
+              merged: 'yes',
+              extraneous: 'assigned'
+            }
+          },
+          envTest3: {
+            log: {
+              nested: {
+                merged: 'yes',
+                extraneous: 'assigned',
+                deeplyNested: {
+                  merged: 'yes',
+                  extraneous: 'assigned'
+                }
+              },
+              merged: 'yes',
+              extraneous: 'assigned'
+            }
           }
         },
-        merged: 'no',
-        nested: {
+        log: {
           merged: 'no',
-          deeplyNested: {
-            merged: 'no'
-          }
-        },
-        normal: 'yes'
+          nested: {
+            merged: 'no',
+            deeplyNested: {
+              merged: 'no'
+            }
+          },
+          normal: 'yes'
+        }
       }
     })
 
@@ -55,51 +63,51 @@ describe('lib.Trails', () => {
     })
 
     it('should merge basic env config', () => {
-      process.env.NODE_ENV = 'mergetest1'
+      process.env.NODE_ENV = 'envTest1'
       const config = lib.Trails.buildConfig(testConfig)
 
       assert(config)
-      assert.equal(config.merged, 'yes')
-      assert.equal(config.extraneous, 'assigned')
-      assert.equal(config.normal, 'yes')
-      assert.equal(config.nested.merged, 'no')
+      assert.equal(config.log.merged, 'yes')
+      assert.equal(config.log.extraneous, 'assigned')
+      assert.equal(config.log.normal, 'yes')
+      assert.equal(config.log.nested.merged, 'no')
 
       assert.equal(config.main.maxListeners, 128)
     })
 
     it('should merge nested env config', () => {
-      process.env.NODE_ENV = 'mergetest2'
+      process.env.NODE_ENV = 'envTest2'
       const config = lib.Trails.buildConfig(testConfig)
 
       assert(config)
-      assert.equal(config.merged, 'yes')
-      assert.equal(config.nested.merged, 'yes')
+      assert.equal(config.log.merged, 'yes')
+      assert.equal(config.log.nested.merged, 'yes')
 
-      assert.equal(config.extraneous, 'assigned')
-      assert.equal(config.nested.extraneous, 'assigned')
-      assert.equal(config.normal, 'yes')
-      assert.equal(config.extraneous, 'assigned')
-      assert.equal(config.normal, 'yes')
+      assert.equal(config.log.extraneous, 'assigned')
+      assert.equal(config.log.nested.extraneous, 'assigned')
+      assert.equal(config.log.normal, 'yes')
+      assert.equal(config.log.extraneous, 'assigned')
+      assert.equal(config.log.normal, 'yes')
 
       assert.equal(config.main.maxListeners, 128)
     })
 
     it('should merge deeply nested env config', () => {
-      process.env.NODE_ENV = 'mergetest3'
+      process.env.NODE_ENV = 'envTest3'
       const config = lib.Trails.buildConfig(testConfig)
 
       assert(config)
-      assert.equal(config.merged, 'yes')
-      assert.equal(config.nested.merged, 'yes')
-      assert.equal(config.nested.deeplyNested.merged, 'yes')
+      assert.equal(config.log.merged, 'yes')
+      assert.equal(config.log.nested.merged, 'yes')
+      assert.equal(config.log.nested.deeplyNested.merged, 'yes')
 
-      assert.equal(config.extraneous, 'assigned')
-      assert.equal(config.nested.extraneous, 'assigned')
-      assert.equal(config.nested.deeplyNested.extraneous, 'assigned')
+      assert.equal(config.log.extraneous, 'assigned')
+      assert.equal(config.log.nested.extraneous, 'assigned')
+      assert.equal(config.log.nested.deeplyNested.extraneous, 'assigned')
 
-      assert.equal(config.normal, 'yes')
-      assert.equal(config.extraneous, 'assigned')
-      assert.equal(config.normal, 'yes')
+      assert.equal(config.log.normal, 'yes')
+      assert.equal(config.log.extraneous, 'assigned')
+      assert.equal(config.log.normal, 'yes')
 
       assert.equal(config.main.maxListeners, 128)
     })
@@ -109,18 +117,18 @@ describe('lib.Trails', () => {
       const config = lib.Trails.buildConfig(testConfig)
 
       assert(config)
-      assert.equal(config.merged, 'no')
-      assert.equal(config.normal, 'yes')
-      assert(!config.extraneous)
-      assert(!config.env)
+      assert.equal(config.log.merged, 'no')
+      assert.equal(config.log.normal, 'yes')
+      assert(!config.log.extraneous)
+      assert(config.env)
 
       assert.equal(config.main.maxListeners, 128)
     })
 
-    it('should remove "env" property from config', () => {
+    it('should keep "env" property from config', () => {
       process.env.NODE_ENV = 'mergetest2'
       const config = lib.Trails.buildConfig(testConfig)
-      assert(!config.env)
+      assert(config.env)
     })
   })
 
