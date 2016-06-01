@@ -37,6 +37,12 @@ module.exports = class TrailsApp extends events.EventEmitter {
         enumerable: false,
         value: app.pkg
       },
+      versions: {
+        enumerable: false,
+        writable: false,
+        configurable: false,
+        value: process.versions
+      },
       config: {
         value: lib.Trails.buildConfig(app.config),
         configurable: true
