@@ -7,8 +7,8 @@
   "main": "index.js",
   "dependencies": {
     "trailpack-core": "^1.0.0",
-    "trailpack-repl": "^1.0.0",
-    "trailpack-router": "^1.0.0",
+    "trailpack-repl": "^1.0.8",
+    "trailpack-router": "^1.0.2",
     "trails": "^1.0.4",
     "trails-controller": "^1.0.0-beta-2",
     "trails-model": "^1.0.0-beta-2",
