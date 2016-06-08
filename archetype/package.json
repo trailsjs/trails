@@ -6,10 +6,10 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "trailpack-core": "^1.0.0-beta-3",
-    "trailpack-repl": "^1.0.0-beta-3",
-    "trailpack-router": "^1.0.0-beta-4",
-    "trails": "^1.0.0-beta-1",
+    "trailpack-core": "^1.0.0",
+    "trailpack-repl": "^1.0.0",
+    "trailpack-router": "^1.0.0",
+    "trails": "^1.0.4",
     "trails-controller": "^1.0.0-beta-2",
     "trails-model": "^1.0.0-beta-2",
     "trails-policy": "^1.0.1",
@@ -17,9 +17,9 @@
     "winston": "^2.2"
   },
   "devDependencies": {
-    "eslint": "^2.8",
+    "eslint": "^2.11",
     "eslint-config-trails": "latest",
-    "mocha": "^2.4",
+    "mocha": "^2.5",
     "supertest": "^1.2"
   },
   "scripts": {
