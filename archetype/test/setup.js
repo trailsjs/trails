@@ -3,8 +3,8 @@
 const TrailsApp = require('trails')
 
 before(() => {
-  global.app = new TrailsApp(require('../../'))
-  return global.app.start()
+  global.app = new TrailsApp(require('../'))
+  return global.app.start().catch(global.app.stop)
 })
 
 after(() => {
