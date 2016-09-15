@@ -168,17 +168,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
       return
     if (!(events instanceof Array))
       events = [events]
-    const self = this
-    const genCb = function(eventName){
-      const cb = function(){
-        self.removeListener(eventName, cb)
-        handler.apply(self, Array.prototype.slice.call(arguments, 0))
-      }
-      return cb
+
+    const cb = (e) => {
+      this.removeListener(e, cb)
+      handler.apply(this, Array.prototype.slice.call(arguments, 0))
     }
-    events.forEach(function(e){
-      self.addListener(e, genCb(e))
-    })
+
+    events.forEach(e => this.addListener(e, cb(e)))
   }
 
   /**
