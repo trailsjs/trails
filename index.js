@@ -174,7 +174,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
       handler.apply(this, Array.prototype.slice.call(arguments, 0))
     }
 
-    events.forEach(e => this.addListener(e, cb(e)))
+    events.forEach(e => {
+      this.addListener(e, cb)
+    })
   }
 
   /**
