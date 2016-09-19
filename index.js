@@ -161,6 +161,25 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
+   * Extend the once emiter reader for accept multi valid events
+   */
+  onceAny (events, handler) {
+    if (!events)
+      return
+    if (!(events instanceof Array))
+      events = [events]
+
+    const cb = (e) => {
+      this.removeListener(e, cb)
+      handler.apply(this, Array.prototype.slice.call(arguments, 0))
+    }
+
+    events.forEach(e => {
+      this.addListener(e, cb)
+    })
+  }
+
+  /**
    * Resolve Promise once all events in the list have emitted
    * @return Promise
    */
@@ -168,9 +187,15 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!Array.isArray(events)) {
       events = [ events ]
     }
-
     return Promise.all(events.map(eventName => {
-      return new Promise(resolve => this.once(eventName, resolve))
+      return new Promise(resolve => {
+        if (eventName instanceof Array){
+          this.onceAny(eventName, resolve)
+        }
+        else {
+          this.once(eventName, resolve)
+        }
+      })
     }))
   }
 

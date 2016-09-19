@@ -207,6 +207,13 @@ describe('Trails', () => {
 
         return eventPromise
       })
+      it('should invoke listener when listening for multiple possible events', () => {
+        const eventPromise = app.after([['test1', 'test2'], 'test3'])
+        app.emit('test1')
+        app.emit('test3')
+
+        return eventPromise
+      })
     })
   })
 })
