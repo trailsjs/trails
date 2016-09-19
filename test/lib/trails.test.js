@@ -18,6 +18,14 @@ describe('lib.Trails', () => {
             log: {
               merged: 'yes',
               extraneous: 'assigned'
+            },
+            customObject: {
+              string: 'b',
+              int: 2,
+              array: [2, 3, 4],
+              subobj: {
+                attr: 'b'
+              }
             }
           },
           envTest2: {
@@ -28,6 +36,12 @@ describe('lib.Trails', () => {
               },
               merged: 'yes',
               extraneous: 'assigned'
+            },
+            customObject: {
+              subobj: {
+                attr: 'b'
+              },
+              int2: 2
             }
           },
           envTest3: {
@@ -54,6 +68,14 @@ describe('lib.Trails', () => {
             }
           },
           normal: 'yes'
+        },
+        customObject: {
+          string: 'a',
+          int: 1,
+          array: [1, 2, 3],
+          subobj: {
+            attr: 'a'
+          }
         }
       }
     })
@@ -112,6 +134,49 @@ describe('lib.Trails', () => {
       assert.equal(config.main.maxListeners, 128)
     })
 
+    it('should merge full custom env config', () => {
+      process.env.NODE_ENV = 'envTest1'
+      const config = lib.Trails.buildConfig(testConfig)
+
+      assert(config)
+      assert(typeof config.customObject === 'object')
+      assert.equal(config.customObject.string, 'b')
+      assert.equal(config.customObject.int, 2)
+      assert(Array.isArray(config.customObject.array))
+      assert.equal(config.customObject.array[0], 2)
+      assert(typeof config.customObject.subobj === 'object')
+      assert.equal(config.customObject.subobj.attr, 'b')
+    })
+
+    it('should merge partial custom env config', () => {
+      process.env.NODE_ENV = 'envTest2'
+      const config = lib.Trails.buildConfig(testConfig)
+
+      assert(config)
+      assert(typeof config.customObject === 'object')
+      assert.equal(config.customObject.string, 'a')
+      assert.equal(config.customObject.int, 1)
+      assert(Array.isArray(config.customObject.array))
+      assert.equal(config.customObject.array[0], 1)
+      assert(typeof config.customObject.subobj === 'object')
+      assert.equal(config.customObject.subobj.attr, 'b')
+    })
+
+    it('should merge new custom attr in env config', () => {
+      process.env.NODE_ENV = 'envTest2'
+      const config = lib.Trails.buildConfig(testConfig)
+
+      assert(config)
+      assert(typeof config.customObject === 'object')
+      assert.equal(config.customObject.string, 'a')
+      assert.equal(config.customObject.int, 1)
+      assert(Array.isArray(config.customObject.array))
+      assert.equal(config.customObject.array[0], 1)
+      assert(typeof config.customObject.subobj === 'object')
+      assert.equal(config.customObject.subobj.attr, 'b')
+      assert.equal(config.customObject.int2, 2)
+    })
+
     it('should not override any configs if NODE_ENV matches no env', () => {
       process.env.NODE_ENV = 'notconfigured'
       const config = lib.Trails.buildConfig(testConfig)
@@ -119,6 +184,7 @@ describe('lib.Trails', () => {
       assert(config)
       assert.equal(config.log.merged, 'no')
       assert.equal(config.log.normal, 'yes')
+      assert.equal(config.customObject, testConfig.customObject)
       assert(!config.log.extraneous)
       assert(config.env)
 
