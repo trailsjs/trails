@@ -131,7 +131,7 @@ information on how our projects are organized and how to get started.
 
 <img src="http://i.imgur.com/dCjNisP.png">
 
-[trails-image]: http://i.imgur.com/zfT2NEv.png
+[trails-image]: http://i.imgur.com/0iVVRxi.png
 [trails-url]: http://trailsjs.io
 [npm-image]: https://img.shields.io/npm/v/trails.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trails
