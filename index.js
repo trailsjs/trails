@@ -164,13 +164,15 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * Extend the once emiter reader for accept multi valid events
    */
   onceAny (events, handler) {
+    const self = this
+
     if (!events)
       return
-    if (!(events instanceof Array))
+    if (!Array.isArray(events))
       events = [events]
 
-    const cb = (e) => {
-      this.removeListener(e, cb)
+    function cb (e) {
+      self.removeListener(e, cb)
       handler.apply(this, Array.prototype.slice.call(arguments, 0))
     }
 
