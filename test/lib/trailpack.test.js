@@ -13,25 +13,6 @@ describe('lib.Trailpack', () => {
     return app.start(testAppDefinition)
   })
 
-  describe('#getUserlandTrailpacks', () => {
-    let testTrailpacks
-    before(() => {
-      testTrailpacks = [
-        new Trailpack(app, { pkg: { name: 'trailpack-pack1' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-pack2' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-pack3' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-pack4' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-core' }, config: { } })
-      ]
-    })
-
-    it('should exclude the core trailpack', () => {
-      const packs = lib.Trailpack.getUserlandTrailpacks(testTrailpacks)
-
-      assert(packs)
-      assert.equal(packs.length, 4)
-    })
-  })
   describe('#getTrailpackMapping', () => {
     let testTrailpacks
     before(() => {

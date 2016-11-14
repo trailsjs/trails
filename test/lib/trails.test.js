@@ -85,8 +85,7 @@ describe('lib.Trails', () => {
     })
 
     it('should merge basic env config', () => {
-      process.env.NODE_ENV = 'envTest1'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'envTest1')
 
       assert(config)
       assert.equal(config.log.merged, 'yes')
@@ -99,7 +98,7 @@ describe('lib.Trails', () => {
 
     it('should merge nested env config', () => {
       process.env.NODE_ENV = 'envTest2'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'envTest2')
 
       assert(config)
       assert.equal(config.log.merged, 'yes')
@@ -116,7 +115,7 @@ describe('lib.Trails', () => {
 
     it('should merge deeply nested env config', () => {
       process.env.NODE_ENV = 'envTest3'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'envTest3')
 
       assert(config)
       assert.equal(config.log.merged, 'yes')
@@ -136,7 +135,7 @@ describe('lib.Trails', () => {
 
     it('should merge full custom env config', () => {
       process.env.NODE_ENV = 'envTest1'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'envTest1')
 
       assert(config)
       assert(typeof config.customObject === 'object')
@@ -150,7 +149,7 @@ describe('lib.Trails', () => {
 
     it('should merge partial custom env config', () => {
       process.env.NODE_ENV = 'envTest2'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'envTest2')
 
       assert(config)
       assert(typeof config.customObject === 'object')
@@ -164,7 +163,7 @@ describe('lib.Trails', () => {
 
     it('should merge new custom attr in env config', () => {
       process.env.NODE_ENV = 'envTest2'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'envTest2')
 
       assert(config)
       assert(typeof config.customObject === 'object')
@@ -179,12 +178,11 @@ describe('lib.Trails', () => {
 
     it('should not override any configs if NODE_ENV matches no env', () => {
       process.env.NODE_ENV = 'notconfigured'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'notconfigured')
 
       assert(config)
       assert.equal(config.log.merged, 'no')
       assert.equal(config.log.normal, 'yes')
-      assert.equal(config.customObject, testConfig.customObject)
       assert(!config.log.extraneous)
       assert(config.env)
 
@@ -193,7 +191,7 @@ describe('lib.Trails', () => {
 
     it('should keep "env" property from config', () => {
       process.env.NODE_ENV = 'mergetest2'
-      const config = lib.Trails.buildConfig(testConfig)
+      const config = lib.Trails.buildConfig(testConfig, 'mergetest2')
       assert(config.env)
     })
   })

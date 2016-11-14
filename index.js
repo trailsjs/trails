@@ -3,6 +3,7 @@
 
 const events = require('events')
 const lib = require('./lib')
+const i18next = require('i18next')
 
 /**
  * The Trails Application. Merges the configuration and API resources
@@ -12,6 +13,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
   /**
    * @param pkg The application package.json
+   * @param app.api The application api (api/ folder)
+   * @param app.config The application configuration (config/ folder)
    *
    * Initialize the Trails Application and its EventEmitter parentclass. Set
    * some necessary default configuration.
@@ -19,19 +22,24 @@ module.exports = class TrailsApp extends events.EventEmitter {
   constructor (app) {
     super()
 
-    if (!process.env.NODE_ENV) {
-      process.env.NODE_ENV = 'development'
-    }
     if (!app.pkg) {
       throw new lib.Errors.PackageNotDefinedError()
     }
+    if (!app.api && !(app && app.api)) {
+      throw new lib.Errors.ApiNotDefinedError()
+    }
 
+    if (!process.env.NODE_ENV) {
+      process.env.NODE_ENV = 'development'
+    }
+
+    const processEnv = Object.freeze(JSON.parse(JSON.stringify(process.env)))
     lib.Trails.validateConfig(app.config)
 
     Object.defineProperties(this, {
       env: {
         enumerable: false,
-        value: Object.freeze(JSON.parse(JSON.stringify(process.env)))
+        value: processEnv
       },
       pkg: {
         enumerable: false,
@@ -44,7 +52,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
         value: process.versions
       },
       config: {
-        value: lib.Trails.buildConfig(app.config),
+        value: lib.Trails.buildConfig(app.config, processEnv),
         configurable: true
       },
       api: {
@@ -87,34 +95,63 @@ module.exports = class TrailsApp extends events.EventEmitter {
         enumerable: false,
         writable: true,
         value: { }
+      },
+      models: {
+        enumerable: true,
+        writable: false,
+        value: { }
+      },
+      services: {
+        enumerable: true,
+        writable: false,
+        value: { }
+      },
+      controllers: {
+        enumerable: true,
+        writable: false,
+        value: { }
+      },
+      policies: {
+        enumerable: true,
+        writable: false,
+        value: { }
+      },
+      translate: {
+        enumerable: false,
+        writable: true
       }
     })
 
+    lib.Core.createDefaultPaths(this)
     this.setMaxListeners(this.config.main.maxListeners)
+
+    Object.assign(this.models, lib.Core.bindMethods(this, 'models'))
+    Object.assign(this.services, lib.Core.bindMethods(this, 'services'))
+    Object.assign(this.controllers, lib.Core.bindMethods(this, 'controllers'))
+    Object.assign(this.policies, lib.Core.bindMethods(this, 'policies'))
+
     this.config.main.packs.forEach(Pack => new Pack(this))
-    delete this.config.env // Delete env config, now it has been merge
+    this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
+
+    delete this.config.env // Delete env config, now it has been merged
   }
 
   /**
-   * Start the App. Load all Trailpacks. The "api" property is required, here,
-   * if not provided to the constructor.
+   * Start the App. Load all Trailpacks.
    *
-   * @param app.api The application api (api/ folder)
-   * @param app.config The application configuration (config/ folder)
    * @return Promise
    */
-  start (app) {
-    if (!this.api && !(app && app.api)) {
-      throw new lib.Errors.ApiNotDefinedError()
-    }
-    this.api || (this.api = app && app.api)
-
-    this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
+  start () {
     lib.Trails.bindEvents(this)
     lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
-    this.emit('trails:start')
+    i18next.init(this.config.i18n, (err, t) => {
+      if (err) throw err
+
+      this.translate = t
+      this.emit('trails:start')
+    })
 
     return this.after('trails:ready')
       .then(() => {
@@ -207,5 +244,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
    */
   get log () {
     return this.config.log.logger
+  }
+
+  get __ () {
+    return this.translate
   }
 }

@@ -6,6 +6,9 @@ const TrailsApp = require('..')
 const testAppDefinition = require('./testapp')
 const lib = require('../lib')
 
+global.app = new TrailsApp(require('./integration/app'))
+global.app.start()
+
 describe('Trails', () => {
   describe('@TrailsApp', () => {
     describe('idempotence', () => {
@@ -102,8 +105,7 @@ describe('Trails', () => {
                 }
               }
             }
-            const app = new TrailsApp(def)
-            assert.throws(() => app.start(), lib.Errors.ApiNotDefinedError)
+            assert.throws(() => new TrailsApp(def), lib.Errors.ApiNotDefinedError)
           })
         })
         describe('@PackageNotDefinedError', () => {
