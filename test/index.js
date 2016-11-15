@@ -197,35 +197,70 @@ describe('Trails', () => {
         return eventPromise
       })
       it('should accept a single event as an array or a string', () => {
-        const eventPromise = app.after('test1')
-        app.emit('test1')
+        const eventPromise = app.after('test2')
+        app.emit('test2')
         return eventPromise
       })
       it('should invoke listener when listening for multiple events', () => {
-        const eventPromise = app.after([ 'test1', 'test2', 'test3' ])
-        app.emit('test1')
-        app.emit('test2')
+        const eventPromise = app.after([ 'test3', 'test4', 'test5' ])
         app.emit('test3')
+        app.emit('test4')
+        app.emit('test5')
 
         return eventPromise
       })
       it('should invoke listener when listening for multiple possible events', () => {
-        const eventPromise = app.after([['test1', 'test2'], 'test3'])
-        app.emit('test1')
-        app.emit('test3')
+        const eventPromise = app.after([['test6', 'test7'], 'test8'])
+        app.emit('test6')
+        app.emit('test8')
 
         return eventPromise
       })
-      it('should pass event parameters to callbacks added using `onceAny`', done => {
-        const sent = { test: true }
+      it('should pass event parameters through to handler', () => {
+        const eventPromise = app.after(['test9', 'test10'])
+          .then(([ t1, t2 ]) => {
+            assert.equal(t1, 9)
+            assert.equal(t2, 10)
+          })
 
-        app.onceAny('test', received => {
-          assert.equal(received, sent)
+        app.emit('test9', 9)
+        app.emit('test10', 10)
 
-          return done()
+        return eventPromise
+      })
+      it('should accept a callback as the 2nd argument to invoke instead of returning a Promise', done => {
+        app.after(['test11', 'test12'], ([t1, t2]) => {
+          assert.equal(t1, 11)
+          assert.equal(t2, 12)
+          done()
         })
+        app.emit('test11', 11)
+        app.emit('test12', 12)
+      })
+    })
 
-        app.emit('test', sent)
+    describe('#onceAny', () => {
+      let app
+      before(() => {
+        app = new TrailsApp(testAppDefinition)
+      })
+
+      it('should pass event parameters through to handler', () => {
+        const eventPromise = app.onceAny('test1')
+          .then(t1 => {
+            assert.equal(t1, 1)
+          })
+
+        app.emit('test1', 1)
+
+        return eventPromise
+      })
+      it('should accept a callback as the 2nd argument to invoke instead of returning a Promise', done => {
+        app.onceAny(['test1', 'test2'], t1 => {
+          assert.equal(t1, 1)
+          done()
+        })
+        app.emit('test1', 1)
       })
     })
   })

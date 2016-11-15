@@ -4,6 +4,7 @@
 const events = require('events')
 const lib = require('./lib')
 const i18next = require('i18next')
+const NOOP = function () { }
 
 /**
  * The Trails Application. Merges the configuration and API resources
@@ -198,32 +199,47 @@ module.exports = class TrailsApp extends events.EventEmitter {
   }
 
   /**
-   * Extend the once emiter reader for accept multi valid events
+   * Resolve Promise once ANY of the events in the list have emitted. Also
+   * accepts a callback.
+   * @return Promise
    */
-  onceAny (events, handler) {
-    const self = this
-
+  onceAny (events, handler = NOOP) {
     if (!Array.isArray(events)) {
       events = [events]
     }
 
-    function cb (e) {
-      self.removeListener(e, cb)
-      handler.apply(this, Array.prototype.slice.call(arguments, 0))
+    let resolveCallback
+    const handlerWrapper = (...args) => {
+      handler(args)
+      return args
     }
 
-    events.forEach(e => {
-      this.addListener(e, cb)
+    return Promise.race(events.map(eventName => {
+      return new Promise(resolve => {
+        resolveCallback = resolve
+        this.once(eventName, resolveCallback)
+      })
+    }))
+    .then(handlerWrapper)
+    .then(args => {
+      events.forEach(eventName => this.removeListener(eventName, resolveCallback))
+      return args
     })
   }
 
   /**
-   * Resolve Promise once all events in the list have emitted
+   * Resolve Promise once all events in the list have emitted. Also accepts
+   * a callback.
    * @return Promise
    */
-  after (events) {
+  after (events, handler = NOOP) {
     if (!Array.isArray(events)) {
       events = [ events ]
+    }
+
+    const handlerWrapper = (args) => {
+      handler(args)
+      return args
     }
 
     return Promise.all(events.map(eventName => {
@@ -236,6 +252,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
         }
       })
     }))
+    .then(handlerWrapper)
   }
 
   /**
