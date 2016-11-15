@@ -142,7 +142,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   start () {
-    lib.Trails.bindEvents(this)
+    lib.Trails.bindListeners(this)
     lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
@@ -175,7 +175,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     }
 
     this.emit('trails:stop')
-    lib.Trails.unbindEvents(this)
+    lib.Trails.unbindListeners(this)
 
     return Promise.all(
       this.loadedPacks.map(pack => {
