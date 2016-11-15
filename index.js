@@ -35,7 +35,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
     }
 
     const processEnv = Object.freeze(JSON.parse(JSON.stringify(process.env)))
-    lib.Trails.validateConfig(app.config)
 
     Object.defineProperties(this, {
       env: {
@@ -123,6 +122,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       }
     })
 
+    lib.Trails.validateConfig(app.config)
     lib.Core.createDefaultPaths(this)
     this.setMaxListeners(this.config.main.maxListeners)
 
@@ -134,7 +134,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     this.config.main.packs.forEach(Pack => new Pack(this))
     this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
 
-    delete this.config.env // Delete env config, now it has been merged
+    delete this.config.env
   }
 
   /**
