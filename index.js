@@ -203,10 +203,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
   onceAny (events, handler) {
     const self = this
 
-    if (!events)
-      return
-    if (!Array.isArray(events))
+    if (!Array.isArray(events)) {
       events = [events]
+    }
 
     function cb (e) {
       self.removeListener(e, cb)
@@ -226,6 +225,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     if (!Array.isArray(events)) {
       events = [ events ]
     }
+
     return Promise.all(events.map(eventName => {
       return new Promise(resolve => {
         if (eventName instanceof Array){
