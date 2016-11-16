@@ -203,7 +203,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * accepts a callback.
    * @return Promise
    */
-  onceAny (events, handler = NOOP) {
+  onceAny (events, handler) {
+    handler || (handler = NOOP)
     if (!Array.isArray(events)) {
       events = [events]
     }
@@ -232,7 +233,8 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * a callback.
    * @return Promise
    */
-  after (events, handler = NOOP) {
+  after (events, handler) {
+    handler || (handler = NOOP)
     if (!Array.isArray(events)) {
       events = [ events ]
     }
