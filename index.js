@@ -23,10 +23,13 @@ module.exports = class TrailsApp extends events.EventEmitter {
   constructor (app) {
     super()
 
+    if (!app) {
+      throw new RangeError('No app definition provided to Trails constructor')
+    }
     if (!app.pkg) {
       throw new lib.Errors.PackageNotDefinedError()
     }
-    if (!app.api && !(app && app.api)) {
+    if (!app.api) {
       throw new lib.Errors.ApiNotDefinedError()
     }
 
