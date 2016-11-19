@@ -58,7 +58,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
         value: process.versions
       },
       config: {
-        value: lib.Core.buildConfig(app.config, processEnv),
+        value: lib.Core.buildConfig(app.config, processEnv.NODE_ENV),
         configurable: true
       },
       api: {
@@ -128,7 +128,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       }
     })
 
-    lib.Core.validateConfig(app.config)
+    lib.Core.validateConfig(this.config)
     lib.Core.createDefaultPaths(this)
     this.setMaxListeners(this.config.main.maxListeners)
 
@@ -139,8 +139,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
 
     this.config.main.packs.forEach(Pack => new Pack(this))
     this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
-
-    delete this.config.env
   }
 
   /**
