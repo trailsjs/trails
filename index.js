@@ -6,6 +6,9 @@ const lib = require('./lib')
 const i18next = require('i18next')
 const NOOP = function () { }
 
+// inject Error types into the global namespace
+Object.assign(global, lib.Errors)
+
 /**
  * The Trails Application. Merges the configuration and API resources
  * loads Trailpacks, initializes logging and event listeners.
@@ -55,7 +58,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
         value: process.versions
       },
       config: {
-        value: lib.Trails.buildConfig(app.config, processEnv),
+        value: lib.Core.buildConfig(app.config, processEnv),
         configurable: true
       },
       api: {
@@ -77,7 +80,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       },
       loadedModules: {
         enumerable: false,
-        value: lib.Trails.getExternalModules(this.pkg)
+        value: lib.Core.getExternalModules(this.pkg)
       },
       bound: {
         enumerable: false,
@@ -125,7 +128,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
       }
     })
 
-    lib.Trails.validateConfig(app.config)
+    lib.Core.validateConfig(app.config)
     lib.Core.createDefaultPaths(this)
     this.setMaxListeners(this.config.main.maxListeners)
 
@@ -146,7 +149,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
    * @return Promise
    */
   start () {
-    lib.Trails.bindListeners(this)
+    lib.Core.bindListeners(this)
     lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
@@ -179,7 +182,7 @@ module.exports = class TrailsApp extends events.EventEmitter {
     }
 
     this.emit('trails:stop')
-    lib.Trails.unbindListeners(this)
+    lib.Core.unbindListeners(this)
 
     return Promise.all(
       this.loadedPacks.map(pack => {
@@ -268,6 +271,10 @@ module.exports = class TrailsApp extends events.EventEmitter {
     return this.config.log.logger
   }
 
+  /**
+   * Expose the i18n translator on the app object. Internationalization can be
+   * configured in config.i18n
+   */
   get __ () {
     return this.translate
   }

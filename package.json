@@ -17,7 +17,8 @@
     "hapi",
     "i18n",
     "orm",
-    "server"
+    "server",
+    "graphql"
   ],
   "scripts": {
     "test": "eslint . && mocha",
@@ -65,16 +66,14 @@
   },
   "homepage": "http://trailsjs.io",
   "dependencies": {
-    "i18next": "^3.4.1",
-    "joi": "^9.2.0",
-    "lodash.defaultsdeep": "^4.6.0",
-    "lodash.foreach": "^4.5.0",
-    "lodash.get": "^4.4.2",
-    "lodash.includes": "^4.3.0",
-    "lodash.isfunction": "^3.0.8",
-    "lodash.isplainobject": "^4.0.6",
-    "lodash.mapvalues": "^4.6.0",
-    "lodash.merge": "^4.6.0"
+    "hoek": "4.1.0",
+    "i18next": "3.4.1",
+    "joi": "9.2.0",
+    "lodash": "4.17.2",
+    "trails-controller": "1.0.0",
+    "trails-model": "1.0.0",
+    "trails-policy": "1.0.1",
+    "trails-service": "1.0.0"
   },
   "devDependencies": {
     "eslint": "^2.5.3",
@@ -86,6 +85,16 @@
     "trailpack": "^1.0.1",
     "winston": "^2.1.1"
   },
+  "bundledDependencies": [
+    "hoek",
+    "i18next",
+    "joi",
+    "lodash",
+    "trails-controller",
+    "trails-model",
+    "trails-policy",
+    "trails-service"
+  ],
   "eslintConfig": {
     "extends": "trails"
   },
