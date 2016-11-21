@@ -77,7 +77,7 @@
   },
   "devDependencies": {
     "eslint": "^2.5.3",
-    "eslint-config-trails": "^1.0",
+    "eslint-config-trails": "^2.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "pre-commit": "^1.1.3",
