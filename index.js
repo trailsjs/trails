@@ -1,7 +1,7 @@
 /*eslint no-console: 0 */
 'use strict'
 
-const events = require('events')
+const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')
 const i18next = require('i18next')
 const NOOP = function () { }
@@ -13,7 +13,7 @@ Object.assign(global, lib.Errors)
  * The Trails Application. Merges the configuration and API resources
  * loads Trailpacks, initializes logging and event listeners.
  */
-module.exports = class TrailsApp extends events.EventEmitter {
+module.exports = class TrailsApp extends EventEmitter {
 
   /**
    * @param pkg The application package.json
@@ -58,8 +58,9 @@ module.exports = class TrailsApp extends events.EventEmitter {
         value: process.versions
       },
       config: {
-        value: lib.Core.buildConfig(app.config, processEnv.NODE_ENV),
-        configurable: true
+        value: new lib.Configuration(app.config, processEnv),
+        configurable: true,
+        writable: false
       },
       api: {
         value: app.api,
@@ -128,7 +129,6 @@ module.exports = class TrailsApp extends events.EventEmitter {
       }
     })
 
-    lib.Core.validateConfig(this.config)
     lib.Core.createDefaultPaths(this)
     this.setMaxListeners(this.config.main.maxListeners)
 
@@ -189,6 +189,10 @@ module.exports = class TrailsApp extends events.EventEmitter {
       }))
       .then(() => {
         this.log.debug('All trailpacks unloaded. Done.')
+        return this
+      })
+      .catch(err => {
+        console.error(err)
         return this
       })
   }
@@ -259,6 +263,19 @@ module.exports = class TrailsApp extends events.EventEmitter {
       })
     }))
     .then(handlerWrapper)
+  }
+
+  freezeConfig () {
+    this.config.freeze(this.loadedModules)
+  }
+
+  unfreezeConfig () {
+    Object.defineProperties(this, {
+      config: {
+        value: this.config.unfreeze(),
+        configurable: true
+      }
+    })
   }
 
   /**
