@@ -3,7 +3,6 @@
 const path = require('path')
 const assert = require('assert')
 const _ = require('lodash')
-const smokesignals = require('smokesignals')
 const lib = require('../../lib')
 
 describe('lib.Core', () => {
@@ -56,7 +55,8 @@ describe('lib.Core', () => {
     })
     it('should return external modules', () => {
       const modules = lib.Core.getExternalModules()
-      assert(modules.indexOf(require.resolve('mocha')) !== -1)
+      assert(modules.indexOf(require.resolve('trails')) !== -1)
+      assert(modules.indexOf(require.resolve('lodash')) !== -1)
     })
   })
 
