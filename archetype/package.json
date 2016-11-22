@@ -8,7 +8,7 @@
   "dependencies": {
     "trailpack-repl": "^2",
     "trailpack-router": "^2",
-    "trails": "^2",
+    "trails": "v2-latest",
     "winston": "^2.2"
   },
   "devDependencies": {
