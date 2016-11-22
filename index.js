@@ -129,7 +129,6 @@ module.exports = class TrailsApp extends EventEmitter {
       }
     })
 
-    lib.Core.createDefaultPaths(this)
     this.setMaxListeners(this.config.main.maxListeners)
 
     Object.assign(this.models, lib.Core.bindMethods(this, 'models'))
@@ -272,10 +271,17 @@ module.exports = class TrailsApp extends EventEmitter {
   unfreezeConfig () {
     Object.defineProperties(this, {
       config: {
-        value: this.config.unfreeze(),
+        value: new lib.Configuration(this.config.unfreeze(), this.env),
         configurable: true
       }
     })
+  }
+
+  createPaths () {
+    if (this.config.main.createPaths !== true) {
+      this.log.warn('createPaths is disabled. Configured paths will not be created')
+    }
+    return lib.Core.createDefaultPaths(this)
   }
 
   /**
