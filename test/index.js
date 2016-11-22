@@ -218,9 +218,9 @@ describe('Trails', () => {
       })
       it('should pass event parameters through to handler', () => {
         const eventPromise = app.after(['test9', 'test10'])
-          .then(([ t1, t2 ]) => {
-            assert.equal(t1, 9)
-            assert.equal(t2, 10)
+          .then(results => {
+            assert.equal(results[0], 9)
+            assert.equal(results[1], 10)
           })
 
         app.emit('test9', 9)
@@ -229,9 +229,9 @@ describe('Trails', () => {
         return eventPromise
       })
       it('should accept a callback as the 2nd argument to invoke instead of returning a Promise', done => {
-        app.after(['test11', 'test12'], ([t1, t2]) => {
-          assert.equal(t1, 11)
-          assert.equal(t2, 12)
+        app.after(['test11', 'test12'], results => {
+          assert.equal(results[0], 11)
+          assert.equal(results[1], 12)
           done()
         })
         app.emit('test11', 11)
@@ -247,8 +247,8 @@ describe('Trails', () => {
 
       it('should pass event parameters through to handler', () => {
         const eventPromise = app.onceAny('test1')
-          .then(t1 => {
-            assert.equal(t1, 1)
+          .then(result => {
+            assert.equal(result[0], 1)
           })
 
         app.emit('test1', 1)

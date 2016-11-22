@@ -218,9 +218,9 @@ module.exports = class TrailsApp extends EventEmitter {
     }
 
     let resolveCallback
-    const handlerWrapper = (...args) => {
-      handler(args)
-      return args
+    const handlerWrapper = function () {
+      handler.apply(null, arguments)
+      return arguments
     }
 
     return Promise.race(events.map(eventName => {
