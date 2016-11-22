@@ -74,7 +74,8 @@
     "trails-controller": "1.0.0",
     "trails-model": "1.0.0",
     "trails-policy": "1.0.1",
-    "trails-service": "1.0.0"
+    "trails-service": "1.0.0",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "eslint": "^2.5.3",

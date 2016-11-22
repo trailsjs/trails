@@ -6,14 +6,9 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "trailpack-core": "^1.0.1",
-    "trailpack-repl": "^1.1.0",
-    "trailpack-router": "^1.0.8",
-    "trails": "^1.1.0",
-    "trails-controller": "^1.0.0-beta-2",
-    "trails-model": "^1.0.0-beta-2",
-    "trails-policy": "^1.0.1",
-    "trails-service": "1.0.0-beta-2",
+    "trailpack-repl": "^2",
+    "trailpack-router": "^2",
+    "trails": "^2",
     "winston": "^2.2"
   },
   "devDependencies": {
