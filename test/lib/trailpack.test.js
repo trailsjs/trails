@@ -12,29 +12,8 @@ describe('lib.Trailpack', () => {
   before(() => {
     return app.start(testAppDefinition)
   })
-
-  describe('#getTrailpackMapping', () => {
-    let testTrailpacks
-    before(() => {
-      testTrailpacks = [
-        new Trailpack(app, { pkg: { name: 'trailpack-pack1' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-pack2' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-pack3' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-pack4' }, config: { } }),
-        new Trailpack(app, { pkg: { name: 'trailpack-core' }, config: { } })
-      ]
-    })
-
-    it('should index packs by name', () => {
-      const packs = lib.Trailpack.getTrailpackMapping(testTrailpacks)
-
-      assert(packs.pack1)
-      assert(packs.pack2)
-      assert(packs.pack3)
-      assert(packs.pack4)
-      assert(packs.core)
-    })
-
+  after(() => {
+    return app.stop()
   })
 })
 
