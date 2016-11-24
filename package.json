@@ -86,16 +86,6 @@
     "trailpack": "^2",
     "winston": "^2.3"
   },
-  "bundledDependencies": [
-    "hoek",
-    "i18next",
-    "joi",
-    "lodash",
-    "trails-controller",
-    "trails-model",
-    "trails-policy",
-    "trails-service"
-  ],
   "eslintConfig": {
     "extends": "trails"
   },
