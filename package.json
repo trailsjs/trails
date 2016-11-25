@@ -70,7 +70,7 @@
     "i18next": "3.4.1",
     "joi": "9.2.0",
     "lodash": "4.17.2",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "0.5.1",
     "trails-controller": "1.0.0",
     "trails-model": "1.0.0",
     "trails-policy": "1.0.1",
@@ -87,10 +87,6 @@
     "winston": "^2.1.1"
   },
   "bundledDependencies": [
-    "hoek",
-    "i18next",
-    "joi",
-    "lodash",
     "trails-controller",
     "trails-model",
     "trails-policy",
