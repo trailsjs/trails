@@ -68,7 +68,7 @@
   "dependencies": {
     "hoek": "4.1.0",
     "i18next": "3.4.1",
-    "joi": "9.2.0",
+    "joi": "^10.0.1",
     "lodash": "4.17.2",
     "mkdirp": "0.5.1",
     "trails-controller": "1.0.0",
