@@ -131,13 +131,15 @@ module.exports = class TrailsApp extends EventEmitter {
 
     this.setMaxListeners(this.config.main.maxListeners)
 
+    // instatiate trailpacks
+    this.config.main.packs.forEach(Pack => new Pack(this))
+    this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
+
+    // bind resource methods to 'app'
     Object.assign(this.models, lib.Core.bindMethods(this, 'models'))
     Object.assign(this.services, lib.Core.bindMethods(this, 'services'))
     Object.assign(this.controllers, lib.Core.bindMethods(this, 'controllers'))
     Object.assign(this.policies, lib.Core.bindMethods(this, 'policies'))
-
-    this.config.main.packs.forEach(Pack => new Pack(this))
-    this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
   }
 
   /**
