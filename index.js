@@ -280,7 +280,7 @@ module.exports = class TrailsApp extends EventEmitter {
   }
 
   createPaths () {
-    if (this.config.main.createPaths !== true) {
+    if (this.config.main.createPaths === false) {
       this.log.warn('createPaths is disabled. Configured paths will not be created')
     }
     return lib.Core.createDefaultPaths(this)
