@@ -6,8 +6,8 @@ const lib = require('./lib')
 const i18next = require('i18next')
 const NOOP = function () { }
 
-// inject Error types into the global namespace
-Object.assign(global, lib.Errors)
+// inject Error and Resource types into the global namespace
+lib.Core.assignGlobals()
 
 /**
  * The Trails Application. Merges the configuration and API resources
@@ -132,7 +132,15 @@ module.exports = class TrailsApp extends EventEmitter {
     this.setMaxListeners(this.config.main.maxListeners)
 
     // instatiate trailpacks
-    this.config.main.packs.forEach(Pack => new Pack(this))
+    this.config.main.packs.forEach(Pack => {
+      try {
+        new Pack(this)
+      }
+      catch (e) {
+        console.error('Error loading Trailpack')
+        console.error(e)
+      }
+    })
     this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
 
     // bind resource methods to 'app'
@@ -153,7 +161,9 @@ module.exports = class TrailsApp extends EventEmitter {
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
     i18next.init(this.config.i18n, (err, t) => {
-      if (err) throw err
+      if (err) {
+        this.log.error('Problem loading i18n:', err)
+      }
 
       this.translate = t
       this.emit('trails:start')

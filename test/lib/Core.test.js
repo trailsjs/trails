@@ -3,7 +3,6 @@
 const path = require('path')
 const assert = require('assert')
 const _ = require('lodash')
-const smokesignals = require('smokesignals')
 const lib = require('../../lib')
 
 describe('lib.Core', () => {
@@ -60,4 +59,28 @@ describe('lib.Core', () => {
     })
   })
 
+  describe('#assignGlobals', () => {
+    it('should assign variables to the global namespace', () => {
+      lib.Core.assignGlobals()
+
+      assert(global.Service)
+      assert(Service)
+    })
+    it('global variables should be immutable and error if mutation is attempted', () => {
+      assert.throws(() => delete global.Service, Error)
+      assert(global.Service)
+      assert(Service)
+    })
+    it('should ignore conflicts for identical values', () => {
+      const s1 = Service
+      lib.Core.assignGlobals()
+      lib.Core.assignGlobals()
+      lib.Core.assignGlobals()
+      lib.Core.assignGlobals()
+
+      assert(global.Service)
+      assert(Service)
+      assert.equal(s1, Service)
+    })
+  })
 })
