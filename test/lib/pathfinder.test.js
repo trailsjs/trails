@@ -1,8 +1,9 @@
 'use strict'
 
+const EventEmitter = require('events').EventEmitter
 const assert = require('assert')
 const lib = require('../../lib')
-const smokesignals = require('smokesignals')
+const Trailpack = require('trailpack')
 
 describe('lib.Pathfinder', () => {
   describe('#getPathErrors', () => {
@@ -121,27 +122,38 @@ describe('lib.Pathfinder', () => {
     })
   })
   describe('#getEventProducer', () => {
+    const app = new EventEmitter()
     const packs = [
-      new smokesignals.Trailpack(new smokesignals.TrailsApp(), {
-        trailpack: {
-          lifecycle: {
-            configure: {
-              emit: [ 'pack1:configured', 'pack1:custom' ]
-            },
-            initialize: {
-              emit: [ 'pack1:initialized', 'pack1:custom' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack1'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              configure: {
+                emit: [ 'pack1:configured', 'pack1:custom' ]
+              },
+              initialize: {
+                emit: [ 'pack1:initialized', 'pack1:custom' ]
+              }
             }
           }
         }
       }),
-      new smokesignals.Trailpack(new smokesignals.TrailsApp(), {
-        trailpack: {
-          lifecycle: {
-            configure: {
-              emit: [ 'pack2:configured' ]
-            },
-            initialize: {
-              emit: [ 'pack2:initialized' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack2'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              configure: {
+                emit: [ 'pack2:configured' ]
+              },
+              initialize: {
+                emit: [ 'pack2:initialized' ]
+              }
             }
           }
         }
@@ -162,98 +174,128 @@ describe('lib.Pathfinder', () => {
   })
 
   describe('Lifecycle', () => {
-    const app = new smokesignals.TrailsApp()
+    const app = new EventEmitter()
     const packs = [
-      new smokesignals.Trailpack(app, {
-        trailpack: {
-          lifecycle: {
-            configure: {
-              listen: [ ],
-              emit: [ 'pack0:configured' ]
-            },
-            initialize: {
-              listen: [ ],
-              emit: [ 'pack0:initialized' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack0'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              configure: {
+                listen: [ ],
+                emit: [ 'pack0:configured' ]
+              },
+              initialize: {
+                listen: [ ],
+                emit: [ 'pack0:initialized' ]
+              }
             }
           }
         }
-      }, 'pack0'),
+      }),
 
-      new smokesignals.Trailpack(app, {
-        trailpack: {
-          lifecycle: {
-            configure: {
-              listen: [ 'pack0:configured' ],
-              emit: [ 'pack1:configured' ]
-            },
-            initialize: {
-              emit: [ 'pack1:initialized', 'pack1:custom' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack1'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              configure: {
+                listen: [ 'pack0:configured' ],
+                emit: [ 'pack1:configured' ]
+              },
+              initialize: {
+                emit: [ 'pack1:initialized', 'pack1:custom' ]
+              }
             }
           }
         }
-      }, 'pack1'),
+      }),
 
-      new smokesignals.Trailpack(app, {
-        trailpack: {
-          lifecycle: {
-            configure: {
-              listen: [ 'pack1:configured' ],
-              emit: [ 'pack2:configured' ]
-            },
-            initialize: {
-              listen: [ 'pack1:initialized', 'pack1:custom' ],
-              emit: [ 'pack2:initialized' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack2'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              configure: {
+                listen: [ 'pack1:configured' ],
+                emit: [ 'pack2:configured' ]
+              },
+              initialize: {
+                listen: [ 'pack1:initialized', 'pack1:custom' ],
+                emit: [ 'pack2:initialized' ]
+              }
             }
           }
         }
-      }, 'pack2'),
+      }),
 
-      new smokesignals.Trailpack(app, {
-        trailpack: {
-          lifecycle: {
-            configure: {
-              listen: [ 'pack2:configured' ],
-              emit: [ 'pack3:configured' ]
-            },
-            initialize: {
-              listen: [ 'pack2:initialized', 'pack1:custom' ],
-              emit: [ 'pack3:initialized' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack3'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              configure: {
+                listen: [ 'pack2:configured' ],
+                emit: [ 'pack3:configured' ]
+              },
+              initialize: {
+                listen: [ 'pack2:initialized', 'pack1:custom' ],
+                emit: [ 'pack3:initialized' ]
+              }
             }
           }
         }
-      }, 'pack3'),
+      }),
 
-      new smokesignals.Trailpack(app, {
-        trailpack: {
-          lifecycle: {
-            // dependency with no route to source
-            configure: {
-              listen: [ 'packX:configured' ],
-              emit: [ 'pack4:configured' ]
-            },
-            // dependency on pack with circular dependency
-            initialize: {
-              listen: [ 'pack5:initialized', 'pack0:initialized' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack4'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              // dependency with no route to source
+              configure: {
+                listen: [ 'packX:configured' ],
+                emit: [ 'pack4:configured' ]
+              },
+              // dependency on pack with circular dependency
+              initialize: {
+                listen: [ 'pack5:initialized', 'pack0:initialized' ]
+              }
             }
           }
         }
-      }, 'pack4'),
+      }),
 
       // circular dependency
-      new smokesignals.Trailpack(app, {
-        trailpack: {
-          lifecycle: {
-            configure: {
-              listen: [ 'pack5:configured' ],
-              emit: [ 'pack5:configured' ]
-            },
-            initialize: {
-              listen: [ 'pack4:initialized' ],
-              emit: [ 'pack5:initialized' ]
+      new Trailpack(app, {
+        pkg: {
+          name: 'pack5'
+        },
+        config: {
+          trailpack: {
+            lifecycle: {
+              configure: {
+                listen: [ 'pack5:configured' ],
+                emit: [ 'pack5:configured' ]
+              },
+              initialize: {
+                listen: [ 'pack4:initialized' ],
+                emit: [ 'pack5:initialized' ]
+              }
             }
           }
         }
-      }, 'pack5')
+      })
     ]
 
     describe('#getLifecyclePath', () => {

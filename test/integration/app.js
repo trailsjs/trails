@@ -1,6 +1,7 @@
 const path = require('path')
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
+const Trailpack = require('trailpack')
 
 const AppConfigLocales = {
   en: {
@@ -27,7 +28,7 @@ const App = {
   config: {
     main: {
       packs: [
-        smokesignals.Trailpack
+        Trailpack
       ],
       paths: {
         testdir: path.resolve(__dirname, 'testdir')

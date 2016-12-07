@@ -5,6 +5,7 @@ const path = require('path')
 const assert = require('assert')
 const smokesignals = require('smokesignals')
 const TrailsApp = require('../..')
+const Trailpack = require('trailpack')
 const testAppDefinition = require('./testapp')
 const lib = require('../../lib')
 
@@ -166,7 +167,7 @@ describe('Trails', () => {
             api: { },
             config: {
               main: {
-                packs: [ smokesignals.Trailpack ]
+                packs: [ Trailpack ]
               },
               log: { logger: new smokesignals.Logger('silent') },
               foo: 'bar'
@@ -189,7 +190,7 @@ describe('Trails', () => {
             api: { },
             config: {
               main: {
-                packs: [ smokesignals.Trailpack ]
+                packs: [ Trailpack ]
               },
               log: { logger: new smokesignals.Logger('silent') },
               foo: 'bar'
