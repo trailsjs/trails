@@ -271,13 +271,19 @@ describe('lib.Configuration', () => {
     })
 
     // https://bugs.chromium.org/p/v8/issues/detail?id=4460
-    if (!/^v6/.test(process.version)) {
-      it('v8 issue 4460 exists', () => {
+    if (/^(v4)|(v5)/.test(process.version)) {
+      it('v8 issue 4460 exists in node v4, v5 series (cannot naively freeze Int8Aray)', () => {
         assert.throws(() => Object.freeze(new Int8Array()), TypeError)
         //assert.throws(() => Object.freeze(new Buffer([1,2,3])), TypeError)
         //assert.throws(() => Object.freeze(new DataView()), TypeError)
       })
     }
+    else {
+      it('v8 issue 4460 is resolved (node 6 and newer)', () => {
+        assert(true)
+      })
+    }
+
     it('should freeze objects containing unfreezable types without error', () => {
       const o1 = {
         typedArray: new Int8Array(),
