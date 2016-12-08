@@ -1,5 +1,5 @@
 const smokesignals = require('smokesignals')
-const Trailpack = require('trailpack')
+const Testpack = require('./testpack')
 
 module.exports = {
   api: {
@@ -11,7 +11,7 @@ module.exports = {
         root: __dirname
       },
       packs: [
-        Trailpack
+        Testpack
       ]
     },
     log: {
