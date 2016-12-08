@@ -55,7 +55,7 @@ describe('lib.Core', () => {
     })
     it('should return external modules', () => {
       const modules = lib.Core.getExternalModules()
-      assert(modules.indexOf(require.resolve('mocha')) !== -1)
+      assert.notEqual(modules.indexOf(require.resolve('trailpack')), -1)
     })
   })
 
