@@ -21,7 +21,7 @@
     "graphql"
   ],
   "scripts": {
-    "test": "eslint . && istanbul cover _mocha -- -R spec",
+    "test": "eslint . && istanbul cover _mocha",
     "ci": "cd .. && ci"
   },
   "pre-commit": [
