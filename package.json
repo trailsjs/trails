@@ -21,7 +21,7 @@
     "graphql"
   ],
   "scripts": {
-    "test": "eslint --ignore-path .gitignore . && istanbul cover _mocha",
+    "test": "eslint --ignore-path .gitignore . && istanbul cover node_modules/mocha/bin/_mocha",
     "ci": "cd .. && ci"
   },
   "pre-commit": [
