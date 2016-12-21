@@ -22,6 +22,8 @@
   ],
   "scripts": {
     "test": "eslint --ignore-path .gitignore . && istanbul cover node_modules/mocha/bin/_mocha",
+    "test-performance": "eslint . && mocha test-performance",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
     "ci": "cd .. && ci"
   },
   "pre-commit": [

@@ -398,30 +398,6 @@ describe('lib.Pathfinder', () => {
         const valid = lib.Pathfinder.isComplete(path)
         assert(!valid)
       })
-      it('should execute in under 5ms (n=6, with errors)', () => {
-        const t0 = process.hrtime()
-        const path = [ packs[0], packs[1], packs[2], packs[3], packs[4], packs[5] ]
-
-        const complete = lib.Pathfinder.isComplete(path)
-
-        const t1 = process.hrtime(t0)
-        const t = t1[1] / 1e6
-
-        assert(t < 5, `actual time: ${t} ms`)
-        assert(!complete)
-      })
-      it('should execute in under 2ms (n=4, no errors)', () => {
-        const t0 = process.hrtime()
-        const path = [ packs[0], packs[1], packs[2], packs[3] ]
-
-        const complete = lib.Pathfinder.isComplete(path)
-
-        const t1 = process.hrtime(t0)
-        const t = t1[1] / 1e6
-
-        assert(t < 2, `actual time: ${t} ms`)
-        assert(complete)
-      })
     })
   })
 })
