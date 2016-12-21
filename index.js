@@ -160,6 +160,7 @@ module.exports = class TrailsApp extends EventEmitter {
     lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
+    // initialize i18n
     i18next.init(this.config.i18n, (err, t) => {
       if (err) {
         this.log.error('Problem loading i18n:', err)
@@ -276,10 +277,16 @@ module.exports = class TrailsApp extends EventEmitter {
     .then(handlerWrapper)
   }
 
+  /**
+   * Prevent changes to the app configuration
+   */
   freezeConfig () {
     this.config.freeze(this.loadedModules)
   }
 
+  /**
+   * Allow changes to the app configuration
+   */
   unfreezeConfig () {
     Object.defineProperties(this, {
       config: {
@@ -289,6 +296,9 @@ module.exports = class TrailsApp extends EventEmitter {
     })
   }
 
+  /**
+   * Create any configured paths which may not already exist.
+   */
   createPaths () {
     if (this.config.main.createPaths === false) {
       this.log.warn('createPaths is disabled. Configured paths will not be created')
