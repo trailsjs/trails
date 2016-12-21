@@ -21,6 +21,7 @@
   ],
   "scripts": {
     "test": "eslint . && mocha",
+    "test-performance": "eslint . && mocha test-performance",
     "coverage": "istanbul cover _mocha",
     "ci": "cd .. && ci"
   },
