@@ -3,7 +3,6 @@
   "version": "2.0.0-rc11",
   "description": "Modern Web Application Framework for Node.js",
   "keywords": [
-    "mvc",
     "framework",
     "platform",
     "rest",
@@ -13,10 +12,6 @@
     "sails",
     "trails",
     "trailsjs",
-    "realtime",
-    "hapi",
-    "i18n",
-    "orm",
     "server",
     "graphql"
   ],
