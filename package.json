@@ -67,10 +67,10 @@
     "joi": "^10.0.1",
     "lodash": "4.17.2",
     "mkdirp": "0.5.1",
-    "trails-controller": "1.0.0",
-    "trails-model": "1.0.0",
-    "trails-policy": "1.0.1",
-    "trails-service": "1.0.0"
+    "trails-controller": "^2",
+    "trails-model": "^2",
+    "trails-policy": "^2",
+    "trails-service": "^2"
   },
   "devDependencies": {
     "eslint": "^2.5.3",
