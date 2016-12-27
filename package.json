@@ -1,9 +1,8 @@
 {
   "name": "trails",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Modern Web Application Framework for Node.js",
   "keywords": [
-    "mvc",
     "framework",
     "platform",
     "rest",
@@ -13,20 +12,17 @@
     "sails",
     "trails",
     "trailsjs",
-    "realtime",
-    "hapi",
-    "i18n",
-    "orm",
-    "server"
+    "server",
+    "graphql"
   ],
   "scripts": {
-    "test": "eslint . && mocha",
+    "test": "eslint --ignore-path .gitignore . && istanbul cover node_modules/mocha/bin/_mocha",
     "test-performance": "eslint . && mocha test-performance",
-    "coverage": "istanbul cover _mocha",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
     "ci": "cd .. && ci"
   },
   "pre-commit": [
-  "test"
+    "test"
   ],
   "repository": {
     "type": "git",
@@ -65,22 +61,41 @@
     "url": "https://github.com/trailsjs/trails/issues"
   },
   "homepage": "http://trailsjs.io",
-  "dependencies": {},
+  "dependencies": {
+    "hoek": "4.1.0",
+    "i18next": "3.4.1",
+    "joi": "^10.0.1",
+    "lodash": "4.17.2",
+    "mkdirp": "0.5.1",
+    "trails-controller": "^2",
+    "trails-model": "^2",
+    "trails-policy": "^2",
+    "trails-service": "^2"
+  },
   "devDependencies": {
     "eslint": "^2.5.3",
-    "eslint-config-trails": "^1.0",
+    "eslint-config-trails": "^2.0",
     "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
     "pre-commit": "^1.1.3",
-    "smokesignals": "^1.2.0",
-    "trailpack": "^1.0.1",
+    "smokesignals": "v2-latest",
+    "trailpack": "v2-latest",
     "winston": "^2.1.1"
   },
+  "bundledDependencies": [
+    "trails-controller",
+    "trails-model",
+    "trails-policy",
+    "trails-service"
+  ],
   "eslintConfig": {
     "extends": "trails"
   },
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 2.14.2"
+  },
+  "publishConfig": {
+    "tag": "next"
   }
 }

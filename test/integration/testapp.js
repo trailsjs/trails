@@ -1,4 +1,5 @@
 const smokesignals = require('smokesignals')
+const Testpack = require('./testpack')
 
 module.exports = {
   api: {
@@ -8,7 +9,10 @@ module.exports = {
     main: {
       paths: {
         root: __dirname
-      }
+      },
+      packs: [
+        Testpack
+      ]
     },
     log: {
       logger: new smokesignals.Logger('silent')

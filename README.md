@@ -63,13 +63,14 @@ capabilities and allow developers to leverage existing ecosystem tools through a
 simple and well-defined API. New features, behavior, APIs, and other functionality
 can be added to the Trails framework through Trailpacks.
 
-Out of the box, Trails includes a small suite of trailpacks:
+Many Trails installations will include some of the following Trailpacks:
 
-- [core](https://github.com/trailsjs/trailpack-core)
 - [router](https://github.com/trailsjs/trailpack-router)
 - [repl](https://github.com/trailsjs/trailpack-repl)
 - [hapi](https://github.com/trailsjs/trailpack-hapi)
+- [express](https://github.com/trailsjs/trailpack-express)
 - [waterline](https://github.com/trailsjs/trailpack-waterline)
+- [knex](https://github.com/trailsjs/trailpack-knex)
 
 ## Compatibility
 
@@ -86,7 +87,9 @@ Out of the box, Trails includes a small suite of trailpacks:
 - [Getting Started with Trails.js](https://www.youtube.com/watch?v=AbSp8jqFDAY)
 
 #### Support
-- [Gitter chat room](https://gitter.im/trailsjs/trails)
+- [Stackoverflow](http://stackoverflow.com/questions/tagged/trailsjs)
+- [Live Gitter Chat](https://gitter.im/trailsjs/trails)
+- [Twitter](https://twitter.com/trailsjs)
 
 ## FAQ
 
