@@ -66,11 +66,7 @@
     "i18next": "3.4.1",
     "joi": "^10.0.1",
     "lodash": "4.17.2",
-    "mkdirp": "0.5.1",
-    "trails-controller": "^2",
-    "trails-model": "^2",
-    "trails-policy": "^2",
-    "trails-service": "^2"
+    "mkdirp": "0.5.1"
   },
   "devDependencies": {
     "eslint": "^2.5.3",
@@ -83,17 +79,13 @@
     "winston": "^2.1.1"
   },
   "bundledDependencies": [
-    "trails-controller",
-    "trails-model",
-    "trails-policy",
-    "trails-service"
   ],
   "eslintConfig": {
     "extends": "trails"
   },
   "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 2.14.2"
+    "node": ">= 7.0.0",
+    "npm": ">= 3.10.8"
   },
   "publishConfig": {
     "tag": "next"
