@@ -60,10 +60,13 @@ describe('lib.Core', () => {
   })
 
   describe('#assignGlobals', () => {
-    it('should assign variables to the global namespace', () => {
+    it('should assign values to the global namespace', () => {
       lib.Core.assignGlobals()
 
       assert(global.Service)
+      assert(global.Controller)
+      assert(global.Model)
+      assert(global.Policy)
       assert(Service)
     })
     it('global variables should be immutable and error if mutation is attempted', () => {
