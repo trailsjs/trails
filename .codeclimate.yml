@@ -1,5 +1,5 @@
 engines:
   eslint:
-    enabled: true
+    enabled: false
   duplication:
     enabled: false
