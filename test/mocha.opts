@@ -4,3 +4,4 @@
 --no-exit
 --check-leaks
 --globals app
+test/index.js test/integration/ test/lib/
