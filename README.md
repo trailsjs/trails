@@ -4,7 +4,7 @@
 [![NPM version][npm-image]][npm-url]
 [![Linux + OSX Build Status][ci-image]][ci-url]
 [![Windows Build Status][appveyor-image]][appveyor-url]
-[![Code Climate][codeclimate-image]][codeclimate-url]
+[![Test Coverage][coverage-image]][coverage-url]
 [![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
 
 Trails is a modern, community-driven web application framework for node.js. It
@@ -87,8 +87,8 @@ Many Trails installations will include some of the following Trailpacks:
 - [Getting Started with Trails.js](https://www.youtube.com/watch?v=AbSp8jqFDAY)
 
 #### Support
-- [Stackoverflow](http://stackoverflow.com/questions/tagged/trailsjs)
 - [Live Gitter Chat](https://gitter.im/trailsjs/trails)
+- [Stackoverflow](http://stackoverflow.com/questions/tagged/trailsjs)
 - [Twitter](https://twitter.com/trailsjs)
 
 ## FAQ
@@ -142,9 +142,9 @@ information on how our projects are organized and how to get started.
 [ci-url]: https://travis-ci.org/trailsjs/trails
 [appveyor-image]: https://img.shields.io/appveyor/ci/trailsjs/trails/master.svg?style=flat-square&label=Windows
 [appveyor-url]: https://ci.appveyor.com/project/trailsjs/trails
-[codeclimate-image]: https://img.shields.io/codeclimate/github/trailsjs/trails.svg?style=flat-square
-[codeclimate-url]: https://codeclimate.com/github/trailsjs/trails
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
 [gitter-url]: https://gitter.im/trailsjs/trails
 [twitter-image]: https://img.shields.io/twitter/follow/trailsjs.svg?style=social
 [twitter-url]: https://twitter.com/trailsjs
+[coverage-image]: https://img.shields.io/codeclimate/coverage/github/trailsjs/trails.svg?style=flat-square
+[coverage-url]: https://codeclimate.com/github/trailsjs/trails/coverage
