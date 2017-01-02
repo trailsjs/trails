@@ -1,6 +1,8 @@
 'use strict'
 
 const assert = require('assert')
+const smokesignals = require('smokesignals')
+const lib = require('../../lib')
 
 describe('lib.Errors', () => {
   it('all Error types should be global', () => {
@@ -13,6 +15,7 @@ describe('lib.Errors', () => {
     assert(global.TimeoutError)
     assert(global.GraphCompletenessError)
     assert(global.NamespaceConflictError)
+    assert(global.ValidationError)
   })
 
   describe('ConfigNotDefinedError', () => {
@@ -67,6 +70,35 @@ describe('lib.Errors', () => {
     it('#name', () => {
       const err = new NamespaceConflictError()
       assert.equal(err.name, 'NamespaceConflictError')
+    })
+  })
+  describe('ValidationError', () => {
+    it('#name', () => {
+      const err = new ValidationError()
+      assert.equal(err.name, 'ValidationError')
+    })
+    it('#message', () => {
+      it('should specifiy missing/undefined trailpacks', () => {
+        const testConfig = {
+          main: {
+            packs: [
+              undefined
+            ]
+          },
+          log: {
+            logger: new smokesignals.Logger('silent')
+          }
+        }
+
+        try {
+          lib.Configuration.validateConfig(testConfig)
+        }
+        catch (e) {
+          assert(/The following configuration values are invalid/.test(e.message))
+          assert(/main.packs[0]/.test(e.message))
+        }
+      })
+
     })
   })
 })
