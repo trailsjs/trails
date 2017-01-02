@@ -1,7 +1,9 @@
 ---
 instrumentation:
+  root: .
   # Include all source files so we know which files are not tested at all
   include-all-sources: true
+  excludes: [ 'test/**' ]
 
 reporting:
   reports:
