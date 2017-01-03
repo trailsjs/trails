@@ -5,6 +5,7 @@ const path = require('path')
 const assert = require('assert')
 const smokesignals = require('smokesignals')
 const TrailsApp = require('../..')
+const Trailpack = require('trailpack')
 const Testpack = require('./testpack')
 const testAppDefinition = require('./testapp')
 const lib = require('../../lib')
@@ -142,6 +143,29 @@ describe('Trails', () => {
               }
             }
             assert.throws(() => new TrailsApp(def), lib.Errors.PackageNotDefinedError)
+          })
+        })
+        describe('@TrailpackError', () => {
+          it('should throw PackageNotDefinedError if no pkg definition is provided', () => {
+            const def = {
+              api: { },
+              pkg: { },
+              config: {
+                main: {
+                  packs: [
+                    class Failpack extends Trailpack {
+                      constructor (app) {
+                        super(app)
+                      }
+                    }
+                  ]
+                },
+                log: {
+                  logger: new smokesignals.Logger('silent')
+                }
+              }
+            }
+            assert.throws(() => new TrailsApp(def), lib.Errors.TrailpackError)
           })
         })
 

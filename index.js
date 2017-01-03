@@ -137,8 +137,7 @@ module.exports = class TrailsApp extends EventEmitter {
         new Pack(this)
       }
       catch (e) {
-        console.error('Error loading Trailpack')
-        console.error(e)
+        throw new TrailpackError(Pack, e, 'constructor')
       }
     })
     this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
