@@ -162,7 +162,7 @@ module.exports = class TrailsApp extends EventEmitter {
     // initialize i18n
     i18next.init(this.config.i18n, (err, t) => {
       if (err) {
-        this.log.error('Problem loading i18n:', err)
+        throw new Error(`Problem loading i18n: ${err}`)
       }
 
       this.translate = t
