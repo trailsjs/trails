@@ -225,6 +225,20 @@ describe('lib.Configuration', () => {
       assert.throws(() => lib.Configuration.validateConfig(testConfig), lib.Errors.ConfigValueError)
       assert.throws(() => lib.Configuration.validateConfig(testConfig), /config.env/)
     })
+    it('should throw ValidationError if main.packs contains an "undefined" trailpack', () => {
+      const testConfig = {
+        main: {
+          packs: [
+            undefined
+          ]
+        },
+        log: {
+          logger: new smokesignals.Logger('silent')
+        }
+      }
+
+      assert.throws(() => lib.Configuration.validateConfig(testConfig), lib.Errors.ValidationError)
+    })
   })
   describe('#getNestedEnv', () => {
     it('should return a list of envs if one contains a "env" property', () => {
