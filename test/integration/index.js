@@ -96,6 +96,9 @@ describe('Trails', () => {
       })
 
       describe('errors', () => {
+        it('should require "app" argument to constructor', () => {
+          assert.throws(() => new TrailsApp(), RangeError)
+        })
         describe('@LoggerNotDefinedError', () => {
           it('should throw LoggerNotDefinedError if logger is missing', () => {
             const def = {
