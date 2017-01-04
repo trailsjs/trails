@@ -40,7 +40,16 @@ before_script:
 
 script:
 - npm test
-- npm run ci
+
+# retry the ecosystem tests if required; occasionally a no-output-received timeout will occur
+# see: https://docs.travis-ci.com/user/common-build-problems/#Build-times-out-because-no-output-was-received
+- 'if [ ${REQUIRED_TESTS} = "true" ]; then
+    travis_retry npm run ci;
+  fi'
+
+- 'if [ ${OPTIONAL_TESTS} = "true" ]; then
+    npm run ci;
+  fi'
 
 after_script:
   - npm install -g codeclimate-test-reporter

@@ -2,6 +2,7 @@
 
 const assert = require('assert')
 const smokesignals = require('smokesignals')
+const Trailpack = require('trailpack')
 const lib = require('../../lib')
 
 describe('lib.Errors', () => {
@@ -16,6 +17,7 @@ describe('lib.Errors', () => {
     assert(global.GraphCompletenessError)
     assert(global.NamespaceConflictError)
     assert(global.ValidationError)
+    assert(global.TrailpackError)
   })
 
   describe('ConfigNotDefinedError', () => {
@@ -77,7 +79,7 @@ describe('lib.Errors', () => {
       const err = new ValidationError()
       assert.equal(err.name, 'ValidationError')
     })
-    it('#message', () => {
+    describe('#message', () => {
       it('should specifiy missing/undefined trailpacks', () => {
         const testConfig = {
           main: {
@@ -94,11 +96,28 @@ describe('lib.Errors', () => {
           lib.Configuration.validateConfig(testConfig)
         }
         catch (e) {
+          console.log(e)
           assert(/The following configuration values are invalid/.test(e.message))
-          assert(/main.packs[0]/.test(e.message))
+          assert(/main.packs\[0\]/.test(e.message))
         }
       })
 
+    })
+  })
+  describe('TrailpackError', () => {
+    it('#name', () => {
+      const err = new TrailpackError()
+      assert.equal(err.name, 'TrailpackError')
+    })
+    describe('#message', () => {
+      it('should specify the failed trailpack and stage', () => {
+        const Failpack = class Failpack extends Trailpack { }
+        const err = new TrailpackError(Failpack, new Error(), 'constructor')
+
+        assert(/trailpack failed/.test(err.message))
+        assert(/"constructor"/.test(err.message))
+        assert(/Failpack trailpack/.test(err.message))
+      })
     })
   })
 })
