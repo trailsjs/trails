@@ -3,73 +3,39 @@
 ## Purpose
 
 The trails.js team maintains this document to serve as a foward-looking plan
-for how the framework will grow and evolve. Please submit a Pull Request if you
+for how the framework will grow and evolve. Please submit an Issue or Pull Request if you
 feel that something should be added or changed in this document, and we are
 happy to discuss.
 
 ## Organization
 
-Each future *minor* release will be represented by a Github Milestone, which will
-be linked to in the following sections. Each future *major* version will contain
-one or more minor-release Milestones.
+Each major and minor release will be represented by a Github Milestone. Each major version series
+will be developed on a separate branch. Please submit featyre requests, bug reports, and other suggestions
+as Github Issues for inclusion in a future release.
 
 ## Release Schedule
 
 Major and minor version releases occur according to a regular calendar
 schedule, and versions are assigned according to semver. The preview of
 each major release occurs in January of each year; the final major version
-GA (General Availability) release occurs in April of each year, coincident with
-each [major Node.js release](https://github.com/nodejs/LTS#lts-plan). In
-October, a minor-version of the April release will be memorialized as an LTS
-release.
+GA (General Availability) release occurs in April and October of each year,
+coincident with each [major Node.js release](https://github.com/nodejs/LTS#lts-plan).
+Each October release will be an LTS release.
 
 ## Upcoming Releases
 
-### v1.0 alpha (January 2016)
+### v3.0 (April 2017)
 
-##### Summary
+Trails v3 development takes place on the [v3 branch](https://github.com/trailsjs/trails/tree/v3). Some key changes and additions:
+- Node 6 is required; ES5 code written for Node 4 will be refactored into ES6
+- Separate i18n and logging from the core
+- Utilize GraphQL as a common ORM language
 
-Trails v1.0 Alpha will be the first preview release for Trails 1.0. In this
-release, the core framework will be feature-complete and the API will be final.
-The following trailpacks also must reach v1.0-alpha status:
+## Previous Releases
 
-- [trailpack-core](https://github.com/trailsjs/trailpack-core) ([v1.0-alpha milestone](https://github.com/trailsjs/trailpack-core/milestones/v1.0-alpha))
-- [trailpack-repl](https://github.com/trailsjs/trailpack-repl) ([v1.0-alpha milestone](https://github.com/trailsjs/trailpack-repl/milestones/v1.0-alpha))
-- [trailpack-router](https://github.com/trailsjs/trailpack-router) ([v1.0-alpha milestone](https://github.com/trailsjs/trailpack-router/milestones/v1.0-alpha))
-- [trailpack-hapi](https://github.com/trailsjs/trailpack-hapi) ([v1.0-alpha milestone](https://github.com/trailsjs/trailpack-hapi/milestones/v1.0-alpha))
-- [trailpack-waterline](https://github.com/trailsjs/trailpack-waterline) ([v1.0-alpha milestone](https://github.com/trailsjs/trailpack-waterline/milestones/v1.0-alpha))
-- [trailpack-swagger](https://github.com/trailsjs/trailpack-swagger) ([v1.0-alpha milestone](https://github.com/trailsjs/trailpack-swagger/milestones/v1.0-alpha))
+Trails began its initial development in November 2015.
 
-##### Open Issues
-See: [trailsjs/trails/milestones/v1.0-alpha](https://github.com/trailsjs/trails/milestones/v1.0-alpha)
-
-### v1.0 beta (February 2016)
-
-##### Open Issues
-See: [trailsjs/trails/milestones/v1.0-beta](https://github.com/trailsjs/trails/milestones/v1.0-beta)
-
-### v1.0 (April 2016)
-
-The April 2016 release of Trails will constitute the first production-ready release.
-
-##### Open Issues
-See: [trailsjs/trails/milestones/v1.0](https://github.com/trailsjs/trails/milestones/v1.0)
-
-## Future Releases
-
-### v2.0 LTS (October 2016)
-
-## Past Releases
-
-See https://github.com/trailsjs/trails/releases.
-
-## Backlog
-
-The backlog consists of features which are not currently in the immediate-term roadmap above, but are useful.  We would exuberantly accept a pull request implementing any of the items below, so long as it was accompanied with reasonable tests that prove it, and it doesn't break other core functionality.
-
-This backlog table is intended for major pieces of functionality that have not been broken down yet.  If you have a backlog item that's a smaller piece of work, please add it to the [Backlog](https://github.com/trailsjs/trails/milestones/Backlog) milestone in the Issue queue.
-
-ProTip: _(feel free to suggest things)_
-
- Feature                                         | Owner                                              | Details
- :---------------------------------------------- | :------------------------------------------------- | :------
+| Version | Release Date |
+|:---|:---|
+| v1.0 | April 2016 |
+| v2.0 | December 2016 |

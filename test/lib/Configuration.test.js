@@ -84,7 +84,6 @@ describe('lib.Configuration', () => {
   })
 
   describe('#buildConfig', () => {
-
     it('should merge basic env config', () => {
       const config = lib.Configuration.buildConfig(testConfig, 'envTest1')
 
@@ -197,6 +196,10 @@ describe('lib.Configuration', () => {
     })
   })
   describe('#validateConfig', () => {
+    it('should throw ConfigNotDefinedError if config or config.main is not set', () => {
+      assert.throws(() => lib.Configuration.validateConfig(), lib.Errors.ConfigNotDefinedError)
+      assert.throws(() => lib.Configuration.validateConfig({ }), lib.Errors.ConfigNotDefinedError)
+    })
     it('should throw ConfigValueError if an env config contains the "env" property', () => {
       const testConfig = {
         main: { },
@@ -224,6 +227,20 @@ describe('lib.Configuration', () => {
       }
       assert.throws(() => lib.Configuration.validateConfig(testConfig), lib.Errors.ConfigValueError)
       assert.throws(() => lib.Configuration.validateConfig(testConfig), /config.env/)
+    })
+    it('should throw ValidationError if main.packs contains an "undefined" trailpack', () => {
+      const testConfig = {
+        main: {
+          packs: [
+            undefined
+          ]
+        },
+        log: {
+          logger: new smokesignals.Logger('silent')
+        }
+      }
+
+      assert.throws(() => lib.Configuration.validateConfig(testConfig), lib.Errors.ValidationError)
     })
   })
   describe('#getNestedEnv', () => {
