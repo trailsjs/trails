@@ -1,3 +1,5 @@
+'use strict'
+
 /**
  * Trails Controller Class.
  */
@@ -12,22 +14,22 @@ module.exports = class TrailsController {
   }
 
   /**
-   * Controller configuration
-   */
-  static config () {
-  }
-
-  /**
    * Return the id of this controller
    */
   get id () {
     return this.constructor.name.replace(/(\w+)Controller/, '$1').toLowerCase()
   }
 
+  /**
+   * Return a reference to the Trails logger
+   */
   get log () {
     return this.app.log
   }
 
+  /**
+   * Return a reference to the i18n translate function
+   */
   get __ () {
     return this.app.__
   }

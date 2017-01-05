@@ -40,13 +40,4 @@ module.exports = class TrailsModel {
     const config = this.constructor.config() || { }
     return config.tableName || this.getModelName()
   }
-
-  get log () {
-    return this.app.log
-  }
-
-  get __ () {
-    return this.app.__
-  }
-
 }

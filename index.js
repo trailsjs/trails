@@ -1,5 +1,5 @@
-/*eslint no-console: 0 */
 'use strict'
+/*eslint no-console: 0 */
 
 const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')
@@ -222,8 +222,7 @@ module.exports = class TrailsApp extends EventEmitter {
    * accepts a callback.
    * @return Promise
    */
-  onceAny (events, handler) {
-    handler || (handler = NOOP)
+  onceAny (events, handler = NOOP) {
     if (!Array.isArray(events)) {
       events = [events]
     }
@@ -252,8 +251,7 @@ module.exports = class TrailsApp extends EventEmitter {
    * a callback.
    * @return Promise
    */
-  after (events, handler) {
-    handler || (handler = NOOP)
+  after (events, handler = NOOP) {
     if (!Array.isArray(events)) {
       events = [ events ]
     }
@@ -319,5 +317,21 @@ module.exports = class TrailsApp extends EventEmitter {
    */
   get __ () {
     return this.translate
+  }
+
+  static get Controller () {
+    return global.Controller
+  }
+
+  static get Model () {
+    return global.Model
+  }
+
+  static get Policy () {
+    return global.Policy
+  }
+
+  static get Service () {
+    return global.Service
   }
 }

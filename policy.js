@@ -1,8 +1,11 @@
+'use strict'
+
 /**
  * Trails Policy Class.
  */
 module.exports = class TrailsPolicy {
-  constructor(app) {
+
+  constructor (app) {
     Object.defineProperty(this, 'app', {
       enumerable: false,
       writable: false,
@@ -13,7 +16,7 @@ module.exports = class TrailsPolicy {
   /**
    * Policy configuration
    */
-  static config() {
+  static config () {
   }
 
   /**
@@ -23,11 +26,18 @@ module.exports = class TrailsPolicy {
     return this.constructor.name.replace(/(\w+)Policy/, '$1').toLowerCase()
   }
 
-  get log() {
+  /**
+   * Return a reference to the Trails logger
+   */
+  get log () {
     return this.app.log
   }
 
-  get __() {
+  get __ () {
     return this.app.__
+  }
+
+  get services () {
+    return this.app.services
   }
 }
