@@ -5,6 +5,7 @@
   "keywords": [
     "framework",
     "platform",
+    "microservices",
     "rest",
     "api",
     "rails",
@@ -78,14 +79,12 @@
     "trailpack": "v2-latest",
     "winston": "^2.1.1"
   },
-  "bundledDependencies": [
-  ],
   "eslintConfig": {
     "extends": "trails"
   },
   "engines": {
     "node": ">= 7.0.0",
-    "npm": ">= 3.10.8"
+    "npm": ">= 3.10.0"
   },
   "publishConfig": {
     "tag": "next"
