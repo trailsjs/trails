@@ -30,10 +30,10 @@ module.exports = class TrailsApp extends EventEmitter {
       throw new RangeError('No app definition provided to Trails constructor')
     }
     if (!app.pkg) {
-      throw new lib.Errors.PackageNotDefinedError()
+      throw new PackageNotDefinedError()
     }
     if (!app.api) {
-      throw new lib.Errors.ApiNotDefinedError()
+      throw new ApiNotDefinedError()
     }
 
     if (!process.env.NODE_ENV) {
@@ -333,5 +333,9 @@ module.exports = class TrailsApp extends EventEmitter {
 
   static get Service () {
     return global.Service
+  }
+
+  static get Resolver () {
+    return global.Resolver
   }
 }
