@@ -12,4 +12,11 @@ describe('lib/Policy', () => {
       assert(new Policy())
     })
   })
+  describe('#id', () => {
+    it('should return "root" name of Policy', () => {
+      const TestPolicy = class TestPolicy extends Policy { }
+
+      assert.equal(new TestPolicy().id, 'test')
+    })
+  })
 })

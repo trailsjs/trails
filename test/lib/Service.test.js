@@ -12,4 +12,11 @@ describe('lib/Service', () => {
       assert(new Service())
     })
   })
+  describe('#id', () => {
+    it('should return "root" name of Service', () => {
+      const TestService = class TestService extends Service { }
+
+      assert.equal(new TestService().id, 'test')
+    })
+  })
 })

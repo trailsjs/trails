@@ -12,5 +12,12 @@ describe('lib/Controller', () => {
       assert(new Controller())
     })
   })
+  describe('#id', () => {
+    it('should return "root" name of Controller', () => {
+      const TestController = class TestController extends Controller { }
+
+      assert.equal(new TestController().id, 'test')
+    })
+  })
 })
 

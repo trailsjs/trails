@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('assert')
-const { Resolver } = require('../../')
+const { Resolver, Model } = require('../../')
 
 describe('lib/Resolver', () => {
   describe('sanity', () => {
@@ -9,8 +9,11 @@ describe('lib/Resolver', () => {
       assert(Resolver)
     })
     it('can instantiate without error', () => {
-      assert(new Resolver())
+      assert(new Resolver(new Model()))
     })
+  })
+  describe('#model getter', () => {
+
   })
 })
 
