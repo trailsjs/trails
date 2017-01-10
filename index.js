@@ -79,10 +79,6 @@ module.exports = class TrailsApp extends EventEmitter {
         writable: true,
         value: [ ]
       },
-      loadedModules: {
-        enumerable: false,
-        value: lib.Core.getExternalModules(this.pkg)
-      },
       bound: {
         enumerable: false,
         writable: true,
@@ -129,10 +125,10 @@ module.exports = class TrailsApp extends EventEmitter {
       }
     })
 
-    this.setMaxListeners(this.config.main.maxListeners)
+    this.setMaxListeners(this.config.get('main.maxListeners'))
 
     // instantiate trailpacks
-    this.config.main.packs.forEach(Pack => {
+    this.config.get('main.packs').forEach(Pack => {
       try {
         new Pack(this)
       }
@@ -160,7 +156,7 @@ module.exports = class TrailsApp extends EventEmitter {
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
     // initialize i18n
-    i18next.init(this.config.i18n, (err, t) => {
+    i18next.init(this.config.get('i18n'), (err, t) => {
       if (err) {
         throw new Error(`Problem loading i18n: ${err}`)
       }
@@ -278,26 +274,21 @@ module.exports = class TrailsApp extends EventEmitter {
    * Prevent changes to the app configuration
    */
   freezeConfig () {
-    this.config.freeze(this.loadedModules)
+    this.config.freeze()
   }
 
   /**
    * Allow changes to the app configuration
    */
   unfreezeConfig () {
-    Object.defineProperties(this, {
-      config: {
-        value: new lib.Configuration(this.config.unfreeze(), this.env),
-        configurable: true
-      }
-    })
+    this.config.unfreeze()
   }
 
   /**
    * Create any configured paths which may not already exist.
    */
   createPaths () {
-    if (this.config.main.createPaths === false) {
+    if (this.config.get('main.createPaths') === false) {
       this.log.warn('createPaths is disabled. Configured paths will not be created')
     }
     return lib.Core.createDefaultPaths(this)
@@ -308,7 +299,7 @@ module.exports = class TrailsApp extends EventEmitter {
    * setting the "config.log.logger" config property.
    */
   get log () {
-    return this.config.log.logger
+    return this.config.get('log.logger')
   }
 
   /**

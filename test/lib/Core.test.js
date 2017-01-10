@@ -1,6 +1,5 @@
 'use strict'
 
-const path = require('path')
 const assert = require('assert')
 const _ = require('lodash')
 const lib = require('../../lib')
@@ -41,21 +40,6 @@ describe('lib.Core', () => {
       assert(_.includes(methods, 'bar'))
       assert(_.includes(methods, 'foo'))
       assert(_.includes(methods, 'baz'))
-    })
-  })
-
-  describe('#getExternalModules', () => {
-    const rmf = require.main.filename
-
-    beforeEach(() => {
-      require.main.filename = path.resolve(__dirname, '..', '..', 'index.js')
-    })
-    afterEach(() => {
-      require.main.filename = rmf
-    })
-    it('should return external modules', () => {
-      const modules = lib.Core.getExternalModules()
-      assert.notEqual(modules.indexOf(require.resolve('trailpack')), -1)
     })
   })
 

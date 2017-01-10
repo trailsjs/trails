@@ -80,7 +80,7 @@ describe('lib.Errors', () => {
       assert.equal(err.name, 'ValidationError')
     })
     describe('#message', () => {
-      it('should specifiy missing/undefined trailpacks', () => {
+      it.skip('should specifiy missing/undefined trailpacks', () => {
         const testConfig = {
           main: {
             packs: [
