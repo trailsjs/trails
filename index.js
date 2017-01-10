@@ -36,6 +36,12 @@ module.exports = class TrailsApp extends EventEmitter {
       throw new ApiNotDefinedError()
     }
 
+    app.api.models || (app.api.models = { })
+    app.api.services || (app.api.services = { })
+    app.api.resolvers || (app.api.resolvers = { })
+    app.api.policies || (app.api.policies = { })
+    app.api.controllers || (app.api.controllers = { })
+
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
     }

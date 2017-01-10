@@ -196,7 +196,7 @@ describe('Trails', () => {
               main: {
                 packs: [ Testpack ]
               },
-              log: { logger: new smokesignals.Logger('silent') },
+              log: { logger: new smokesignals.Logger('debug') },
               foo: 'bar'
             }
           }
