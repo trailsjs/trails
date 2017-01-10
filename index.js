@@ -119,6 +119,11 @@ module.exports = class TrailsApp extends EventEmitter {
         writable: false,
         value: { }
       },
+      resolvers: {
+        enumerable: true,
+        writable: false,
+        value: { }
+      },
       translate: {
         enumerable: false,
         writable: true
@@ -139,7 +144,6 @@ module.exports = class TrailsApp extends EventEmitter {
     this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
 
     // bind resource methods
-    Object.assign(this.models, lib.Core.bindMethods(this, 'models'))
     Object.assign(this.services, lib.Core.bindMethods(this, 'services'))
     Object.assign(this.controllers, lib.Core.bindMethods(this, 'controllers'))
     Object.assign(this.policies, lib.Core.bindMethods(this, 'policies'))
