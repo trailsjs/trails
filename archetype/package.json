@@ -6,15 +6,15 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "trailpack-repl": "v2-latest",
-    "trailpack-router": "v2-latest",
-    "trails": "v2-latest",
+    "trailpack-repl": "^2",
+    "trailpack-router": "^2",
+    "trails": "^2",
     "winston": "^2.3"
   },
   "devDependencies": {
-    "eslint": "^2.11",
+    "eslint": "^3.15.0",
     "eslint-config-trails": "^2",
-    "mocha": "^2.5",
+    "mocha": "^3.2.0",
     "supertest": "^1.2"
   },
   "scripts": {
