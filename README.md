@@ -93,37 +93,7 @@ Many Trails installations will include some of the following Trailpacks:
 
 ## FAQ
 
-#### Q. Does Trails have a Roadmap?
-
-Yes! We have a [Trail Map](https://github.com/trailsjs/trails/blob/master/ROADMAP.md) that
-lays out our future plans and release schedule. Feel free to contribute your
-ideas.
-
-#### Q. Why does Trails require Node 4+?
-
-Trails is written entirely in ES6, and [runs natively on Node](https://nodejs.org/en/docs/es6/) without
-transpiling. If you'd like to use Trails on an older version of node, you can
-install babel and configure it to transpile your application into ES5.
-
-#### Q. Is Trails compatible with Sails?
-
-Trails can auto-migrate legacy Sails applications by installing the
-[Sails Trailpack](https://github.com/trailsjs/trailpack-sails).
-We want this upgrade to be as smooth as possible, and are committed to
-maintaining it as a core module.
-
-#### Q. Is Trails a fork of Sails?
-
-No. Trails is built and maintained by former members of the Sails.js core team,
-and offers an upgrade path from existing Sails applications, but it utilizes
-exactly zero lines of code from the original Sails project.
-
-#### Q. Can I use my own ORM, Webserver, whatever?
-
-Yes! The core team maintains [several](https://github.com/trailsjs?query=trailpack)
-popular trailpacks, but you are free to implement your own integration and use
-that instead or in addition to the core packs. See the [Trailpack](https://github.com/trailsjs/trailpack)
-docs for more info.
+See https://github.com/trailsjs/trails/wiki/FAQ
 
 ## Contributing
 We love contributions! Please check out our [Contributor's Guide](https://github.com/trailsjs/trails/blob/master/.github/CONTRIBUTING.md) for more
