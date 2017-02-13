@@ -1,4 +1,4 @@
-<img src="http://cdn.trailsjs.io/art/logos/trails-horiz-logo-green.svg" height="96px" />
+<img src="http://cdn.trailsjs.io/art/logos/trails-horiz-logo-green.svg" height="96px" title="Trails Logo" />
 
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
