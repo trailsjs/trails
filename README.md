@@ -1,4 +1,4 @@
-[![Trails.js][trails-image]][trails-url]
+<img src="http://cdn.trailsjs.io/art/logos/trails-horiz-logo-green.svg" height="96px" />
 
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
@@ -102,10 +102,8 @@ information on how our projects are organized and how to get started.
 ## License
 [MIT](https://github.com/trailsjs/trails/blob/master/LICENSE)
 
-<img src="http://i.imgur.com/dCjNisP.png">
+<img src="http://cdn.trailsjs.io/art/backgrounds/trails-day.png">
 
-[trails-image]: http://i.imgur.com/0iVVRxi.png
-[trails-url]: http://trailsjs.io
 [npm-image]: https://img.shields.io/npm/v/trails.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trails
 [ci-image]: https://img.shields.io/travis/trailsjs/trails.svg?style=flat-square&label=Linux%20/%20OSX
