@@ -23,4 +23,4 @@ Major and minor version releases occur according to a regular calendar schedule,
 Trails v3 development takes place on the [v3 branch](https://github.com/trailsjs/trails/tree/v3). Some key changes and additions:
 - Node 6 is required; ES5 code written for Node 4 will be refactored into ES6
 - Separate i18n and logging from the core
-- Utilize GraphQL as a common ORM language
+- Introduce `Resolver` as a core Trails class
