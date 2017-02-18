@@ -24,3 +24,4 @@ Trails v3 development takes place on the [v3 branch](https://github.com/trailsjs
 - Node 6 is required; ES5 code written for Node 4 will be refactored into ES6
 - Separate i18n and logging from the core
 - Introduce `Resolver` as a core Trails class
+- Standardize `Policy` interface
