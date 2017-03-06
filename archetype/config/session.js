@@ -2,7 +2,7 @@
  * Session Configuration
  * (app.config.session)
  *
- * @see http://trailsjs.io/doc/config/session.js
+ * @see http://trailsjs.io/doc/config/session
  */
 
 'use strict'
