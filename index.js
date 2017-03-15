@@ -314,7 +314,7 @@ module.exports = class TrailsApp extends EventEmitter {
 
   /**
    * Expose the i18n translator on the app object. Internationalization can be
-   * configured in config.i18n
+   * configured in config.i18n, or via Trailpack.
    */
   get __ () {
     return this.translate
