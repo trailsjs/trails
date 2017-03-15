@@ -6,5 +6,4 @@
 --globals app
 
 test/setup.js
-test/unit/
-test/integration/
+test/**/*.test.js

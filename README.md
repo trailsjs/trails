@@ -1,4 +1,4 @@
-[![Trails.js][trails-image]][trails-url]
+<img src="http://cdn.trailsjs.io/art/logos/trails-horiz-logo-green.svg" height="96px" title="Trails Logo" />
 
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
@@ -93,37 +93,7 @@ Many Trails installations will include some of the following Trailpacks:
 
 ## FAQ
 
-#### Q. Does Trails have a Roadmap?
-
-Yes! We have a [Trail Map](https://github.com/trailsjs/trails/blob/master/ROADMAP.md) that
-lays out our future plans and release schedule. Feel free to contribute your
-ideas.
-
-#### Q. Why does Trails require Node 4+?
-
-Trails is written entirely in ES6, and [runs natively on Node](https://nodejs.org/en/docs/es6/) without
-transpiling. If you'd like to use Trails on an older version of node, you can
-install babel and configure it to transpile your application into ES5.
-
-#### Q. Is Trails compatible with Sails?
-
-Trails can auto-migrate legacy Sails applications by installing the
-[Sails Trailpack](https://github.com/trailsjs/trailpack-sails).
-We want this upgrade to be as smooth as possible, and are committed to
-maintaining it as a core module.
-
-#### Q. Is Trails a fork of Sails?
-
-No. Trails is built and maintained by former members of the Sails.js core team,
-and offers an upgrade path from existing Sails applications, but it utilizes
-exactly zero lines of code from the original Sails project.
-
-#### Q. Can I use my own ORM, Webserver, whatever?
-
-Yes! The core team maintains [several](https://github.com/trailsjs?query=trailpack)
-popular trailpacks, but you are free to implement your own integration and use
-that instead or in addition to the core packs. See the [Trailpack](https://github.com/trailsjs/trailpack)
-docs for more info.
+See https://github.com/trailsjs/trails/wiki/FAQ
 
 ## Contributing
 We love contributions! Please check out our [Contributor's Guide](https://github.com/trailsjs/trails/blob/master/.github/CONTRIBUTING.md) for more
@@ -132,10 +102,8 @@ information on how our projects are organized and how to get started.
 ## License
 [MIT](https://github.com/trailsjs/trails/blob/master/LICENSE)
 
-<img src="http://i.imgur.com/dCjNisP.png">
+<img src="http://cdn.trailsjs.io/art/backgrounds/trails-day.png">
 
-[trails-image]: http://i.imgur.com/0iVVRxi.png
-[trails-url]: http://trailsjs.io
 [npm-image]: https://img.shields.io/npm/v/trails.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trails
 [ci-image]: https://img.shields.io/travis/trailsjs/trails.svg?style=flat-square&label=Linux%20/%20OSX
