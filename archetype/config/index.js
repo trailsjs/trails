@@ -3,8 +3,6 @@
  * (app.config)
  */
 
-'use strict'
-
 exports.env = require('./env')
 exports.log = require('./log')
 exports.main = require('./main')

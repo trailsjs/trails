@@ -5,8 +5,6 @@
  * @see http://trailsjs.io/doc/config/session.js
  */
 
-'use strict'
-
 module.exports = {
 
   /**

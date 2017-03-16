@@ -1,4 +1,3 @@
-'use strict'
 /*eslint no-console: 0 */
 
 const EventEmitter = require('events').EventEmitter

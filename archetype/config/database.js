@@ -7,8 +7,6 @@
  * @see {@link http://trailsjs.io/doc/config/database}
  */
 
-'use strict'
-
 module.exports = {
 
   /**

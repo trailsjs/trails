@@ -1,8 +1,7 @@
 {
   "version": "0.0.0",
   "keywords": [
-    "trails",
-    "trailsjs"
+    "trails"
   ],
   "main": "index.js",
   "dependencies": {

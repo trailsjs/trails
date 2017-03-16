@@ -7,8 +7,6 @@
  * @see http://trailsjs.io/doc/config/routes.js
  */
 
-'use strict'
-
 module.exports = [
 
   /**
