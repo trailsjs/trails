@@ -63,10 +63,10 @@
   },
   "homepage": "http://trailsjs.io",
   "dependencies": {
-    "hoek": "4.1.0",
-    "i18next": "3.4.1",
-    "joi": "^10.0.1",
-    "lodash": "4.17.2",
+    "joi": "^10.2.2",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.merge": "^4.6.0",
     "mkdirp": "0.5.1"
   },
   "devDependencies": {

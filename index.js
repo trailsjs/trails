@@ -3,7 +3,6 @@
 
 const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')
-const i18next = require('i18next')
 const NOOP = function () { }
 
 // inject Error and Resource types into the global namespace
@@ -165,15 +164,7 @@ module.exports = class TrailsApp extends EventEmitter {
     lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
-    // initialize i18n
-    i18next.init(this.config.get('i18n'), (err, t) => {
-      if (err) {
-        throw new Error(`Problem loading i18n: ${err}`)
-      }
-
-      this.translate = t
-      this.emit('trails:start')
-    })
+    this.emit('trails:start')
 
     return this.after('trails:ready')
       .then(() => {
@@ -300,6 +291,7 @@ module.exports = class TrailsApp extends EventEmitter {
   createPaths () {
     if (this.config.get('main.createPaths') === false) {
       this.log.warn('createPaths is disabled. Configured paths will not be created')
+      return
     }
     return lib.Core.createDefaultPaths(this)
   }
@@ -310,14 +302,6 @@ module.exports = class TrailsApp extends EventEmitter {
    */
   get log () {
     return this.config.get('log.logger')
-  }
-
-  /**
-   * Expose the i18n translator on the app object. Internationalization can be
-   * configured in config.i18n, or via Trailpack.
-   */
-  get __ () {
-    return this.translate
   }
 
   static get Controller () {
