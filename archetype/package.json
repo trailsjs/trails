@@ -7,8 +7,7 @@
   "dependencies": {
     "trailpack-repl": "^2",
     "trailpack-router": "^2",
-    "trails": "^2",
-    "winston": "^2.3"
+    "trails": "^2"
   },
   "devDependencies": {
     "eslint": "^3.15.0",

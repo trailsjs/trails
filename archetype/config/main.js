@@ -1,8 +1,8 @@
 /**
- * Trailpack Configuration
+ * Main App Configuration
  * (app.config.main)
  *
- * @see http://trailsjs.io/doc/config/main
+ * @see {@link http://trailsjs.io/doc/config/main}
  */
 
 const path = require('path')
@@ -14,9 +14,6 @@ module.exports = {
    * requirements.
    */
   packs: [
-    require('trailpack-repl'),
-    require('trailpack-router'),
-    require('<%- trailpacks %>')
   ],
 
   /**
