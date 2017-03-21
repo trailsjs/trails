@@ -158,25 +158,24 @@ module.exports = class TrailsApp extends EventEmitter {
    *
    * @return Promise
    */
-  start () {
+  async start () {
     lib.Core.bindListeners(this)
     lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
     lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
     this.emit('trails:start')
 
-    return this.after('trails:ready')
-      .then(() => {
-        this.started = true
-        return this
-      })
+    await this.after('trails:ready')
+    this.started = true
+
+    return this
   }
 
   /**
    * Shutdown. Unbind listeners, unload trailpacks.
    * @return Promise
    */
-  stop (err) {
+  async stop (err) {
     this.stopped = true
     if (err) {
       this.log.error('\n', err.stack || '')
@@ -189,19 +188,13 @@ module.exports = class TrailsApp extends EventEmitter {
     this.emit('trails:stop')
     lib.Core.unbindListeners(this)
 
-    return Promise.all(
-      this.loadedPacks.map(pack => {
-        this.log.debug('Unloading trailpack', pack.name, '...')
-        return pack.unload()
-      }))
-      .then(() => {
-        this.log.debug('All trailpacks unloaded. Done.')
-        return this
-      })
-      .catch(err => {
-        console.error(err)
-        return this
-      })
+    await Promise.all(this.loadedPacks.map(pack => {
+      this.log.debug('Unloading trailpack', pack.name, '...')
+      return pack.unload()
+    }))
+    this.log.debug('All trailpacks unloaded. Done.')
+
+    return this
   }
 
   /**
@@ -218,7 +211,7 @@ module.exports = class TrailsApp extends EventEmitter {
    * accepts a callback.
    * @return Promise
    */
-  onceAny (events, handler = NOOP) {
+  async onceAny (events, handler = NOOP) {
     if (!Array.isArray(events)) {
       events = [events]
     }
@@ -247,7 +240,7 @@ module.exports = class TrailsApp extends EventEmitter {
    * a callback.
    * @return Promise
    */
-  after (events, handler = NOOP) {
+  async after (events, handler = NOOP) {
     if (!Array.isArray(events)) {
       events = [ events ]
     }
@@ -287,7 +280,7 @@ module.exports = class TrailsApp extends EventEmitter {
   /**
    * Create any configured paths which may not already exist.
    */
-  createPaths () {
+  async createPaths () {
     if (this.config.get('main.createPaths') === false) {
       this.log.warn('createPaths is disabled. Configured paths will not be created')
       return
