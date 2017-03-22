@@ -265,20 +265,6 @@ module.exports = class TrailsApp extends EventEmitter {
   }
 
   /**
-   * Prevent changes to the app configuration
-   */
-  freezeConfig () {
-    this.config.freeze()
-  }
-
-  /**
-   * Allow changes to the app configuration
-   */
-  unfreezeConfig () {
-    this.config.unfreeze()
-  }
-
-  /**
    * Create any configured paths which may not already exist.
    */
   async createPaths () {
