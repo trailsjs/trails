@@ -1,12 +1,14 @@
 'use strict'
 
 const assert = require('assert')
-const { Model, Resolver } = require('../../')
+const Model = require('../../lib/Model')
+const Resolver = require('../../lib/Resolver')
 
 describe('lib/Model', () => {
   describe('sanity', () => {
     it('should exist', () => {
       assert(Model)
+      assert(global.Model)
     })
     it('can instantiate without error', () => {
       assert(new Model())

@@ -1,12 +1,13 @@
 'use strict'
 
 const assert = require('assert')
-const { Service } = require('../../')
+const Service = require('../../lib/Service')
 
 describe('lib/Service', () => {
   describe('sanity', () => {
     it('should exist', () => {
       assert(Service)
+      assert(global.Service)
     })
     it('can instantiate without error', () => {
       assert(new Service())

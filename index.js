@@ -296,24 +296,4 @@ module.exports = class TrailsApp extends EventEmitter {
   get log () {
     return this.config.get('log.logger')
   }
-
-  static get Controller () {
-    return global.Controller
-  }
-
-  static get Model () {
-    return global.Model
-  }
-
-  static get Policy () {
-    return global.Policy
-  }
-
-  static get Service () {
-    return global.Service
-  }
-
-  static get Resolver () {
-    return global.Resolver
-  }
 }
