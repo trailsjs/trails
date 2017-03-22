@@ -1,4 +1,5 @@
 /*eslint no-console: 0 */
+/*eslint no-process-env: 0 */
 
 const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')

@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "test": "eslint --ignore-path .gitignore . && istanbul cover node_modules/mocha/bin/_mocha",
-    "test-performance": "eslint . && mocha test-performance",
+    "test-performance": "eslint --ignore-path .gitignore . && mocha test-performance",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
     "ci": "cd .. && ci"
   },
@@ -71,7 +71,7 @@
     "mkdirp": "0.5.1"
   },
   "devDependencies": {
-    "eslint": "^3.12.2",
+    "eslint": "^3.18.0",
     "eslint-config-trails": "^2.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.2.0",
