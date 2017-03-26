@@ -1,8 +1,9 @@
 'use strict'
 
-const EventEmitter = require('events').EventEmitter
 const assert = require('assert')
 const lib = require('../../lib')
+const Trails = require('../..')
+const testAppDefinition = require('../integration/testapp')
 const Trailpack = require('trailpack')
 
 describe('lib.Pathfinder', () => {
@@ -122,7 +123,7 @@ describe('lib.Pathfinder', () => {
     })
   })
   describe('#getEventProducer', () => {
-    const app = new EventEmitter()
+    const app = new Trails(testAppDefinition)
     const packs = [
       new Trailpack(app, {
         pkg: {
@@ -174,7 +175,7 @@ describe('lib.Pathfinder', () => {
   })
 
   describe('Lifecycle', () => {
-    const app = new EventEmitter()
+    const app = new Trails(testAppDefinition)
     const packs = [
       new Trailpack(app, {
         pkg: {

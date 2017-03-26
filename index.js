@@ -147,6 +147,7 @@ module.exports = class TrailsApp extends EventEmitter {
       }
     })
     this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
+    lib.Core.bindTrailpackPhaseListeners(this, this.loadedPacks)
 
     // bind resource methods
     Object.assign(this.controllers, lib.Core.bindMethods(this, 'controllers'))
@@ -160,8 +161,6 @@ module.exports = class TrailsApp extends EventEmitter {
    */
   async start () {
     lib.Core.bindListeners(this)
-    lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
-    lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
     this.emit('trails:start')
 
