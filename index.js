@@ -140,7 +140,8 @@ module.exports = class TrailsApp extends EventEmitter {
     // instantiate trailpacks
     this.config.get('main.packs').forEach(Pack => {
       try {
-        new Pack(this)
+        const pack = new Pack(this)
+        lib.Core.bindTrailpackMethodListeners(this, pack)
       }
       catch (e) {
         throw new TrailpackError(Pack, e, 'constructor')
@@ -151,6 +152,9 @@ module.exports = class TrailsApp extends EventEmitter {
     // bind resource methods
     Object.assign(this.controllers, lib.Core.bindMethods(this, 'controllers'))
     Object.assign(this.policies, lib.Core.bindMethods(this, 'policies'))
+
+    lib.Core.bindListeners(this)
+    lib.Core.bindTrailpackPhaseListeners(this, this.loadedPacks)
   }
 
   /**
@@ -159,9 +163,6 @@ module.exports = class TrailsApp extends EventEmitter {
    * @return Promise
    */
   async start () {
-    lib.Core.bindListeners(this)
-    lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
-    lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
 
     this.emit('trails:start')
 
