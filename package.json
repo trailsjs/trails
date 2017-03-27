@@ -65,6 +65,7 @@
   "homepage": "http://trailsjs.io",
   "dependencies": {
     "joi": "^10.2.2",
+    "lodash.defaultsdeep": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.mapvalues": "^4.6.0",
     "lodash.merge": "^4.6.0",

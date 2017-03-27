@@ -3,7 +3,6 @@
 
 const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')
-const NOOP = function () { }
 
 // inject Error and Resource types into the global namespace
 lib.Core.assignGlobals()
@@ -208,20 +207,16 @@ module.exports = class TrailsApp extends EventEmitter {
   }
 
   /**
-   * Resolve Promise once ANY of the events in the list have emitted. Also
-   * accepts a callback.
+   * Resolve Promise once ANY of the events in the list have emitted.
+   *
    * @return Promise
    */
-  async onceAny (events, handler = NOOP) {
+  async onceAny (events) {
     if (!Array.isArray(events)) {
       events = [events]
     }
 
     let resolveCallback
-    const handlerWrapper = function () {
-      handler.apply(null, arguments)
-      return arguments
-    }
 
     return Promise.race(events.map(eventName => {
       return new Promise(resolve => {
@@ -229,8 +224,7 @@ module.exports = class TrailsApp extends EventEmitter {
         this.once(eventName, resolveCallback)
       })
     }))
-    .then(handlerWrapper)
-    .then(args => {
+    .then((...args) => {
       events.forEach(eventName => this.removeListener(eventName, resolveCallback))
       return args
     })
@@ -238,30 +232,25 @@ module.exports = class TrailsApp extends EventEmitter {
 
   /**
    * Resolve Promise once all events in the list have emitted. Also accepts
+   *
    * a callback.
    * @return Promise
    */
-  async after (events, handler = NOOP) {
+  async after (events) {
     if (!Array.isArray(events)) {
       events = [ events ]
-    }
-
-    const handlerWrapper = (args) => {
-      handler(args)
-      return args
     }
 
     return Promise.all(events.map(eventName => {
       return new Promise(resolve => {
         if (eventName instanceof Array){
-          this.onceAny(eventName, resolve)
+          resolve(this.onceAny(eventName))
         }
         else {
           this.once(eventName, resolve)
         }
       })
     }))
-    .then(handlerWrapper)
   }
 
   /**

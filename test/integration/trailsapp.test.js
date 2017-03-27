@@ -272,15 +272,6 @@ describe('Trails', () => {
 
         return eventPromise
       })
-      it('should accept a callback as the 2nd argument to invoke instead of returning a Promise', done => {
-        app.after(['test11', 'test12'], results => {
-          assert.equal(results[0], 11)
-          assert.equal(results[1], 12)
-          done()
-        })
-        app.emit('test11', 11)
-        app.emit('test12', 12)
-      })
     })
 
     describe('#onceAny', () => {
@@ -298,13 +289,6 @@ describe('Trails', () => {
         app.emit('test1', 1)
 
         return eventPromise
-      })
-      it('should accept a callback as the 2nd argument to invoke instead of returning a Promise', done => {
-        app.onceAny(['test1', 'test2'], t1 => {
-          assert.equal(t1, 1)
-          done()
-        })
-        app.emit('test1', 1)
       })
     })
   })
