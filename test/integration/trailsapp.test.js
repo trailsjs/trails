@@ -3,7 +3,6 @@
 const fs = require('fs')
 const path = require('path')
 const assert = require('assert')
-const smokesignals = require('smokesignals')
 const TrailsApp = require('../..')
 const Trailpack = require('trailpack')
 const Testpack = require('./testpack')
@@ -100,20 +99,6 @@ describe('Trails', () => {
         it('should require "app" argument to constructor', () => {
           assert.throws(() => new TrailsApp(), RangeError)
         })
-        describe('@LoggerNotDefinedError', () => {
-          it('should throw LoggerNotDefinedError if logger is missing', () => {
-            const def = {
-              pkg: { },
-              api: { },
-              config: {
-                main: {
-                  paths: { root: __dirname }
-                }
-              }
-            }
-            assert.throws(() => new TrailsApp(def), lib.Errors.LoggerNotDefinedError)
-          })
-        })
         describe('@ApiNotDefinedError', () => {
           it('should throw ApiNotDefinedError if no api definition is provided', () => {
             const def = {
@@ -121,9 +106,6 @@ describe('Trails', () => {
               config: {
                 main: {
                   paths: { root: __dirname }
-                },
-                log: {
-                  logger: new smokesignals.Logger('silent')
                 }
               }
             }
@@ -136,9 +118,6 @@ describe('Trails', () => {
               config: {
                 main: {
                   paths: { root: __dirname }
-                },
-                log: {
-                  logger: new smokesignals.Logger('silent')
                 }
               }
             }
@@ -159,9 +138,6 @@ describe('Trails', () => {
                       }
                     }
                   ]
-                },
-                log: {
-                  logger: new smokesignals.Logger('silent')
                 }
               }
             }
@@ -174,10 +150,7 @@ describe('Trails', () => {
           const def = {
             api: { },
             config: {
-              main: { },
-              log: {
-                logger: new smokesignals.Logger('silent')
-              }
+              main: { }
             },
             pkg: { }
           }
@@ -196,7 +169,6 @@ describe('Trails', () => {
               main: {
                 packs: [ Testpack ]
               },
-              log: { logger: new smokesignals.Logger('debug') },
               foo: 'bar'
             }
           }
@@ -218,7 +190,6 @@ describe('Trails', () => {
               main: {
                 packs: [ Testpack ]
               },
-              log: { logger: new smokesignals.Logger('silent') },
               foo: 'bar'
             }
           }

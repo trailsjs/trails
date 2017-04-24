@@ -1,4 +1,3 @@
-/*eslint no-console: 0 */
 /*eslint no-process-env: 0 */
 
 const EventEmitter = require('events').EventEmitter
@@ -47,6 +46,9 @@ module.exports = class TrailsApp extends EventEmitter {
     const processEnv = Object.freeze(JSON.parse(JSON.stringify(process.env)))
 
     Object.defineProperties(this, {
+      log: {
+        value: new lib.Console()
+      },
       env: {
         enumerable: false,
         value: processEnv
@@ -269,6 +271,6 @@ module.exports = class TrailsApp extends EventEmitter {
    * setting the "config.log.logger" config property.
    */
   get log () {
-    return this.config.get('log.logger')
+    return this.log
   }
 }

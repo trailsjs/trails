@@ -1,14 +1,12 @@
 'use strict'
 
 const assert = require('assert')
-const smokesignals = require('smokesignals')
 const Trailpack = require('trailpack')
 const lib = require('../../lib')
 
 describe('lib.Errors', () => {
   it('all Error types should be global', () => {
     assert(global.ConfigNotDefinedError)
-    assert(global.LoggerNotDefinedError)
     assert(global.ApiNotDefinedError)
     assert(global.ConfigValueError)
     assert(global.PackageNotDefinedError)
@@ -24,12 +22,6 @@ describe('lib.Errors', () => {
     it('#name', () => {
       const err = new ConfigNotDefinedError()
       assert.equal(err.name, 'ConfigNotDefinedError')
-    })
-  })
-  describe('LoggerNotDefinedError', () => {
-    it('#name', () => {
-      const err = new LoggerNotDefinedError()
-      assert.equal(err.name, 'LoggerNotDefinedError')
     })
   })
   describe('ApiNotDefinedError', () => {
@@ -86,9 +78,6 @@ describe('lib.Errors', () => {
             packs: [
               undefined
             ]
-          },
-          log: {
-            logger: new smokesignals.Logger('silent')
           }
         }
 
