@@ -47,7 +47,9 @@ module.exports = class TrailsApp extends EventEmitter {
 
     Object.defineProperties(this, {
       log: {
-        value: new lib.Console()
+        value: new lib.Console(),
+        enumerable: false,
+        writable: true
       },
       env: {
         enumerable: false,
@@ -264,13 +266,5 @@ module.exports = class TrailsApp extends EventEmitter {
       return
     }
     return lib.Core.createDefaultPaths(this)
-  }
-
-  /**
-   * Expose the logger on the app object. The logger can be configured by
-   * setting the "config.log.logger" config property.
-   */
-  get log () {
-    return this.log
   }
 }
