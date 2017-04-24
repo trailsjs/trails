@@ -5,21 +5,21 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "trailpack-repl": "^2",
     "trailpack-router": "^2",
     "trails": "^2"
   },
   "devDependencies": {
-    "eslint": "^3.15.0",
-    "eslint-config-trails": "^2",
-    "mocha": "^3.2.0",
-    "supertest": "^1.2"
+    "eslint": "^3",
+    "eslint-config-trails": "^3",
+    "mocha": "^3",
+    "supertest": "^3",
+    "trailpack-repl": "^2"
   },
   "scripts": {
     "test": "eslint . && mocha"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 7.6.0"
   },
   "eslintConfig": {
     "extends": "trails"
