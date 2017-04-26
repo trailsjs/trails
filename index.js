@@ -119,21 +119,17 @@ module.exports = class TrailsApp extends EventEmitter {
    * Shutdown. Unbind listeners, unload trailpacks.
    * @return Promise
    */
-  async stop (err) {
-    if (err) {
-      this.log.error('\n', err.stack || '')
-    }
-
+  async stop () {
     this.emit('trails:stop')
-    lib.Core.unbindListeners(this)
 
-    await Promise.all(Object.values(this.packs).map(pack => {
+    return await Promise.all(Object.values(this.packs).map(pack => {
       this.log.debug('Unloading trailpack', pack.name, '...')
       return pack.unload()
     }))
-    this.log.debug('All trailpacks unloaded. Done.')
-
-    return this
+    .then(() => {
+      this.log.debug('All trailpacks unloaded. Done.')
+      this.removeAllListeners()
+    })
   }
 
   /**
@@ -181,17 +177,6 @@ module.exports = class TrailsApp extends EventEmitter {
         }
       })
     }))
-  }
-
-  /**
-   * Create any configured paths which may not already exist.
-   */
-  async createPaths () {
-    if (this.config.get('main.createPaths') === false) {
-      this.log.warn('createPaths is disabled. Configured paths will not be created')
-      return
-    }
-    return lib.Core.createDefaultPaths(this)
   }
 
   /**
