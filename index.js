@@ -112,7 +112,8 @@ module.exports = class TrailsApp extends EventEmitter {
    */
   async start () {
     this.emit('trails:start')
-    return await this.after('trails:ready')
+    await this.after('trails:ready')
+    return this
   }
 
   /**
@@ -122,7 +123,7 @@ module.exports = class TrailsApp extends EventEmitter {
   async stop () {
     this.emit('trails:stop')
 
-    return await Promise.all(Object.values(this.packs).map(pack => {
+    await Promise.all(Object.values(this.packs).map(pack => {
       this.log.debug('Unloading trailpack', pack.name, '...')
       return pack.unload()
     }))
@@ -130,6 +131,8 @@ module.exports = class TrailsApp extends EventEmitter {
       this.log.debug('All trailpacks unloaded. Done.')
       this.removeAllListeners()
     })
+
+    return this
   }
 
   /**

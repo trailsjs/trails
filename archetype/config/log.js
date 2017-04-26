@@ -6,5 +6,5 @@
  */
 
 module.exports = {
-
+  level: 'info'
 }
