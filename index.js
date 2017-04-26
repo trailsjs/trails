@@ -81,60 +81,6 @@ module.exports = class TrailsApp extends EventEmitter {
       },
       packs: {
         value: { }
-      },
-      loadedPacks: {
-        enumerable: false,
-        writable: true,
-        value: [ ]
-      },
-      bound: {
-        enumerable: false,
-        writable: true,
-        value: false
-      },
-      started: {
-        enumerable: false,
-        writable: true,
-        value: false
-      },
-      stopped: {
-        enumerable: false,
-        writable: true,
-        value: false
-      },
-      timers: {
-        enumerable: false,
-        writable: true,
-        value: { }
-      },
-      models: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      services: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      controllers: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      policies: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      resolvers: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      translate: {
-        enumerable: false,
-        writable: true
       }
     })
 
@@ -150,14 +96,13 @@ module.exports = class TrailsApp extends EventEmitter {
         throw new TrailpackError(Pack, e, 'constructor')
       }
     })
-    this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
 
     // bind resource methods
-    Object.assign(this.controllers, lib.Core.bindMethods(this, 'controllers'))
-    Object.assign(this.policies, lib.Core.bindMethods(this, 'policies'))
+    this.controllers = lib.Core.bindMethods(this, 'controllers')
+    this.policies = lib.Core.bindMethods(this, 'policies')
 
-    lib.Core.bindListeners(this)
-    lib.Core.bindTrailpackPhaseListeners(this, this.loadedPacks)
+    lib.Core.bindApplicationListeners(this)
+    lib.Core.bindTrailpackPhaseListeners(this, Object.values(this.packs))
   }
 
   /**
@@ -167,11 +112,7 @@ module.exports = class TrailsApp extends EventEmitter {
    */
   async start () {
     this.emit('trails:start')
-
-    await this.after('trails:ready')
-    this.started = true
-
-    return this
+    return await this.after('trails:ready')
   }
 
   /**
@@ -179,19 +120,14 @@ module.exports = class TrailsApp extends EventEmitter {
    * @return Promise
    */
   async stop (err) {
-    this.stopped = true
     if (err) {
       this.log.error('\n', err.stack || '')
-    }
-    if (!this.started) {
-      this.log.error('The application did not boot successfully.')
-      this.log.error('Try increasing the loglevel to "debug" to learn more')
     }
 
     this.emit('trails:stop')
     lib.Core.unbindListeners(this)
 
-    await Promise.all(this.loadedPacks.map(pack => {
+    await Promise.all(Object.values(this.packs).map(pack => {
       this.log.debug('Unloading trailpack', pack.name, '...')
       return pack.unload()
     }))
