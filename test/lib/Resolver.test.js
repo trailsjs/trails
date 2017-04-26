@@ -1,5 +1,3 @@
-'use strict'
-
 const assert = require('assert')
 const Model = require('../../lib/Model')
 const Resolver = require('../../lib/Resolver')

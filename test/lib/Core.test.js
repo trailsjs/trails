@@ -1,5 +1,3 @@
-'use strict'
-
 const assert = require('assert')
 const _ = require('lodash')
 const lib = require('../../lib')
@@ -54,7 +52,7 @@ describe('lib.Core', () => {
       assert(Service)
     })
     it('global variables should be immutable and error if mutation is attempted', () => {
-      assert.throws(() => delete global.Service, Error)
+      delete global.Service
       assert(global.Service)
       assert(Service)
     })

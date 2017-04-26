@@ -46,10 +46,10 @@ module.exports = class TrailsApp extends EventEmitter {
     const processEnv = Object.freeze(JSON.parse(JSON.stringify(process.env)))
 
     Object.defineProperties(this, {
-      log: {
-        value: new lib.Console(),
+      logger: {
+        value: new lib.LoggerProxy(this),
         enumerable: false,
-        writable: true
+        writable: false
       },
       env: {
         enumerable: false,
@@ -166,7 +166,6 @@ module.exports = class TrailsApp extends EventEmitter {
    * @return Promise
    */
   async start () {
-
     this.emit('trails:start')
 
     await this.after('trails:ready')
@@ -199,15 +198,6 @@ module.exports = class TrailsApp extends EventEmitter {
     this.log.debug('All trailpacks unloaded. Done.')
 
     return this
-  }
-
-  /**
-   * @override
-   * Log app events for debugging
-   */
-  emit (event) {
-    this.log.debug('trails event:', event)
-    return super.emit.apply(this, arguments)
   }
 
   /**
@@ -266,5 +256,13 @@ module.exports = class TrailsApp extends EventEmitter {
       return
     }
     return lib.Core.createDefaultPaths(this)
+  }
+
+  /**
+   * Return the Trails logger
+   * @fires trails:log:* log events
+   */
+  get log () {
+    return this.logger
   }
 }

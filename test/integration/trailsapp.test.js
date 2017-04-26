@@ -1,5 +1,3 @@
-'use strict'
-
 const fs = require('fs')
 const path = require('path')
 const assert = require('assert')
@@ -158,7 +156,8 @@ describe('Trails', () => {
 
           assert.equal(process.env.FOO, 'bar')
           assert.equal(app.env.FOO, 'bar')
-          assert.throws(() => app.env.FOO = 1, TypeError)
+          app.env.FOO = 1
+          assert.equal(app.env.FOO, 'bar')
         })
 
         it('should freeze config object after trailpacks are loaded', () => {
@@ -195,7 +194,8 @@ describe('Trails', () => {
           }
           const app = new TrailsApp(def)
           assert.equal(app.config.get('foo'), 'bar')
-          assert.throws(() => app.config = { }, Error)
+          app.config = { }
+          assert.equal(app.config.get('foo'), 'bar')
         })
       })
     })

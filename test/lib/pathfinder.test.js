@@ -1,5 +1,3 @@
-'use strict'
-
 const EventEmitter = require('events').EventEmitter
 const assert = require('assert')
 const lib = require('../../lib')

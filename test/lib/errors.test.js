@@ -1,5 +1,3 @@
-'use strict'
-
 const assert = require('assert')
 const Trailpack = require('trailpack')
 const lib = require('../../lib')

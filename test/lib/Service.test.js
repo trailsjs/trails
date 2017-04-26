@@ -1,5 +1,3 @@
-'use strict'
-
 const assert = require('assert')
 const Service = require('../../lib/Service')
 
