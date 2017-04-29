@@ -100,6 +100,7 @@ module.exports = class TrailsApp extends EventEmitter {
     // bind resource methods
     this.controllers = lib.Core.bindMethods(this, 'controllers')
     this.policies = lib.Core.bindMethods(this, 'policies')
+    this.services = lib.Core.bindMethods(this, 'services')
 
     lib.Core.bindApplicationListeners(this)
     lib.Core.bindTrailpackPhaseListeners(this, Object.values(this.packs))
