@@ -7,7 +7,7 @@
 [![Test Coverage][coverage-image]][coverage-url]
 [![Follow @trailsjs on Twitter][twitter-image]][twitter-url]
 
-Trails is a modern, [community-driven](https://opencollective.com/trails) web application framework for node.js. It
+Trails is a modern, [community-driven](https://opencollective.com/trails) web application framework for Node.js. It
 builds on the pedigree of [Rails](http://rubyonrails.org/) and [Grails](https://grails.org/)
 to accelerate development by adhering to a straightforward, convention-based,
 API-driven design philosophy.
