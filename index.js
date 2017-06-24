@@ -90,6 +90,9 @@ module.exports = class TrailsApp extends EventEmitter {
     this.config.get('main.packs').forEach(Pack => {
       try {
         const pack = new Pack(this)
+        this.packs[pack.name] = pack
+        this.config.merge(pack.config)
+        lib.Core.mergeApi(this, pack)
         lib.Core.bindTrailpackMethodListeners(this, pack)
       }
       catch (e) {
@@ -100,7 +103,6 @@ module.exports = class TrailsApp extends EventEmitter {
     // bind resource methods
     this.controllers = lib.Core.bindMethods(this, 'controllers')
     this.policies = lib.Core.bindMethods(this, 'policies')
-    this.services = lib.Core.bindMethods(this, 'services')
 
     lib.Core.bindApplicationListeners(this)
     lib.Core.bindTrailpackPhaseListeners(this, Object.values(this.packs))
@@ -158,6 +160,10 @@ module.exports = class TrailsApp extends EventEmitter {
       events.forEach(eventName => this.removeListener(eventName, resolveCallback))
       return args
     })
+    .catch(err => {
+      this.log.error(err, 'handling onceAny events', events)
+      throw err
+    })
   }
 
   /**
@@ -181,6 +187,10 @@ module.exports = class TrailsApp extends EventEmitter {
         }
       })
     }))
+    .catch(err => {
+      this.log.error(err, 'handling after events', events)
+      throw err
+    })
   }
 
   /**

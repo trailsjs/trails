@@ -18,9 +18,8 @@
     "graphql"
   ],
   "scripts": {
-    "test": "eslint --ignore-path .gitignore . && istanbul cover node_modules/mocha/bin/_mocha",
+    "test": "eslint --ignore-path .gitignore . && nyc mocha",
     "test-performance": "eslint --ignore-path .gitignore . && mocha test-performance",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
     "ci": "cd .. && ci"
   },
   "pre-commit": [
@@ -74,8 +73,8 @@
   "devDependencies": {
     "eslint": "^3",
     "eslint-config-trails": "^3",
-    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.2.0",
+    "nyc": "^11.0.2",
     "pre-commit": "^1.1.3",
     "proxyquire": "^1.7.11",
     "smokesignals": "next",

@@ -274,4 +274,36 @@ describe('lib.Configuration', () => {
       assert.equal(obj['settings.foo'], 'bar')
     })
   })
+  describe('#merge', () => {
+    const tree = {
+      foo: true,
+      bar: [ 1,2,3 ],
+      level2: {
+        name: 'alice',
+        level3: {
+          a: 1
+        }
+      },
+      customObject: {
+        string: 'b'
+      }
+    }
+    it('should merge nested tree into configuration', () => {
+      const config = new lib.Configuration(testConfig)
+      config.merge(tree)
+
+      assert.equal(config.get('level2.level3.a'), 1)
+      assert.equal(config.level2.level3.a, 1)
+      assert.equal(config.get('customObject.string'), 'b')
+      assert.equal(config.get('customObject.int'), 1)
+    })
+    it('should return list of merged keys', () => {
+      const config = new lib.Configuration(testConfig)
+      const mergeList = config.merge(tree)
+
+      console.log('mergeList', mergeList)
+
+      assert(mergeList.find(m => m.hasKey && m.key === 'customObject.string'))
+    })
+  })
 })

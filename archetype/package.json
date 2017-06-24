@@ -5,15 +5,15 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "trailpack-router": "^2",
-    "trails": "^2"
+    "trailpack-router": "next",
+    "trails": "next"
   },
   "devDependencies": {
     "eslint": "^3",
     "eslint-config-trails": "^3",
     "mocha": "^3",
     "supertest": "^3",
-    "trailpack-repl": "^2"
+    "trailpack-repl": "^3"
   },
   "scripts": {
     "test": "eslint . && mocha"
