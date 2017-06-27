@@ -1,6 +1,6 @@
 /**
- * Database Configuration
- * (app.config.database)
+ * Datastore Configuration
+ * (app.config.stores)
  *
  * Configure the ORM layer, connections, etc.
  *
