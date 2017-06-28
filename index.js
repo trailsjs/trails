@@ -100,7 +100,7 @@ module.exports = class TrailsApp extends EventEmitter {
       }
     })
 
-    // bind resource methods
+    // instantiate resource classes and bind resource methods
     this.controllers = lib.Core.bindMethods(this, 'controllers')
     this.policies = lib.Core.bindMethods(this, 'policies')
     this.services = lib.Core.bindMethods(this, 'services')
