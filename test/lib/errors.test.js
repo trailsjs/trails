@@ -1,3 +1,4 @@
+/* eslint new-cap: [0] */
 const assert = require('assert')
 const Trailpack = require('trailpack')
 const lib = require('../../lib')
@@ -70,7 +71,7 @@ describe('lib.Errors', () => {
       assert.equal(err.name, 'ValidationError')
     })
     describe('#message', () => {
-      it.skip('should specifiy missing/undefined trailpacks', () => {
+      it('should specify missing/undefined trailpacks', () => {
         const testConfig = {
           main: {
             packs: [
@@ -80,7 +81,7 @@ describe('lib.Errors', () => {
         }
 
         try {
-          lib.Configuration.validateConfig(testConfig)
+          new lib.Configuration(testConfig)
         }
         catch (e) {
           console.log(e)
