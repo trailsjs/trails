@@ -194,7 +194,7 @@ describe('lib.Configuration', () => {
     })
   })
   describe('#validateConfig', () => {
-    it.skip('should throw ValidationError if main.packs contains an "undefined" trailpack', () => {
+    it('should throw ValidationError if main.packs contains an "undefined" trailpack', () => {
       const testConfig = {
         main: {
           packs: [
@@ -244,14 +244,14 @@ describe('lib.Configuration', () => {
 
       assert.equal(config.get('foo.bar.new.path'), 'test')
     })
-    it.skip('should throw an error when attempting to set a value after frozen', () => {
+    it('should throw an error when attempting to set a value after frozen', () => {
       const config = new lib.Configuration(_.cloneDeep(testConfig), { NODE_ENV: 'test' })
       config.freeze()
 
-      //assert.throws(() => config.customObject = 'test', IllegalAccessError)
-      //assert.throws(() => config.customObject.newValue = 'test', IllegalAccessError)
-      assert.throws(() => config.customObject.string = 'b', IllegalAccessError)
-      assert.throws(() => config.set('customObject.string', 'b'), IllegalAccessError)
+      assert.throws(() => config.set('customObject.string', 'b'), lib.Errors.IllegalAccessError)
+      // TODO re-enable
+      // assert.throws(() => config.customObject.string = 'c', lib.Errors.IllegalAccessError)
+      // assert.throws(() => config.customObject['string'] = 'c', lib.Errors.IllegalAccessError)
     })
   })
   describe('#flattenTree', () => {
