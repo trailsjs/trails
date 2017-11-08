@@ -55,6 +55,11 @@
     {
       "name": "Mike Hostetler",
       "email": "mike@epicfirm.com"
+    },
+    {
+      "name": "Scott Wyatt",
+      "email": "scottwyatt86@gmail.com",
+      "url": "https://github.com/scott-wyatt"
     }
   ],
   "license": "MIT",
