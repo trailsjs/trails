@@ -1,4 +1,4 @@
-/*eslint no-process-env: 0 */
+/*eslint no-process-env: 0, no-console: 0 */
 
 const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')
@@ -96,6 +96,7 @@ module.exports = class TrailsApp extends EventEmitter {
         lib.Core.bindTrailpackMethodListeners(this, pack)
       }
       catch (e) {
+        console.log(e.stack)
         throw new TrailpackError(Pack, e, 'constructor')
       }
     })
