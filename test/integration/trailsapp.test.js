@@ -9,47 +9,15 @@ const lib = require('../../lib')
 
 describe('Trails', () => {
   describe('@TrailsApp', () => {
-    describe.skip('idempotence', () => {
+    describe('no side effects', () => {
       it('should be able to start and stop many instances in a single node process', () => {
         const cycles = [ ]
         for (let i = 0; i < 10; ++i) {
-          cycles.push(new Promise (resolve => {
-            const app = new TrailsApp(testAppDefinition)
-            app.start(testAppDefinition)
-              .then(app => {
-                assert.equal(app.started, true)
-                resolve(app)
-              })
-          }))
+          cycles.push(new TrailsApp(testAppDefinition).start())
         }
 
         return Promise.all(cycles)
-          .then(apps => {
-            return Promise.all(apps.map(app => {
-              return app.stop()
-            }))
-          })
-          .then(apps => {
-            apps.map(app => {
-              assert.equal(app.stopped, true)
-            })
-          })
-      })
-      it('should be able to stop, then start the same app', () => {
-        const app = new TrailsApp(testAppDefinition)
-        return app.start(testAppDefinition)
-          .then(app => {
-            assert.equal(app.started, true)
-            return app.stop()
-          })
-          .then(app => {
-            assert.equal(app.stopped, true)
-            return app.start(testAppDefinition)
-          })
-          .then(app => {
-            assert.equal(app.started, true)
-            return app.stop()
-          })
+          .then(apps => Promise.all(apps.map(app => app.stop())))
       })
     })
     describe('#constructor', () => {
