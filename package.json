@@ -1,6 +1,6 @@
 {
   "name": "trails",
-  "version": "3.0.0-pre.4",
+  "version": "3.0.0",
   "description": "Modern Web Application Framework for Node.js",
   "keywords": [
     "framework",
@@ -92,9 +92,6 @@
   "engines": {
     "node": ">= 7.6.0",
     "npm": ">= 3.10.0"
-  },
-  "publishConfig": {
-    "tag": "next"
   },
   "runkitExample": "test/runkitExample.js"
 }
