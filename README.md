@@ -95,6 +95,7 @@ See [**trailsjs.io/doc**](http://trailsjs.io/doc) for complete documentation.
 - [Live Gitter Chat](https://gitter.im/trailsjs/trails)
 - [Twitter](https://twitter.com/trailsjs)
 - [Trails.js Website](http://trailsjs.io/support)
+- [Stackoverflow](http://stackoverflow.com/questions/tagged/trailsjs)
 
 ## FAQ
 
