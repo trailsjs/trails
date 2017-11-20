@@ -27,6 +27,7 @@ matrix:
 # gcc 4.8 is included on osx
 # install gcc 4.8 on linux using apt
 addons:
+  postgresql: "9.6"
   apt:
     sources:
       - ubuntu-toolchain-r-test
