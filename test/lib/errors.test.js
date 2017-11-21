@@ -84,9 +84,8 @@ describe('lib.Errors', () => {
           new lib.Configuration(testConfig)
         }
         catch (e) {
-          console.log(e)
           assert(/The following configuration values are invalid/.test(e.message))
-          assert(/main.packs\[0\]/.test(e.message))
+          assert(/main.packs\.0/.test(e.message))
         }
       })
 
