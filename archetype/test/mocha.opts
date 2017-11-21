@@ -4,6 +4,7 @@
 --no-exit
 --check-leaks
 --globals app
+--timeout 5000
 
 test/setup.js
 test/**/*.test.js

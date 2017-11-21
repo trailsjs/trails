@@ -1,10 +1,7 @@
-/*eslint no-console: 0 */
-'use strict'
+/*eslint no-process-env: 0, no-console: 0 */
 
 const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')
-const i18next = require('i18next')
-const NOOP = function () { }
 
 // inject Error and Resource types into the global namespace
 lib.Core.assignGlobals()
@@ -30,11 +27,17 @@ module.exports = class TrailsApp extends EventEmitter {
       throw new RangeError('No app definition provided to Trails constructor')
     }
     if (!app.pkg) {
-      throw new lib.Errors.PackageNotDefinedError()
+      throw new PackageNotDefinedError()
     }
     if (!app.api) {
-      throw new lib.Errors.ApiNotDefinedError()
+      throw new ApiNotDefinedError()
     }
+
+    app.api.models || (app.api.models = { })
+    app.api.services || (app.api.services = { })
+    app.api.resolvers || (app.api.resolvers = { })
+    app.api.policies || (app.api.policies = { })
+    app.api.controllers || (app.api.controllers = { })
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
@@ -43,6 +46,11 @@ module.exports = class TrailsApp extends EventEmitter {
     const processEnv = Object.freeze(JSON.parse(JSON.stringify(process.env)))
 
     Object.defineProperties(this, {
+      logger: {
+        value: new lib.LoggerProxy(this),
+        enumerable: false,
+        writable: false
+      },
       env: {
         enumerable: false,
         value: processEnv
@@ -73,80 +81,35 @@ module.exports = class TrailsApp extends EventEmitter {
       },
       packs: {
         value: { }
-      },
-      loadedPacks: {
-        enumerable: false,
-        writable: true,
-        value: [ ]
-      },
-      loadedModules: {
-        enumerable: false,
-        value: lib.Core.getExternalModules(this.pkg)
-      },
-      bound: {
-        enumerable: false,
-        writable: true,
-        value: false
-      },
-      started: {
-        enumerable: false,
-        writable: true,
-        value: false
-      },
-      stopped: {
-        enumerable: false,
-        writable: true,
-        value: false
-      },
-      timers: {
-        enumerable: false,
-        writable: true,
-        value: { }
-      },
-      models: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      services: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      controllers: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      policies: {
-        enumerable: true,
-        writable: false,
-        value: { }
-      },
-      translate: {
-        enumerable: false,
-        writable: true
       }
     })
 
-    this.setMaxListeners(this.config.main.maxListeners)
+    this.setMaxListeners(this.config.get('main.maxListeners'))
 
     // instantiate trailpacks
-    this.config.main.packs.forEach(Pack => {
+    this.config.get('main.packs').forEach(Pack => {
       try {
-        new Pack(this)
+        const pack = new Pack(this)
+        this.packs[pack.name] = pack
+        this.config.merge(pack.config)
+        lib.Core.mergeApi(this, pack)
+        lib.Core.bindTrailpackMethodListeners(this, pack)
       }
       catch (e) {
+        console.log(e.stack)
         throw new TrailpackError(Pack, e, 'constructor')
       }
     })
-    this.loadedPacks = Object.keys(this.packs).map(name => this.packs[name])
 
-    // bind resource methods
-    Object.assign(this.models, lib.Core.bindMethods(this, 'models'))
-    Object.assign(this.services, lib.Core.bindMethods(this, 'services'))
-    Object.assign(this.controllers, lib.Core.bindMethods(this, 'controllers'))
-    Object.assign(this.policies, lib.Core.bindMethods(this, 'policies'))
+    // instantiate resource classes and bind resource methods
+    this.controllers = lib.Core.bindMethods(this, 'controllers')
+    this.policies = lib.Core.bindMethods(this, 'policies')
+    this.services = lib.Core.bindMethods(this, 'services')
+    this.models = lib.Core.bindMethods(this, 'models')
+    this.resolvers = lib.Core.bindMethods(this, 'resolvers')
+
+    lib.Core.bindApplicationListeners(this)
+    lib.Core.bindTrailpackPhaseListeners(this, Object.values(this.packs))
   }
 
   /**
@@ -154,85 +117,42 @@ module.exports = class TrailsApp extends EventEmitter {
    *
    * @return Promise
    */
-  start () {
-    lib.Core.bindListeners(this)
-    lib.Trailpack.bindTrailpackPhaseListeners(this, this.loadedPacks)
-    lib.Trailpack.bindTrailpackMethodListeners(this, this.loadedPacks)
-
-    // initialize i18n
-    i18next.init(this.config.i18n, (err, t) => {
-      if (err) {
-        throw new Error(`Problem loading i18n: ${err}`)
-      }
-
-      this.translate = t
-      this.emit('trails:start')
-    })
-
-    return this.after('trails:ready')
-      .then(() => {
-        this.started = true
-        return this
-      })
+  async start () {
+    this.emit('trails:start')
+    await this.after('trails:ready')
+    return this
   }
 
   /**
    * Shutdown. Unbind listeners, unload trailpacks.
    * @return Promise
    */
-  stop (err) {
-    this.stopped = true
-    if (err) {
-      this.log.error('\n', err.stack || '')
-    }
-    if (!this.started) {
-      this.log.error('The application did not boot successfully.')
-      this.log.error('Try increasing the loglevel to "debug" to learn more')
-    }
-
+  async stop () {
     this.emit('trails:stop')
-    lib.Core.unbindListeners(this)
 
-    return Promise.all(
-      this.loadedPacks.map(pack => {
-        this.log.debug('Unloading trailpack', pack.name, '...')
-        return pack.unload()
-      }))
-      .then(() => {
-        this.log.debug('All trailpacks unloaded. Done.')
-        return this
-      })
-      .catch(err => {
-        console.error(err)
-        return this
-      })
+    await Promise.all(Object.values(this.packs).map(pack => {
+      this.log.debug('Unloading trailpack', pack.name, '...')
+      return pack.unload()
+    }))
+    .then(() => {
+      this.log.debug('All trailpacks unloaded. Done.')
+      this.removeAllListeners()
+    })
+
+    return this
   }
 
   /**
-   * @override
-   * Log app events for debugging
-   */
-  emit (event) {
-    this.log.debug('trails event:', event)
-    return super.emit.apply(this, arguments)
-  }
-
-  /**
-   * Resolve Promise once ANY of the events in the list have emitted. Also
-   * accepts a callback.
+   * Resolve Promise once ANY of the events in the list have emitted.
+   *
    * @return Promise
    */
-  onceAny (events, handler) {
-    handler || (handler = NOOP)
+  async onceAny (events) {
     if (!Array.isArray(events)) {
       events = [events]
     }
 
     let resolveCallback
-    const handlerWrapper = function () {
-      handler.apply(null, arguments)
-      return arguments
-    }
 
     return Promise.race(events.map(eventName => {
       return new Promise(resolve => {
@@ -240,84 +160,48 @@ module.exports = class TrailsApp extends EventEmitter {
         this.once(eventName, resolveCallback)
       })
     }))
-    .then(handlerWrapper)
-    .then(args => {
+    .then((...args) => {
       events.forEach(eventName => this.removeListener(eventName, resolveCallback))
       return args
+    })
+    .catch(err => {
+      this.log.error(err, 'handling onceAny events', events)
+      throw err
     })
   }
 
   /**
    * Resolve Promise once all events in the list have emitted. Also accepts
+   *
    * a callback.
    * @return Promise
    */
-  after (events, handler) {
-    handler || (handler = NOOP)
+  async after (events) {
     if (!Array.isArray(events)) {
       events = [ events ]
-    }
-
-    const handlerWrapper = (args) => {
-      handler(args)
-      return args
     }
 
     return Promise.all(events.map(eventName => {
       return new Promise(resolve => {
         if (eventName instanceof Array){
-          this.onceAny(eventName, resolve)
+          resolve(this.onceAny(eventName))
         }
         else {
           this.once(eventName, resolve)
         }
       })
     }))
-    .then(handlerWrapper)
-  }
-
-  /**
-   * Prevent changes to the app configuration
-   */
-  freezeConfig () {
-    this.config.freeze(this.loadedModules)
-  }
-
-  /**
-   * Allow changes to the app configuration
-   */
-  unfreezeConfig () {
-    Object.defineProperties(this, {
-      config: {
-        value: new lib.Configuration(this.config.unfreeze(), this.env),
-        configurable: true
-      }
+    .catch(err => {
+      this.log.error(err, 'handling after events', events)
+      throw err
     })
   }
 
   /**
-   * Create any configured paths which may not already exist.
-   */
-  createPaths () {
-    if (this.config.main.createPaths === false) {
-      this.log.warn('createPaths is disabled. Configured paths will not be created')
-    }
-    return lib.Core.createDefaultPaths(this)
-  }
-
-  /**
-   * Expose the logger on the app object. The logger can be configured by
-   * setting the "config.log.logger" config property.
+   * Return the Trails logger
+   * @fires trails:log:* log events
    */
   get log () {
-    return this.config.log.logger
-  }
-
-  /**
-   * Expose the i18n translator on the app object. Internationalization can be
-   * configured in config.i18n
-   */
-  get __ () {
-    return this.translate
+    return this.logger
   }
 }

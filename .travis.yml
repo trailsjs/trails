@@ -5,10 +5,9 @@ os:
   - linux
   - osx
 node_js:
-  - 4
-  - 5
-  - 6
   - 7
+  - 8
+  - 9
 compiler:
   - gcc
 env:
@@ -28,6 +27,7 @@ matrix:
 # gcc 4.8 is included on osx
 # install gcc 4.8 on linux using apt
 addons:
+  postgresql: "9.6"
   apt:
     sources:
       - ubuntu-toolchain-r-test
@@ -71,4 +71,4 @@ deploy:
   on:
     tags: true
     repo: trailsjs/trails
-    node: 6
+    node: 7

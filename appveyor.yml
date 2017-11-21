@@ -2,17 +2,9 @@ environment:
   compiler: gcc-4.8.4-posix
 
   matrix:
-  - nodejs_version: "4"
-    REQUIRED_TESTS: "true"
-  - nodejs_version: "4"
+  - nodejs_version: "7"
     OPTIONAL_TESTS: "true"
-  - nodejs_version: "5"
-    REQUIRED_TESTS: "true"
-  - nodejs_version: "5"
-    OPTIONAL_TESTS: "true"
-  - nodejs_version: "6"
-    REQUIRED_TESTS: "true"
-  - nodejs_version: "6"
+  - nodejs_version: "8"
     OPTIONAL_TESTS: "true"
 
 matrix:

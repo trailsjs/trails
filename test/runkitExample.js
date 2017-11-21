@@ -1,13 +1,12 @@
-const smokesignals = require('smokesignals')
 const TrailsApp = require('trails')
 const app = new TrailsApp({
   api: {
     controllers: {
       RunkitController: class RunkitController extends Controller {
         /**
-          * Write custom logic here to test out your Trails Controller on RunKit
-          * @return Promise or value
-          */
+         * Write custom logic here to test out your Trails Controller on RunKit
+         * @return Promise or value
+         */
         runkitEndpoint (request) {
           return {
             message: 'hello world!',
@@ -25,9 +24,6 @@ const app = new TrailsApp({
       packs: [
         require('trailpack-runkit')(exports)
       ]
-    },
-    log: {
-      logger: new smokesignals.Logger('debug')
     }
   },
   pkg: {

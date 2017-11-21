@@ -1,31 +1,11 @@
 /**
  * Routes Configuration
- * (trails.config.routes)
  *
- * Configure how routes map to views and controllers.
+ * Configure how url patterns map to controllers, views, and static files.
  *
- * @see http://trailsjs.io/doc/config/routes.js
+ * @see {@link http://trailsjs.io/doc/config/routes}
  */
-
-'use strict'
 
 module.exports = [
 
-  /**
-   * Render the HelloWorld view
-   */
-  {
-    method: 'GET',
-    path: '/',
-    handler: 'ViewController.helloWorld'
-  },
-
-  /**
-   * Constrain the DefaultController.info handler to accept only GET requests.
-   */
-  {
-    method: [ 'GET' ],
-    path: '/api/v1/default/info',
-    handler: 'DefaultController.info'
-  }
 ]

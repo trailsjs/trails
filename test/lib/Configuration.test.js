@@ -1,5 +1,3 @@
-'use strict'
-
 const assert = require('assert')
 const lib = require('../../lib')
 const smokesignals = require('smokesignals')
@@ -196,38 +194,6 @@ describe('lib.Configuration', () => {
     })
   })
   describe('#validateConfig', () => {
-    it('should throw ConfigNotDefinedError if config or config.main is not set', () => {
-      assert.throws(() => lib.Configuration.validateConfig(), lib.Errors.ConfigNotDefinedError)
-      assert.throws(() => lib.Configuration.validateConfig({ }), lib.Errors.ConfigNotDefinedError)
-    })
-    it('should throw ConfigValueError if an env config contains the "env" property', () => {
-      const testConfig = {
-        main: { },
-        log: {
-          logger: new smokesignals.Logger('silent')
-        },
-        env: {
-          envtest: {
-            env: 'hello'
-          }
-        }
-      }
-      assert.throws(() => lib.Configuration.validateConfig(testConfig), lib.Errors.ConfigValueError)
-      assert.throws(() => lib.Configuration.validateConfig(testConfig), /Environment configs/)
-    })
-    it('should throw ConfigValueError if config.env contains the "env" property', () => {
-      const testConfig = {
-        main: { },
-        log: {
-          logger: new smokesignals.Logger('silent')
-        },
-        env: {
-          env: 'hello'
-        }
-      }
-      assert.throws(() => lib.Configuration.validateConfig(testConfig), lib.Errors.ConfigValueError)
-      assert.throws(() => lib.Configuration.validateConfig(testConfig), /config.env/)
-    })
     it('should throw ValidationError if main.packs contains an "undefined" trailpack', () => {
       const testConfig = {
         main: {
@@ -240,115 +206,7 @@ describe('lib.Configuration', () => {
         }
       }
 
-      assert.throws(() => lib.Configuration.validateConfig(testConfig), lib.Errors.ValidationError)
-    })
-  })
-  describe('#getNestedEnv', () => {
-    it('should return a list of envs if one contains a "env" property', () => {
-      const testConfig = {
-        main: { },
-        log: {
-          logger: new smokesignals.Logger('silent')
-        },
-        env: {
-          envtest: {
-            env: {
-              invalid: true
-            }
-          }
-        }
-      }
-
-      const nestedEnvs = lib.Configuration.getNestedEnv(testConfig)
-
-      assert.equal(nestedEnvs[0], 'envtest')
-      assert.equal(nestedEnvs.length, 1)
-    })
-  })
-  describe('#freezeConfig', () => {
-    it('should freeze nested object', () => {
-      const o1 = { foo: { bar: 1 } }
-      lib.Configuration.freezeConfig(o1, [ ])
-
-      assert(Object.isFrozen(o1))
-      assert(Object.isFrozen(o1.foo))
-      assert.throws(() => o1.foo = null, Error)
-    })
-    it('should not freeze exernal modules required from config', () => {
-      const o1 = {
-        foo: require('smokesignals'),
-        bar: 1
-      }
-      lib.Configuration.freezeConfig(o1, [ require.resolve('smokesignals') ])
-
-      assert.throws(() => o1.bar = null, Error)
-
-      o1.foo.x = 1
-      assert.equal(o1.foo.x, 1)
-    })
-
-    // https://bugs.chromium.org/p/v8/issues/detail?id=4460
-    if (/^(v4)|(v5)/.test(process.version)) {
-      it('v8 issue 4460 exists in node v4, v5 series (cannot naively freeze Int8Aray)', () => {
-        assert.throws(() => Object.freeze(new Int8Array()), TypeError)
-        //assert.throws(() => Object.freeze(new Buffer([1,2,3])), TypeError)
-        //assert.throws(() => Object.freeze(new DataView()), TypeError)
-      })
-    }
-    else {
-      it('v8 issue 4460 is resolved (node 6 and newer)', () => {
-        assert(true)
-      })
-    }
-
-    it('should freeze objects containing unfreezable types without error', () => {
-      const o1 = {
-        typedArray: new Int8Array(),
-        buffer: new Buffer([ 1,2,3 ]),
-        fun: function () { }
-      }
-      lib.Configuration.freezeConfig(o1, [ ])
-
-      assert(o1.typedArray)
-      assert(Buffer.isBuffer(o1.buffer))
-      assert(o1.fun)
-    })
-  })
-  describe('#unfreezeConfig', () => {
-    it('should unfreeze shallow config object', () => {
-      const app = {
-        config: {
-          a: 1,
-          foo: 'bar'
-        }
-      }
-      lib.Configuration.freezeConfig(app.config, [ ])
-      assert.throws(() => app.config.a = 2, Error)
-
-      app.config = lib.Configuration.unfreezeConfig(app.config, [ ])
-      app.config.a = 2
-      assert.equal(app.config.a, 2)
-    })
-    it('should unfreeze deep config object', () => {
-      const app = {
-        config: {
-          main: {
-            paths: {
-              root: 'rootpath',
-              temp: 'temppath'
-            },
-            foo: 1
-          }
-        }
-      }
-      lib.Configuration.freezeConfig(app.config, [ ])
-      assert.throws(() => app.config.main.paths.root = 'newrootpath', Error)
-
-      app.config = lib.Configuration.unfreezeConfig(app.config, [ ])
-      app.config.main.paths.root = 'newrootpath'
-      assert.equal(app.config.main.paths.root, 'newrootpath')
-      assert.equal(app.config.main.paths.temp, 'temppath')
-      assert.equal(app.config.main.foo, 1)
+      assert.throws(() => new lib.Configuration(testConfig), lib.Errors.ValidationError)
     })
   })
   describe('#get', () => {
@@ -376,19 +234,76 @@ describe('lib.Configuration', () => {
       config.set('customObject.testValue', 'test')
 
       assert.equal(config.get('customObject.testValue'), 'test')
-      assert.equal(config.customObject.testValue, 'test')
+      assert.equal(config.get('customObject.testValue'), 'test')
     })
     it('should set the value of a new, nested leaf node with no pre-existing path', () => {
       const config = new lib.Configuration(_.cloneDeep(testConfig), { NODE_ENV: 'test' })
 
-      assert(!config.foo)
+      assert(!config.get('foo'))
       config.set('foo.bar.new.path', 'test')
 
       assert.equal(config.get('foo.bar.new.path'), 'test')
-      assert.equal(config.foo.bar.new.path, 'test')
-      assert(_.isPlainObject(config.foo))
-      assert(_.isPlainObject(config.foo.bar))
-      assert(_.isPlainObject(config.foo.bar.new))
+    })
+    it('should throw an error when attempting to set a value after frozen', () => {
+      const config = new lib.Configuration(_.cloneDeep(testConfig), { NODE_ENV: 'test' })
+      config.freeze()
+
+      assert.throws(() => config.set('customObject.string', 'b'), lib.Errors.IllegalAccessError)
+      // TODO re-enable
+      // assert.throws(() => config.customObject.string = 'c', lib.Errors.IllegalAccessError)
+      // assert.throws(() => config.customObject['string'] = 'c', lib.Errors.IllegalAccessError)
+    })
+  })
+  describe('#flattenTree', () => {
+    it('test', () => {
+      const obj = lib.Configuration.flattenTree({
+        main: {
+          packs: [
+            1,2,3
+          ]
+        },
+        settings: {
+          foo: 'bar',
+          baz: {
+            yes: true
+          }
+        }
+      })
+
+      assert(obj['main.packs.1'])
+      assert.equal(obj['settings.foo'], 'bar')
+    })
+  })
+  describe('#merge', () => {
+    const tree = {
+      foo: true,
+      bar: [ 1,2,3 ],
+      level2: {
+        name: 'alice',
+        level3: {
+          a: 1
+        }
+      },
+      customObject: {
+        string: 'b'
+      }
+    }
+    it('should merge nested tree into configuration', () => {
+      const config = new lib.Configuration(testConfig)
+      config.merge(tree)
+
+      assert.equal(config.get('level2.level3.a'), 1)
+      assert.equal(config.level2.level3.a, 1)
+      assert.equal(config.get('customObject.string'), 'b')
+      assert.equal(config.get('customObject.int'), 1)
+    })
+    it('should return list of merged keys', () => {
+      const config = new lib.Configuration(testConfig)
+      const mergeList = config.merge(tree)
+
+      console.log('mergeList', mergeList)
+
+      assert(mergeList.find(m => m.hasKey && m.key === 'customObject.string'))
     })
   })
 })

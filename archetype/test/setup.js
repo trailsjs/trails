@@ -1,5 +1,3 @@
-'use strict'
-
 const TrailsApp = require('trails')
 
 before(() => {

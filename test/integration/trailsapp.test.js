@@ -1,9 +1,6 @@
-'use strict'
-
 const fs = require('fs')
 const path = require('path')
 const assert = require('assert')
-const smokesignals = require('smokesignals')
 const TrailsApp = require('../..')
 const Trailpack = require('trailpack')
 const Testpack = require('./testpack')
@@ -12,47 +9,15 @@ const lib = require('../../lib')
 
 describe('Trails', () => {
   describe('@TrailsApp', () => {
-    describe('idempotence', () => {
+    describe('no side effects', () => {
       it('should be able to start and stop many instances in a single node process', () => {
         const cycles = [ ]
         for (let i = 0; i < 10; ++i) {
-          cycles.push(new Promise (resolve => {
-            const app = new TrailsApp(testAppDefinition)
-            app.start(testAppDefinition)
-              .then(app => {
-                assert.equal(app.started, true)
-                resolve(app)
-              })
-          }))
+          cycles.push(new TrailsApp(testAppDefinition).start())
         }
 
         return Promise.all(cycles)
-          .then(apps => {
-            return Promise.all(apps.map(app => {
-              return app.stop()
-            }))
-          })
-          .then(apps => {
-            apps.map(app => {
-              assert.equal(app.stopped, true)
-            })
-          })
-      })
-      it('should be able to stop, then start the same app', () => {
-        const app = new TrailsApp(testAppDefinition)
-        return app.start(testAppDefinition)
-          .then(app => {
-            assert.equal(app.started, true)
-            return app.stop()
-          })
-          .then(app => {
-            assert.equal(app.stopped, true)
-            return app.start(testAppDefinition)
-          })
-          .then(app => {
-            assert.equal(app.started, true)
-            return app.stop()
-          })
+          .then(apps => Promise.all(apps.map(app => app.stop())))
       })
     })
     describe('#constructor', () => {
@@ -86,33 +51,19 @@ describe('Trails', () => {
           assert(fs.statSync(path.resolve(__dirname, 'testdir')))
         })
         it('should set paths.temp if not configured explicitly by user', () => {
-          assert(global.app.config.main.paths.temp)
+          assert(global.app.config.get('main.paths.temp'))
         })
         it('should set paths.logs if not configured explicitly by user', () => {
-          assert(global.app.config.main.paths.logs)
+          assert(global.app.config.get('main.paths.logs'))
         })
         it('should set paths.sockets if not configured explicitly by user', () => {
-          assert(global.app.config.main.paths.sockets)
+          assert(global.app.config.get('main.paths.sockets'))
         })
       })
 
       describe('errors', () => {
         it('should require "app" argument to constructor', () => {
           assert.throws(() => new TrailsApp(), RangeError)
-        })
-        describe('@LoggerNotDefinedError', () => {
-          it('should throw LoggerNotDefinedError if logger is missing', () => {
-            const def = {
-              pkg: { },
-              api: { },
-              config: {
-                main: {
-                  paths: { root: __dirname }
-                }
-              }
-            }
-            assert.throws(() => new TrailsApp(def), lib.Errors.LoggerNotDefinedError)
-          })
         })
         describe('@ApiNotDefinedError', () => {
           it('should throw ApiNotDefinedError if no api definition is provided', () => {
@@ -121,9 +72,6 @@ describe('Trails', () => {
               config: {
                 main: {
                   paths: { root: __dirname }
-                },
-                log: {
-                  logger: new smokesignals.Logger('silent')
                 }
               }
             }
@@ -136,9 +84,6 @@ describe('Trails', () => {
               config: {
                 main: {
                   paths: { root: __dirname }
-                },
-                log: {
-                  logger: new smokesignals.Logger('silent')
                 }
               }
             }
@@ -159,9 +104,6 @@ describe('Trails', () => {
                       }
                     }
                   ]
-                },
-                log: {
-                  logger: new smokesignals.Logger('silent')
                 }
               }
             }
@@ -174,10 +116,7 @@ describe('Trails', () => {
           const def = {
             api: { },
             config: {
-              main: { },
-              log: {
-                logger: new smokesignals.Logger('silent')
-              }
+              main: { }
             },
             pkg: { }
           }
@@ -185,7 +124,8 @@ describe('Trails', () => {
 
           assert.equal(process.env.FOO, 'bar')
           assert.equal(app.env.FOO, 'bar')
-          assert.throws(() => app.env.FOO = 1, TypeError)
+          app.env.FOO = 1
+          assert.equal(app.env.FOO, 'bar')
         })
 
         it('should freeze config object after trailpacks are loaded', () => {
@@ -196,17 +136,15 @@ describe('Trails', () => {
               main: {
                 packs: [ Testpack ]
               },
-              log: { logger: new smokesignals.Logger('silent') },
               foo: 'bar'
             }
           }
           const app = new TrailsApp(def)
-          assert.equal(app.config.foo, 'bar')
+          assert.equal(app.config.get('foo'), 'bar')
 
-          app.start()
-          return app.after('trailpack:all:configured').then(() => {
-            assert.equal(app.config.foo, 'bar')
-            assert.throws(() => app.config.foo = 1, TypeError)
+          return app.start().then(() => {
+            assert.equal(app.config.get('foo'), 'bar')
+            assert.throws(() => app.config.set('foo', 1), Error)
             return app.stop()
           })
         })
@@ -219,13 +157,13 @@ describe('Trails', () => {
               main: {
                 packs: [ Testpack ]
               },
-              log: { logger: new smokesignals.Logger('silent') },
               foo: 'bar'
             }
           }
           const app = new TrailsApp(def)
-          assert.equal(app.config.foo, 'bar')
-          assert.throws(() => app.config = { }, Error)
+          assert.equal(app.config.get('foo'), 'bar')
+          app.config = { }
+          assert.equal(app.config.get('foo'), 'bar')
         })
       })
     })
@@ -273,15 +211,6 @@ describe('Trails', () => {
 
         return eventPromise
       })
-      it('should accept a callback as the 2nd argument to invoke instead of returning a Promise', done => {
-        app.after(['test11', 'test12'], results => {
-          assert.equal(results[0], 11)
-          assert.equal(results[1], 12)
-          done()
-        })
-        app.emit('test11', 11)
-        app.emit('test12', 12)
-      })
     })
 
     describe('#onceAny', () => {
@@ -299,13 +228,6 @@ describe('Trails', () => {
         app.emit('test1', 1)
 
         return eventPromise
-      })
-      it('should accept a callback as the 2nd argument to invoke instead of returning a Promise', done => {
-        app.onceAny(['test1', 'test2'], t1 => {
-          assert.equal(t1, 1)
-          done()
-        })
-        app.emit('test1', 1)
       })
     })
   })

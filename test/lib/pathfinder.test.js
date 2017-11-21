@@ -1,5 +1,3 @@
-'use strict'
-
 const EventEmitter = require('events').EventEmitter
 const assert = require('assert')
 const lib = require('../../lib')
@@ -129,14 +127,12 @@ describe('lib.Pathfinder', () => {
           name: 'pack1'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              configure: {
-                emit: [ 'pack1:configured', 'pack1:custom' ]
-              },
-              initialize: {
-                emit: [ 'pack1:initialized', 'pack1:custom' ]
-              }
+          lifecycle: {
+            configure: {
+              emit: [ 'pack1:configured', 'pack1:custom' ]
+            },
+            initialize: {
+              emit: [ 'pack1:initialized', 'pack1:custom' ]
             }
           }
         }
@@ -146,14 +142,12 @@ describe('lib.Pathfinder', () => {
           name: 'pack2'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              configure: {
-                emit: [ 'pack2:configured' ]
-              },
-              initialize: {
-                emit: [ 'pack2:initialized' ]
-              }
+          lifecycle: {
+            configure: {
+              emit: [ 'pack2:configured' ]
+            },
+            initialize: {
+              emit: [ 'pack2:initialized' ]
             }
           }
         }
@@ -181,16 +175,14 @@ describe('lib.Pathfinder', () => {
           name: 'pack0'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              configure: {
-                listen: [ ],
-                emit: [ 'pack0:configured' ]
-              },
-              initialize: {
-                listen: [ ],
-                emit: [ 'pack0:initialized' ]
-              }
+          lifecycle: {
+            configure: {
+              listen: [ ],
+              emit: [ 'pack0:configured' ]
+            },
+            initialize: {
+              listen: [ ],
+              emit: [ 'pack0:initialized' ]
             }
           }
         }
@@ -201,15 +193,13 @@ describe('lib.Pathfinder', () => {
           name: 'pack1'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              configure: {
-                listen: [ 'pack0:configured' ],
-                emit: [ 'pack1:configured' ]
-              },
-              initialize: {
-                emit: [ 'pack1:initialized', 'pack1:custom' ]
-              }
+          lifecycle: {
+            configure: {
+              listen: [ 'pack0:configured' ],
+              emit: [ 'pack1:configured' ]
+            },
+            initialize: {
+              emit: [ 'pack1:initialized', 'pack1:custom' ]
             }
           }
         }
@@ -220,16 +210,14 @@ describe('lib.Pathfinder', () => {
           name: 'pack2'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              configure: {
-                listen: [ 'pack1:configured' ],
-                emit: [ 'pack2:configured' ]
-              },
-              initialize: {
-                listen: [ 'pack1:initialized', 'pack1:custom' ],
-                emit: [ 'pack2:initialized' ]
-              }
+          lifecycle: {
+            configure: {
+              listen: [ 'pack1:configured' ],
+              emit: [ 'pack2:configured' ]
+            },
+            initialize: {
+              listen: [ 'pack1:initialized', 'pack1:custom' ],
+              emit: [ 'pack2:initialized' ]
             }
           }
         }
@@ -240,16 +228,14 @@ describe('lib.Pathfinder', () => {
           name: 'pack3'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              configure: {
-                listen: [ 'pack2:configured' ],
-                emit: [ 'pack3:configured' ]
-              },
-              initialize: {
-                listen: [ 'pack2:initialized', 'pack1:custom' ],
-                emit: [ 'pack3:initialized' ]
-              }
+          lifecycle: {
+            configure: {
+              listen: [ 'pack2:configured' ],
+              emit: [ 'pack3:configured' ]
+            },
+            initialize: {
+              listen: [ 'pack2:initialized', 'pack1:custom' ],
+              emit: [ 'pack3:initialized' ]
             }
           }
         }
@@ -260,17 +246,15 @@ describe('lib.Pathfinder', () => {
           name: 'pack4'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              // dependency with no route to source
-              configure: {
-                listen: [ 'packX:configured' ],
-                emit: [ 'pack4:configured' ]
-              },
-              // dependency on pack with circular dependency
-              initialize: {
-                listen: [ 'pack5:initialized', 'pack0:initialized' ]
-              }
+          lifecycle: {
+            // dependency with no route to source
+            configure: {
+              listen: [ 'packX:configured' ],
+              emit: [ 'pack4:configured' ]
+            },
+            // dependency on pack with circular dependency
+            initialize: {
+              listen: [ 'pack5:initialized', 'pack0:initialized' ]
             }
           }
         }
@@ -282,16 +266,14 @@ describe('lib.Pathfinder', () => {
           name: 'pack5'
         },
         config: {
-          trailpack: {
-            lifecycle: {
-              configure: {
-                listen: [ 'pack5:configured' ],
-                emit: [ 'pack5:configured' ]
-              },
-              initialize: {
-                listen: [ 'pack4:initialized' ],
-                emit: [ 'pack5:initialized' ]
-              }
+          lifecycle: {
+            configure: {
+              listen: [ 'pack5:configured' ],
+              emit: [ 'pack5:configured' ]
+            },
+            initialize: {
+              listen: [ 'pack4:initialized' ],
+              emit: [ 'pack5:initialized' ]
             }
           }
         }

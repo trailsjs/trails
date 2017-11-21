@@ -1,14 +1,11 @@
-'use strict'
-
+/* eslint new-cap: [0] */
 const assert = require('assert')
-const smokesignals = require('smokesignals')
 const Trailpack = require('trailpack')
 const lib = require('../../lib')
 
 describe('lib.Errors', () => {
   it('all Error types should be global', () => {
     assert(global.ConfigNotDefinedError)
-    assert(global.LoggerNotDefinedError)
     assert(global.ApiNotDefinedError)
     assert(global.ConfigValueError)
     assert(global.PackageNotDefinedError)
@@ -24,12 +21,6 @@ describe('lib.Errors', () => {
     it('#name', () => {
       const err = new ConfigNotDefinedError()
       assert.equal(err.name, 'ConfigNotDefinedError')
-    })
-  })
-  describe('LoggerNotDefinedError', () => {
-    it('#name', () => {
-      const err = new LoggerNotDefinedError()
-      assert.equal(err.name, 'LoggerNotDefinedError')
     })
   })
   describe('ApiNotDefinedError', () => {
@@ -80,20 +71,17 @@ describe('lib.Errors', () => {
       assert.equal(err.name, 'ValidationError')
     })
     describe('#message', () => {
-      it('should specifiy missing/undefined trailpacks', () => {
+      it('should specify missing/undefined trailpacks', () => {
         const testConfig = {
           main: {
             packs: [
               undefined
             ]
-          },
-          log: {
-            logger: new smokesignals.Logger('silent')
           }
         }
 
         try {
-          lib.Configuration.validateConfig(testConfig)
+          new lib.Configuration(testConfig)
         }
         catch (e) {
           console.log(e)
