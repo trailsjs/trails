@@ -6,6 +6,8 @@ environment:
     OPTIONAL_TESTS: "true"
   - nodejs_version: "8"
     OPTIONAL_TESTS: "true"
+  - nodejs_version: "9"
+    OPTIONAL_TESTS: "true"
 
 matrix:
   fast_finish: true
