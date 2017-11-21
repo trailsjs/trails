@@ -68,22 +68,22 @@
   },
   "homepage": "http://trailsjs.io",
   "dependencies": {
-    "joi": "^10.2.2",
-    "lodash.defaultsdeep": "^4.6.0",
-    "lodash.isplainobject": "^4.0.6",
-    "lodash.mapvalues": "^4.6.0",
-    "lodash.merge": "^4.6.0",
+    "joi": "13.0.2",
+    "lodash.defaultsdeep": "4.6.0",
+    "lodash.isplainobject": "4.0.6",
+    "lodash.mapvalues": "4.6.0",
+    "lodash.merge": "4.6.0",
     "mkdirp": "0.5.1"
   },
   "devDependencies": {
     "eslint": "^3",
     "eslint-config-trails": "^3",
-    "mocha": "^3.2.0",
+    "mocha": "^4",
     "nyc": "^11.0.2",
     "pre-commit": "^1.1.3",
     "proxyquire": "^1.7.11",
-    "smokesignals": "next",
-    "trailpack": "3.0.0-pre.5",
+    "smokesignals": "^3",
+    "trailpack": "^3",
     "winston": "^2.1.1"
   },
   "eslintConfig": {
