@@ -5,8 +5,8 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "trailpack-router": "next",
-    "trails": "next"
+    "trailpack-router": "^3",
+    "trails": "^3"
   },
   "devDependencies": {
     "eslint": "^3",

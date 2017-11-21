@@ -1,8 +1,7 @@
 const assert = require('assert')
 
 describe('Trails App', () => {
-  it('should boot', () => {
-    assert(global.app.started)
-    assert(!global.app.stopped)
+  it('should exist', () => {
+    assert(global.app)
   })
 })

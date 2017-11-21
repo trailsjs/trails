@@ -1,7 +1,6 @@
 --reporter spec
 --recursive
 --full-trace
---no-exit
 --check-leaks
 --globals app
 --timeout 5000
