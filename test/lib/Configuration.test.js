@@ -193,22 +193,6 @@ describe('lib.Configuration', () => {
       assert(config.env)
     })
   })
-  describe('#validateConfig', () => {
-    it('should throw ValidationError if main.packs contains an "undefined" trailpack', () => {
-      const testConfig = {
-        main: {
-          packs: [
-            undefined
-          ]
-        },
-        log: {
-          logger: new smokesignals.Logger('silent')
-        }
-      }
-
-      assert.throws(() => new lib.Configuration(testConfig), lib.Errors.ValidationError)
-    })
-  })
   describe('#get', () => {
     it('should return nested config value if it exists', () => {
       const config = new lib.Configuration(testConfig, { NODE_ENV: 'test' })
