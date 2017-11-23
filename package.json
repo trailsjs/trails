@@ -68,7 +68,6 @@
   },
   "homepage": "http://trailsjs.io",
   "dependencies": {
-    "joi": "13.0.2",
     "lodash.merge": "4.6.0",
     "mkdirp": "0.5.1"
   },
