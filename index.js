@@ -130,14 +130,15 @@ module.exports = class TrailsApp extends EventEmitter {
   async stop () {
     this.emit('trails:stop')
 
-    await Promise.all(Object.values(this.packs).map(pack => {
-      this.log.debug('Unloading trailpack', pack.name, '...')
-      return pack.unload()
-    }))
-    .then(() => {
-      this.log.debug('All trailpacks unloaded. Done.')
-      this.removeAllListeners()
-    })
+    await Promise
+      .all(Object.values(this.packs).map(pack => {
+        this.log.debug('Unloading trailpack', pack.name, '...')
+        return pack.unload()
+      }))
+      .then(() => {
+        this.log.debug('All trailpacks unloaded. Done.')
+        this.removeAllListeners()
+      })
 
     return this
   }
@@ -154,20 +155,21 @@ module.exports = class TrailsApp extends EventEmitter {
 
     let resolveCallback
 
-    return Promise.race(events.map(eventName => {
-      return new Promise(resolve => {
-        resolveCallback = resolve
-        this.once(eventName, resolveCallback)
+    return Promise
+      .race(events.map(eventName => {
+        return new Promise(resolve => {
+          resolveCallback = resolve
+          this.once(eventName, resolveCallback)
+        })
+      }))
+      .then((...args) => {
+        events.forEach(eventName => this.removeListener(eventName, resolveCallback))
+        return args
       })
-    }))
-    .then((...args) => {
-      events.forEach(eventName => this.removeListener(eventName, resolveCallback))
-      return args
-    })
-    .catch(err => {
-      this.log.error(err, 'handling onceAny events', events)
-      throw err
-    })
+      .catch(err => {
+        this.log.error(err, 'handling onceAny events', events)
+        throw err
+      })
   }
 
   /**
@@ -181,20 +183,21 @@ module.exports = class TrailsApp extends EventEmitter {
       events = [ events ]
     }
 
-    return Promise.all(events.map(eventName => {
-      return new Promise(resolve => {
-        if (eventName instanceof Array){
-          resolve(this.onceAny(eventName))
-        }
-        else {
-          this.once(eventName, resolve)
-        }
+    return Promise
+      .all(events.map(eventName => {
+        return new Promise(resolve => {
+          if (eventName instanceof Array){
+            resolve(this.onceAny(eventName))
+          }
+          else {
+            this.once(eventName, resolve)
+          }
+        })
+      }))
+      .catch(err => {
+        this.log.error(err, 'handling after events', events)
+        throw err
       })
-    }))
-    .catch(err => {
-      this.log.error(err, 'handling after events', events)
-      throw err
-    })
   }
 
   /**
