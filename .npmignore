@@ -1,0 +1,9 @@
+.github/
+.tmp/
+.nyc_output/
+test/
+test-performance/
+
+.istanbul.yml
+.travis.yml
+appveyor.yml
