@@ -1,5 +1,5 @@
 /*eslint no-process-env: 0, no-console: 0 */
-
+const merge = require('lodash.merge')
 const EventEmitter = require('events').EventEmitter
 const lib = require('./lib')
 
@@ -13,14 +13,14 @@ lib.Core.assignGlobals()
 module.exports = class TrailsApp extends EventEmitter {
 
   /**
-   * @param pkg The application package.json
    * @param app.api The application api (api/ folder)
    * @param app.config The application configuration (config/ folder)
    *
    * Initialize the Trails Application and its EventEmitter parentclass. Set
    * some necessary default configuration.
+   * @param app config to create Trails instance
    */
-  constructor (app) {
+  constructor(app) {
     super()
 
     if (!app) {
@@ -33,11 +33,11 @@ module.exports = class TrailsApp extends EventEmitter {
       throw new ApiNotDefinedError()
     }
 
-    app.api.models || (app.api.models = { })
-    app.api.services || (app.api.services = { })
-    app.api.resolvers || (app.api.resolvers = { })
-    app.api.policies || (app.api.policies = { })
-    app.api.controllers || (app.api.controllers = { })
+    app.api.models || (app.api.models = {})
+    app.api.services || (app.api.services = {})
+    app.api.resolvers || (app.api.resolvers = {})
+    app.api.policies || (app.api.policies = {})
+    app.api.controllers || (app.api.controllers = {})
 
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'development'
@@ -65,11 +65,6 @@ module.exports = class TrailsApp extends EventEmitter {
         configurable: false,
         value: process.versions
       },
-      config: {
-        value: new lib.Configuration(app.config, processEnv),
-        configurable: true,
-        writable: false
-      },
       api: {
         value: app.api,
         writable: true,
@@ -80,26 +75,40 @@ module.exports = class TrailsApp extends EventEmitter {
         value: require('./package')
       },
       packs: {
-        value: { }
+        value: {}
       }
     })
+
+    let trailpacksConfig = {}
+    // instantiate trailpacks
+    if (app.config.main && app.config.main.packs) {
+      app.config.main.packs.forEach(Pack => {
+        try {
+          const pack = new Pack(this)
+          this.packs[pack.name] = pack
+          trailpacksConfig = merge(trailpacksConfig, pack.config)
+          lib.Core.mergeApi(this, pack)
+          lib.Core.bindTrailpackMethodListeners(this, pack)
+        }
+        catch (e) {
+          console.log(e.stack)
+          throw new TrailpackError(Pack, e, 'constructor')
+        }
+      })
+    }
+
+    Object.defineProperties(this, {
+      config: {
+        value: new lib.Configuration(trailpacksConfig, processEnv),
+        configurable: true,
+        writable: false
+      }
+    })
+
+
+    this.config.merge(app.config)
 
     this.setMaxListeners(this.config.get('main.maxListeners'))
-
-    // instantiate trailpacks
-    this.config.get('main.packs').forEach(Pack => {
-      try {
-        const pack = new Pack(this)
-        this.packs[pack.name] = pack
-        this.config.merge(pack.config)
-        lib.Core.mergeApi(this, pack)
-        lib.Core.bindTrailpackMethodListeners(this, pack)
-      }
-      catch (e) {
-        console.log(e.stack)
-        throw new TrailpackError(Pack, e, 'constructor')
-      }
-    })
 
     // instantiate resource classes and bind resource methods
     this.controllers = lib.Core.bindMethods(this, 'controllers')
@@ -107,6 +116,8 @@ module.exports = class TrailsApp extends EventEmitter {
     this.services = lib.Core.bindMethods(this, 'services')
     this.models = lib.Core.bindMethods(this, 'models')
     this.resolvers = lib.Core.bindMethods(this, 'resolvers')
+
+    this.emit('trails:configured')
 
     lib.Core.bindApplicationListeners(this)
     lib.Core.bindTrailpackPhaseListeners(this, Object.values(this.packs))
@@ -117,7 +128,7 @@ module.exports = class TrailsApp extends EventEmitter {
    *
    * @return Promise
    */
-  async start () {
+  async start() {
     this.emit('trails:start')
     await this.after('trails:ready')
     return this
@@ -127,7 +138,7 @@ module.exports = class TrailsApp extends EventEmitter {
    * Shutdown. Unbind listeners, unload trailpacks.
    * @return Promise
    */
-  async stop () {
+  async stop() {
     this.emit('trails:stop')
 
     await Promise
@@ -148,7 +159,7 @@ module.exports = class TrailsApp extends EventEmitter {
    *
    * @return Promise
    */
-  async onceAny (events) {
+  async onceAny(events) {
     if (!Array.isArray(events)) {
       events = [events]
     }
@@ -178,15 +189,15 @@ module.exports = class TrailsApp extends EventEmitter {
    * a callback.
    * @return Promise
    */
-  async after (events) {
+  async after(events) {
     if (!Array.isArray(events)) {
-      events = [ events ]
+      events = [events]
     }
 
     return Promise
       .all(events.map(eventName => {
         return new Promise(resolve => {
-          if (eventName instanceof Array){
+          if (eventName instanceof Array) {
             resolve(this.onceAny(eventName))
           }
           else {
@@ -204,7 +215,7 @@ module.exports = class TrailsApp extends EventEmitter {
    * Return the Trails logger
    * @fires trails:log:* log events
    */
-  get log () {
+  get log() {
     return this.logger
   }
 }

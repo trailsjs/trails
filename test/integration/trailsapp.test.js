@@ -11,7 +11,7 @@ describe('Trails', () => {
   describe('@TrailsApp', () => {
     describe('no side effects', () => {
       it('should be able to start and stop many instances in a single node process', () => {
-        const cycles = [ ]
+        const cycles = []
         for (let i = 0; i < 10; ++i) {
           cycles.push(new TrailsApp(testAppDefinition).start())
         }
@@ -59,6 +59,19 @@ describe('Trails', () => {
         it('should set paths.sockets if not configured explicitly by user', () => {
           assert(global.app.config.get('main.paths.sockets'))
         })
+        it('should set default config value if not configured explicitly by user', () => {
+          assert.equal(global.app.config.get('testpack.defaultValue'), 'default')
+          assert.equal(global.app.config.get('testpack.defaultObject.test'), 'ok')
+        })
+        it('should override config if configured explicitly by user', () => {
+          assert.equal(global.app.config.get('testpack.defaultValue'), 'default')
+          assert.equal(global.app.config.get('testpack.override'), 'ok')
+          assert.equal(global.app.config.get('testpack.defaultObject.override'), 'ok')
+          assert.equal(global.app.config.get('testpack.defaultObject.test'), 'ok')
+          assert.equal(global.app.config.testpack.defaultObject.test, 'ok')
+          assert.deepEqual(global.app.config.get('testpack.defaultArray'), ['ko'])
+          assert.deepEqual(global.app.config.get('testpack.defaultArrayWithDuplicates'), ['ko', 'test'])
+        })
       })
 
       describe('errors', () => {
@@ -68,7 +81,7 @@ describe('Trails', () => {
         describe('@ApiNotDefinedError', () => {
           it('should throw ApiNotDefinedError if no api definition is provided', () => {
             const def = {
-              pkg: { },
+              pkg: {},
               config: {
                 main: {
                   paths: { root: __dirname }
@@ -93,13 +106,13 @@ describe('Trails', () => {
         describe('@TrailpackError', () => {
           it('should throw PackageNotDefinedError if no pkg definition is provided', () => {
             const def = {
-              api: { },
-              pkg: { },
+              api: {},
+              pkg: {},
               config: {
                 main: {
                   packs: [
                     class Failpack extends Trailpack {
-                      constructor (app) {
+                      constructor(app) {
                         super(app)
                       }
                     }
@@ -114,11 +127,11 @@ describe('Trails', () => {
         it('should cache and freeze process.env', () => {
           process.env.FOO = 'bar'
           const def = {
-            api: { },
+            api: {},
             config: {
-              main: { }
+              main: {}
             },
-            pkg: { }
+            pkg: {}
           }
           const app = new TrailsApp(def)
 
@@ -130,11 +143,11 @@ describe('Trails', () => {
 
         it('should freeze config object after trailpacks are loaded', () => {
           const def = {
-            pkg: { },
-            api: { },
+            pkg: {},
+            api: {},
             config: {
               main: {
-                packs: [ Testpack ]
+                packs: [Testpack]
               },
               foo: 'bar'
             }
@@ -151,18 +164,18 @@ describe('Trails', () => {
 
         it('should disallow re-assignment of config object', () => {
           const def = {
-            pkg: { },
-            api: { },
+            pkg: {},
+            api: {},
             config: {
               main: {
-                packs: [ Testpack ]
+                packs: [Testpack]
               },
               foo: 'bar'
             }
           }
           const app = new TrailsApp(def)
           assert.equal(app.config.get('foo'), 'bar')
-          app.config = { }
+          app.config = {}
           assert.equal(app.config.get('foo'), 'bar')
         })
       })
@@ -175,7 +188,7 @@ describe('Trails', () => {
       })
 
       it('should invoke listener when listening for a single event', () => {
-        const eventPromise = app.after([ 'test1' ])
+        const eventPromise = app.after(['test1'])
         app.emit('test1')
         return eventPromise
       })
@@ -185,7 +198,7 @@ describe('Trails', () => {
         return eventPromise
       })
       it('should invoke listener when listening for multiple events', () => {
-        const eventPromise = app.after([ 'test3', 'test4', 'test5' ])
+        const eventPromise = app.after(['test3', 'test4', 'test5'])
         app.emit('test3')
         app.emit('test4')
         app.emit('test5')
