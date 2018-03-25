@@ -108,6 +108,11 @@ module.exports = class TrailsApp extends EventEmitter {
 
     this.config.merge(app.config)
 
+    const envConfig = app.config.env && app.config.env[processEnv.NODE_ENV]
+    if (envConfig) {
+      this.config.merge(envConfig)
+    }
+
     this.setMaxListeners(this.config.get('main.maxListeners'))
 
     // instantiate resource classes and bind resource methods
